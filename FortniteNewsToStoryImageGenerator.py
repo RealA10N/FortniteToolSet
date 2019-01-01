@@ -4,6 +4,9 @@ from io import BytesIO  # TO LOAD IMAGE FROM API
 import sys
 import os
 import subprocess
+import FortniteApiCommands
+from ConsoleFunctions import *
+from FortniteApiCommands import *
 
 class NewsInfo:
 
@@ -89,9 +92,15 @@ print("| Progress | Downloading \"News\" from API.")
 api_list = get_api_request(api_url, api_headers)
 print("| Progress | Info downloaded and saved successfully.")
 if len(sys.argv) == 1:
-    wanted_index = input("|  INPUT   | Please enter the index of the news you want to generate (0 for latest): ")
+    wanted_index = input("|  Input   | Please enter the index of the news you want to generate (0 for latest): ")
 else:
     wanted_index = int(sys.argv[1])
+
+if input("|  Input   | Save only news original image too? 'y' to confirm: ") == 'y':
+    save_only_image = True
+else:
+    save_only_image = False
+
 wanted_news_info = NewsInfo(api_list, int(wanted_index))
 
 # SETTING UP CANVAS
@@ -139,8 +148,14 @@ draw_left_text_lines(
 
 
 print("| Progress | Body drawn successfully.")
-final_image_location = final_image_folder + "\\News - " + wanted_news_info.title + ".png"
+final_image_location = final_image_folder + "\\Generated News Image - " + wanted_news_info.title + ".png"
 news_canvas.save(final_image_location)
 open_command = r'explorer /select,"' + final_image_location + r'"'
 subprocess.Popen(open_command)
-news_canvas.show()
+
+# SAVE ONLY NEWS ORIGINAL IMAGE
+if save_only_image:
+    original_news_save_location = final_image_folder + "\\Original News Image - " + wanted_news_info.title + ".png"
+    wanted_news_info.image.save(original_news_save_location)
+    original_image_open_command = r'explorer /select,"' + original_news_save_location + r'"'
+    subprocess.Popen(original_image_open_command)

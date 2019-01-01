@@ -10,17 +10,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 
 
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
 class NewsInfo:
 
     def __init__(self, request_list, news_num=0):
@@ -144,10 +133,10 @@ api_url = 'https://fortnite-public-api.theapinetwork.com/prod09/br_motd/get'
 print("| Progress | Downloading \"News\" from API.")
 api_list = get_api_request(api_url)
 print("| Progress | Info downloaded and saved successfully.")
-loop_sleep_time = 20  # '''WILL CHECK IF THERE ARE UPDATES EVERY --- MINUTES
+loop_sleep_time = 0.1  # '''WILL CHECK IF THERE ARE UPDATES EVERY --- MINUTES
 
 while True:
-    print(bcolors.HEADER + "| Sleeping | I will wake up at " + bcolors.OKBLUE + calculate_time(0, loop_sleep_time))
+    print("| Sleeping | I will wake up at " + calculate_time(0, loop_sleep_time))
     time.sleep(loop_sleep_time*60)  # SLEEP FOR --- MINUTES
     print("| Progress | Downloading \"News\" from API.")
     api_new_list = get_api_request(api_url)

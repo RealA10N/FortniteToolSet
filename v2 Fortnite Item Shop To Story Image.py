@@ -1,70 +1,10 @@
 import requests  # TO GET API
 from PIL import Image, ImageDraw, ImageFont  # TO EDIT IMAGES
-from io import BytesIO  # TO LOAD IMAGE FROM API
 import os
 from random import shuffle
+import FortniteApiCommands
+import ConsoleFunctions
 
-
-# input: the dictionary item form the api
-# parses back: item info
-class ItemShopInfo:
-
-    def __init__(self, item_dict):
-        self.item_dict = item_dict
-        self.transparent_image = None
-        self.image_already_saved = False
-        self.featured_image = None
-        self.featured_image_already_saved = False
-
-    def get_itemid(self):
-        return self.item_dict['itemid']
-
-    def get_name(self):
-        return self.item_dict['name']
-
-    def get_cost(self):
-        return self.item_dict['cost']
-
-    def get_type(self):
-        return self.item_dict['item']['type']
-
-    def get_rarity(self):
-        return self.item_dict['item']['rarity']
-
-    def get_if_featured(self):
-        return bool(self.item_dict['featured'])
-
-    def get_if_image_featured(self):
-        if self.get_if_featured() == True and self.get_type() == 'outfit':
-            try:
-                self.get_featured_image()
-                return True
-            except OSError:
-                return False
-        else:
-            return False
-
-    def get_transparent_image(self):
-        if self.image_already_saved == False:
-            self.transparent_image = self.generate_transparent_image()
-        return self.transparent_image
-
-    def generate_transparent_image(self):
-        transparent_image = Image.open(BytesIO(requests.get(self.item_dict['item']['images']['transparent']).content)).resize(
-            (512, 512)).convert("RGBA")
-        self.image_already_saved = True
-        return transparent_image
-
-    def get_featured_image(self):
-        if self.featured_image_already_saved == False:
-            self.featured_image = self.generate_featured_transparent_image()
-        return self.featured_image
-
-    def generate_featured_transparent_image(self):
-        featured_image = Image.open(BytesIO(requests.get(self.item_dict['item']['images']['featured']['transparent']).content)).resize(
-            (1024, 1024)).convert("RGBA")
-        self.featured_image_already_saved = True
-        return featured_image
 
 # input: folder of background images
 # 'apply_rarity' returns image (big or small) with background and the skin on it (without the text)
@@ -120,7 +60,7 @@ class GenericItem:
     vbucks_image = Image.open(assets_folder_path + '\\Additional files\\icon_vbucks.png').resize((40, 40))
 
     def __init__(self, item_dict):
-        self.item_shop_info = ItemShopInfo(item_dict)
+        self.item_shop_info = FortniteApiCommands.ShopInfo(item_dict)
         self.final_image_1on1 = None
         self.final_image_1on2 = None
         self.actual_slot_count = self.get_default_slot_count()
@@ -179,7 +119,7 @@ class GenericItem:
         return words_list
 
     def get_description_string(self):
-        return ("| Progress | Possessed Item: " +
+        return ("| Progress | Processing Item: " +
                 self.item_shop_info.get_name() + ' | ' +
                 self.item_shop_info.get_rarity() + ' ' +
                 self.item_shop_info.get_type() + '.')
@@ -337,7 +277,7 @@ class ItemsPlacementTable:
         return (row, column)
 
     def check_if_entry_empty(self, row, column):
-        return self.table[row][column] == None
+        return self.table[row][column] is None
 
     def check_legal_row(self, row):
         return row < self.rows
@@ -381,30 +321,49 @@ class ItemsPlacementTable:
                 placed_items_list.append((index, self.table[row][column]))
         return placed_items_list
 
+
+# GLOBAL FUNCTIONS
+def paste_images_on_canvas(canvas, table, pasting_starting_position, pasting_jumps, resize_1on1_size, resize_1on2_size):
+    for (index, item) in table.get_placed_items():
+        row, column = table.index_to_coordinates(index)
+        item_image = item.get_actual_image()
+        if item.get_actual_slot_count() == 1:
+            item_image = item_image.resize(resize_1on1_size)
+        elif item.get_actual_slot_count() == 2:
+            item_image = item_image.resize(resize_1on2_size)
+        item_pasting_location = (pasting_starting_position[1] + column * pasting_jumps[1],
+                                 pasting_starting_position[0] + row * pasting_jumps[0])
+        canvas.paste(item_image, item_pasting_location)
+
+
 def get_api_request(request_url, request_headers):
     return requests.request("GET", request_url, headers=request_headers)
+
 
 ##########################
 #    GENERATING IMAGE    #
 ##########################
 
 assets_folder_path = os.getcwd() + '\\Item Shop Generator Assets'
-api_url = 'https://api.gamingsdk.com/client/game/fortnite/scope/store/'
-api_headers = {'Authorization': 'c738e77d4212930fd8a1721fd9511c15'}
-print("| Progress | Downloading \"Store Info\" from API.")
-api_list = get_api_request(api_url, api_headers)
-print("| Progress | Info downloaded and saved successfully: " + str(api_list.json()['items']))
+print("\n| Progress | Downloading \"Store Info\" from API.")
+
+fortnite_api = FortniteApiCommands.FortniteApi()
+console = ConsoleFunctions.ConsolePrintFunctions()
+items_info_list = fortnite_api.get_item_shop_json()
+print("| Progress | Info downloaded and saved successfully: " + str(items_info_list))
+
 if input("|  Random  | Whould you like to shuffle the image? 'y' for yes: ") == 'y':
     if_shuffle = True
 else:
     if_shuffle = False
 
 generic_items_list = []
-for item_dict in api_list.json()['items']:
+for item_dict in items_info_list:
     generic_item = GenericItem(item_dict)
     generic_item.generate_final_item_images()
     generic_items_list.append(generic_item)
-    print(generic_item.get_description_string())
+    console.print_replaceable_line(generic_item.get_description_string())
+console.print_replaceable_line('| Progress | All items possessed successfully!\n')
 
 items_container = GenericItemsContainer(generic_items_list)
 table = ItemsPlacementTable(4, 3)
@@ -412,35 +371,12 @@ for item in items_container.items_list:
     table.place_item(item)
 
 item_shop_canvas = Image.open(assets_folder_path + '\\Additional files\\ItemShopStoryTemplate.png')
-pasting_starting_position = (500, 75)
-pasting_jumps = (300, 300)
-for (index, item) in table.get_placed_items():
-    row, column = table.index_to_coordinates(index)
-    item_image = item.get_actual_image()
-    if item.get_actual_slot_count() == 1:
-        item_image = item_image.resize((250, 250))
-    elif item.get_actual_slot_count() == 2:
-        item_image = item_image.resize((250, 550))
-    item_pasting_location = (pasting_starting_position[1] + column * pasting_jumps[1],
-                             pasting_starting_position[0] + row * pasting_jumps[0])
-    item_shop_canvas.paste(item_image, item_pasting_location)
+pasting_sp = (500, 75)
+pasting_j = (300, 300)
+final_1on1_size = (250, 250)
+final_1on2_size = (250, 550)
+
+paste_images_on_canvas(item_shop_canvas, table, pasting_sp, pasting_j, final_1on1_size, final_1on2_size)
 
 item_shop_canvas.save("LastItemShopUpload.png")
 item_shop_canvas.show()
-
-'''
-item_shop_canvas = Image.open(assets_folder_path + '\\Additional files\\ItemShopStoryTemplate.png')
-items_in_row = 3
-pasting_starting_position = (500, 75)
-pasting_jumps = (300, 300)
-for current_item_image, current_item_number in zip(normal_items_images_list, range(len(normal_items_images_list))):
-    current_item_image_resized = current_item_image.resize((250, 250))
-    current_item_table = table_value(current_item_number, items_in_row)
-    item_pasting_location = (
-        pasting_starting_position[1] + current_item_table[1] * pasting_jumps[1],
-        pasting_starting_position[0] + current_item_table[0] * pasting_jumps[0])
-    item_shop_canvas.paste(current_item_image_resized, item_pasting_location)
-
-item_shop_canvas.save("LastItemShopUpload.png")
-item_shop_canvas.show()
-'''
