@@ -347,9 +347,9 @@ def get_api_request(request_url, request_headers):
 assets_folder_path = os.getcwd() + '\\Item Shop Generator Assets'
 print("\n| Progress | Downloading \"Store Info\" from API.")
 
-fortnite_api = FortniteApiCommands.FortniteApi()
+fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
 console = ConsoleFunctions.ConsolePrintFunctions()
-items_info_list = fortnite_api.get_item_shop_json()
+items_info_list = fortnite_api.get_item_shop_json()['items']
 print("| Progress | Info downloaded and saved successfully: " + str(items_info_list))
 
 if input("|  Random  | Whould you like to shuffle the image? 'y' for yes: ") == 'y':

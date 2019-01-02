@@ -9,17 +9,6 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-
 class NewsInfo:
 
     def __init__(self, request_list, news_num=0):
@@ -156,10 +145,10 @@ def instagram_login(input_username, input_password):
         print('No "notification" pop-up was found')
 
 
-
 ##########################
 #         START          #
 ##########################
+
 
 print("|  Credit  | This script was made by RealA10N! (:")
 print("|  Status  | Running.")

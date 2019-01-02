@@ -1,10 +1,8 @@
 import requests  # TO GET API
 from PIL import Image, ImageDraw, ImageFont  # TO EDIT IMAGES
 from io import BytesIO  # TO LOAD IMAGE FROM API
-import sys
 import os
 import subprocess
-import FortniteApiCommands
 from ConsoleFunctions import *
 from FortniteApiCommands import *
 

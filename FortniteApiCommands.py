@@ -200,27 +200,51 @@ class JsonReader:
         return self.__json_data
 
 
-class FortniteApi:
+class FortniteItemShopAPI:
 
     def __init__(self):
         self.__api_url = "https://api.gamingsdk.com/client/game/fortnite/scope/store/"
         self.__api_headers = {'Authorization': 'c738e77d4212930fd8a1721fd9511c15'}
+        self.__api_json_reader = None
+        self.__api_json_data = None
+        self.__api_date_string = None
+        self.__api_update_id = None
 
     def __get_api_request(self, request_url, request_headers):
         return requests.request("GET", request_url, headers=request_headers)
 
+    def __generate_json_reader(self):
+        self.__api_json_reader = JsonReader(self.__api_url, self.__api_headers)
+
+    def __generate_json_data(self):
+        if self.__api_json_reader is None:
+            self.__generate_json_reader()
+        self.__api_json_data = self.__api_json_reader.get_json_data()
+
     def get_item_shop_json(self):
-        itemshop_api = JsonReader(self.__api_url, self.__api_headers)
-        return itemshop_api.get_json_data()['items']
+        self.__generate_json_data()
+        return self.__api_json_data
 
-'''
-api = \
-    JsonReader('https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game')
+    def get_json_reader(self):
+        self.__generate_json_reader()
+        return self.__api_json_reader
 
-__database = Database(api.get_json_data())
-x = __database.find_value_by_key(['battleroyalenews', 'messages'])
-for news in x[0]:
-    y = NewsInfo(news)
-    y.test_all_functions()
-    print('------')
-'''
+    def __generate_date(self):
+        self.__api_date_string = self.get_item_shop_json()["date"]
+        self.__api_date_tuple = (
+            int(self.__api_date_string[0:2]),
+            int(self.__api_date_string[3:5]),
+            int(self.__api_date_string[6:8]))
+
+    def get_date(self):
+        if self.__api_date_string is None:
+            self.__generate_date()
+        return self.__api_date_tuple
+
+    def __generate_update_id(self):
+        self.__api_update_id = int(self.get_item_shop_json()["lastupdate"])
+
+    def get_update_id(self):
+        if self.__api_update_id is None:
+            self.__generate_update_id()
+        return self.__api_update_id

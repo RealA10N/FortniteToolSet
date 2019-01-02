@@ -161,17 +161,21 @@ for news in fortnite_database.get_news_list():
 
 wanted_index = console.select_by_index(select_index_news_list, "Please select the image that you want to make by index:")
 wanted_news = fortnite_database.get_news_list()[int(wanted_index)]
+print()
 
 # SETTING UP CANVAS
 news_canvas = Image.open(assets_folder_path + "\\FortniteNewsStoryTemplate.png")
 new_card_canvas = Image.open(assets_folder_path + "\\FortniteNewsStoryTemplate onlycard.png")
-print("| Progress | Background image drawn successfully.")
+console.print_replaceable_line("Background image drawn successfully.")
 
 newsfunctions = NewsFunctions(wanted_news)
 newsfunctions.generate_story_image(news_canvas)
+console.print_replaceable_line("Body drawn successfully.")
 
-print("| Progress | Body drawn successfully.")
 final_image_name = "Generated News Image - " + wanted_news.get_title() + ".png"
 final_image_location = final_image_folder + "\\" + final_image_name
 news_canvas.save(final_image_location)
 os.startfile(final_image_location)
+
+console.print_replaceable_line("Final Image saved! Press ENTER to exit.")
+input()

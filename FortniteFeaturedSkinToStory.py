@@ -15,7 +15,7 @@ background_assets_path = os.getcwd() + '\\FeaturedSkinToStoryAssets'
 console = ConsoleFunctions.ConsolePrintFunctions()
 console.print_replaceable_line('\nLoading "Fortnite API" data...')
 
-fortnite_api = FortniteApiCommands.FortniteApi()
+fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
 items_info_list = fortnite_api.get_item_shop_json()
 featured_items = []
 console.print_replaceable_line('Searching for "Featured" items only...')
