@@ -106,11 +106,11 @@ def console_to_typing_box(element_xpath, console_string):
 
 def instagram_login(input_username, input_password):
     #Entering login details
-    element_username_xpath = "//input[@name='username']" #Username
+    element_username_xpath = "//input[@__name='username']" #Username
     element_username = driver.find_element_by_xpath(element_username_xpath)
     element_username.send_keys(input_username)
     time.sleep(0.5)
-    element_password_xpath = "//input[@name='password']" #Password
+    element_password_xpath = "//input[@__name='password']" #Password
     element_password = driver.find_element_by_xpath(element_password_xpath)
     element_password.send_keys(input_password)
     print("Progress: Checking info. Please wait...")
@@ -119,7 +119,7 @@ def instagram_login(input_username, input_password):
     time.sleep(3)
 
     try:
-        element_2fa_xpath = "//input[@name='verificationCode']" #2fa
+        element_2fa_xpath = "//input[@__name='verificationCode']" #2fa
         console_to_typing_box(element_2fa_xpath, "Please enter Instagram 2fa code: ")
         time.sleep(1)
         driver.find_element_by_xpath(element_2fa_xpath).send_keys(Keys.RETURN)

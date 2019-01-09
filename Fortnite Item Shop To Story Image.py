@@ -27,7 +27,7 @@ class ItemShopInfo:
         return self.item_dict['item']['type']
 
     def get_rarity(self):
-        return self.item_dict['item']['rarity']
+        return self.item_dict['item']['__rarity']
 
     def get_if_featured(self):
         return bool(self.item_dict['featured'])
