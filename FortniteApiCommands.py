@@ -1,7 +1,7 @@
 import requests  # TO GET API
 from PIL import Image, ImageDraw, ImageFont  # TO EDIT IMAGES
 from io import BytesIO  # TO LOAD IMAGE FROM API
-
+import os.path
 
 # input: the dictionary item form the api
 # parses back: item info
@@ -33,7 +33,7 @@ class ShopInfo:
         return bool(self.item_dict['featured'])
 
     def get_if_image_featured(self):
-        if self.get_if_featured() == True and self.get_type() == 'outfit':
+        if self.get_if_featured() and self.get_type() == 'outfit':
             try:
                 self.get_featured_image()
                 return True
@@ -59,10 +59,70 @@ class ShopInfo:
         return self.featured_image
 
     def __generate_featured_transparent_image(self):
-        featured_image = Image.open(BytesIO(requests.get(self.item_dict['item']['images']['featured']['transparent']).content)).resize(
-            (1024, 1024)).convert("RGBA")
+        featured_image = Image.open(BytesIO(requests.get(
+            self.item_dict['item']['images']['featured']['transparent']).content)).resize((1024, 1024)).convert("RGBA")
         self.featured_image_already_saved = True
         return featured_image
+
+
+class DrawingItems:
+
+    background_assets_path = os.getcwd() + "\\Items Assets\\Background Images"
+
+    def __init__(self, name, rarity, cost, icon_image, featured_image=None):
+        self.__name = name
+        self.__rarity = rarity
+        self.__cost = cost
+        self.__icon_image = icon_image
+        self.__featured_image = featured_image
+        self.__background_1on1_image = None
+        self.__background_1on2_image = None
+        self.__final_1on1_image = None
+        self.__final_1on2_image = None
+
+
+    def __build_rarity_path(self, size):
+        temp_path = self.background_assets_path\
+               + '\\' + self.__rarity + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
+        if os.path.isfile(temp_path):
+            return temp_path
+        else:
+            return self.background_assets_path\
+               + '\\' + "common" + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
+
+    def __generate_1on1_image(self):
+        wip_image = Image.open(self.__build_rarity_path((1, 1)))
+        icon_image = self.__icon_image.resize(wip_image.size)  # resize icon image to wip image size
+        self.__final_1on1_image = Image.alpha_composite(wip_image, icon_image)
+
+    def get_1on1_image(self):
+        if self.__final_1on1_image is None:
+            self.__generate_1on1_image()
+        return self.__final_1on1_image
+
+    def __generate_1on2_image(self):
+        featured_image = self.__featured_image
+        wip_image = Image.open(self.__build_rarity_path((1, 2)))
+
+        if featured_image == None:
+            return None
+
+        featured_image_size = featured_image.size
+        wip_image_size = wip_image.size
+
+        featured_image = featured_image.resize((wip_image_size[1], wip_image_size[1])) # resize featured image to wip image
+
+        if featured_image_size[0] >= wip_image_size[0]:
+            cropping_size = int((featured_image_size[0] - wip_image_size[0]) / 2)
+            featured_image = featured_image.crop((cropping_size, 0, featured_image_size[0] - cropping_size, wip_image_size[1]))
+        else:
+            featured_image = featured_image.resize(wip_image_size)
+        self.__final_1on2_image = Image.alpha_composite(wip_image.convert("RGBA"), featured_image.convert("RGBA"))
+
+    def get_1on2_image(self):
+        if self.__final_1on2_image is None:
+            self.__generate_1on2_image()
+        return self.__final_1on2_image
 
 
 class NewsInfo:

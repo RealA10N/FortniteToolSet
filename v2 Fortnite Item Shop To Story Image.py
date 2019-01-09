@@ -25,7 +25,7 @@ class RaritySet:
                     return Image.alpha_composite(working_image, image)
                 except ValueError:
                     item_error_image = Image.open(assets_folder_path + '\\Additional files\\ItemErrorImage.png')
-                    Image.alpha_composite(working_image, item_error_image)
+                    return Image.alpha_composite(working_image, item_error_image)
 
             elif size == (1, 2):
                 working_w, working_h = working_image.size
@@ -38,14 +38,14 @@ class RaritySet:
                     return Image.alpha_composite(working_image, featured_image)
                 except ValueError:
                     item_error_image = Image.open(assets_folder_path + '\\Additional files\\ItemErrorImage.png')
-                    Image.alpha_composite(working_image, item_error_image)
+                    return Image.alpha_composite(working_image, item_error_image)
 
     def build_image_path(self, rarity, size):
         return self.background_assets_path + '\\' + rarity + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
 
 
 class GenericItem:
-    assets_folder_path = os.getcwd() + '\\Item Shop Generator Assets'
+    assets_folder_path = os.getcwd() + '\\Items Assets'
     item_name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
     item_name_color = '#ffffff'
     item_cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 50)
@@ -345,7 +345,7 @@ console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA
 print()  # to go one line down.
 
 base_folder_path = os.getcwd()
-assets_folder_path = base_folder_path + '\\Item Shop Generator Assets'
+assets_folder_path = base_folder_path + '\\Items Assets'
 
 console.print_replaceable_line('Downloading \"Store Info\" from API.')
 

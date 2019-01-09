@@ -18,10 +18,10 @@ class ItemShopInfo:
         return self.item_dict['itemid']
 
     def get_name(self):
-        return self.item_dict['name']
+        return self.item_dict['__name']
 
     def get_cost(self):
-        return self.item_dict['cost']
+        return self.item_dict['__cost']
 
     def get_type(self):
         return self.item_dict['item']['type']
@@ -103,7 +103,7 @@ class RaritySet:
 
 
 class CraftItemFinalImage:
-    assets_folder_path = os.getcwd() + '\\Item Shop Generator Assets'
+    assets_folder_path = os.getcwd() + '\\Items Assets'
     item_name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
     item_name_color = '#ffffff'
     item_cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 50)
@@ -271,7 +271,7 @@ def generate_table_list(items_in_row, num_of_rows, deafult_value=None):
 #    GENERATING IMAGE    #
 ##########################
 
-assets_folder_path = os.getcwd() + '\\Item Shop Generator Assets'
+assets_folder_path = os.getcwd() + '\\Items Assets'
 api_url = 'https://api.gamingsdk.com/client/game/fortnite/scope/store/'
 api_headers = {'Authorization': 'c738e77d4212930fd8a1721fd9511c15'}
 print("| Progress | Downloading \"Store Info\" from API.")
