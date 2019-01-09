@@ -11,12 +11,14 @@ def generate_print_title(item):
     return item.get_name() +  ' | ' + item.get_rarity() + ' '+ item.get_type()
 
 
-background_assets_path = os.getcwd() + '\\FeaturedSkinToStoryAssets'
 console = ConsoleFunctions.ConsolePrintFunctions()
-console.print_replaceable_line('\nLoading "Fortnite API" data...')
+console.print_one_line_title("Fortnite Featured Image Generator. // Created by @RealA10N", "single heavy square")
+print()  # to go one line down.
 
+console.print_replaceable_line('Loading "Fortnite API" data...')
+background_assets_path = os.getcwd() + '\\FeaturedSkinToStoryAssets'
 fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
-items_info_list = fortnite_api.get_item_shop_json()
+items_info_list = fortnite_api.get_item_shop_json()["items"]
 featured_items = []
 console.print_replaceable_line('Searching for "Featured" items only...')
 

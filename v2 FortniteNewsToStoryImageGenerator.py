@@ -144,14 +144,21 @@ def string_to_word_list(input_string):
         words_list.append(current_word)
     return words_list
 
-print()  # TO GO DOWN ONE LINE
+
+console = ConsolePrintFunctions()
+console.print_one_line_title("Fortnite News Generator. // Created by @RealA10N", "single heavy square")
+print()  # to go one line down.
 
 api = \
     JsonReader('https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game')
 
 assets_folder_path = os.getcwd() + '\\News Generator Assets'
 final_image_folder = os.getcwd() + '\\News Final Images'
-console = ConsolePrintFunctions()
+
+# makes "News Final Images" folder if it is not found.
+if not os.path.exists(final_image_folder):
+    os.makedirs(final_image_folder)
+
 database = Database(api.get_json_data())
 fortnite_database = FortniteDatabase(database)
 

@@ -47,6 +47,3 @@ class ConsolePrintFunctions:
             loop_index += 1
         return input()
 
-
-console = ConsolePrintFunctions()
-console.print_one_line_title("Created by @RealA10N", "single heavy square")
