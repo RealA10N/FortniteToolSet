@@ -66,13 +66,14 @@ class ShopInfo:
 
 
 class DrawingItems:
-
-    background_assets_path = os.getcwd() + "\\Items Assets\\Background Images"
+    assets_folder_path = os.getcwd() + '\\Items Assets'
+    background_assets_path = assets_folder_path + "\\Background Images"
+    additional_assets_path = assets_folder_path + "\\Additional files"
 
     def __init__(self, name, rarity, cost, icon_image, featured_image=None):
         self.__name = name
         self.__rarity = rarity
-        self.__cost = cost
+        self.__cost = str(cost)
         self.__icon_image = icon_image
         self.__featured_image = featured_image
         self.__background_1on1_image = None
@@ -123,6 +124,68 @@ class DrawingItems:
         if self.__final_1on2_image is None:
             self.__generate_1on2_image()
         return self.__final_1on2_image
+
+    # settings for generate_info_image:
+    __pasting_image_resolution = (512, 512)
+    shadow_box_one_line = Image.open(additional_assets_path + '\\ItemShopShadowBoxOneLine.png')
+    shadow_box_two_lines = Image.open(additional_assets_path + '\\ItemShopShadowBoxTwoLines.png')
+    vbucks_image = Image.open(additional_assets_path + '\\icon_vbucks.png').resize((40, 40))
+    overlay_image = Image.open(assets_folder_path + '\\Additional files\\ItemShopOutlineBox_BottomOnly.png')
+    name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
+    cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 40)
+
+    def generate_info_image(self, base_image):
+
+        base_image_size = base_image.size
+
+        # resize "base_image", so the width will math the "pasting_image" width
+        multiplier = base_image_size[0] / self.__pasting_image_resolution[0]
+        base_image = base_image.resize((self.__pasting_image_resolution[0], int(self.__pasting_image_resolution[1] * multiplier)))
+
+        base_image_size = base_image.size  # update to new size
+        wip_image = Image.new('RGBA', base_image_size, (0, 0, 0, 0))  # creates new transparent image
+        pasting_offset = base_image_size[1] - self.__pasting_image_resolution[1]  # calculating pasting offset
+
+        # pasting "shadow" effect on images
+        if self.name_font.getsize(self.__name)[0] + 30 < base_image_size[0]:  # checks if the name is fitting in one line.
+            # if name is one line:
+            more_then_one_line = False
+            wip_image.paste(self.shadow_box_one_line, (0, pasting_offset), self.shadow_box_one_line)
+        else:
+            # if name longer then one line:
+            more_then_one_line = True
+            wip_image.paste(self.shadow_box_one_line, (0, pasting_offset), self.shadow_box_two_lines)
+
+        wip_image = Image.alpha_composite(base_image, wip_image)
+        wip_canvas = ImageDraw.Draw(wip_image)
+
+        # drawing name text on image
+        if not more_then_one_line:
+            name_starting_height = base_image_size[1] - 112
+            draw_centered_text_lines(wip_canvas, [self.__name], self.name_font, "#ffffff", name_starting_height,
+                                     base_image_size[0])
+        else:
+            jumps_between_lines = 45
+            name_starting_height = base_image_size[1] - 112 - jumps_between_lines
+            lines_list = word_list_to_line_list(self.__name.split(' '), 18)
+            draw_centered_text_lines(wip_canvas, lines_list, self.name_font, "#ffffff", name_starting_height,
+                                     base_image_size[0], 0, jumps_between_lines)
+
+        # drawing vbucks icon on image
+        cost_starting_height = base_image_size[1] - 57
+        space_between_vbucks_text = 43  # space between the vbucks icon and the price text
+        cost_width = self.cost_font.getsize(self.__cost)[0]
+        vbucks_image_pasting_location = (int((base_image_size[0] - cost_width - space_between_vbucks_text) / 2), cost_starting_height - 5)
+        wip_image.paste(self.vbucks_image, vbucks_image_pasting_location, self.vbucks_image)
+
+        # drawing cost number on image
+        draw_centered_text_lines(wip_canvas, [self.__cost], self.cost_font, "#ffffff", cost_starting_height, base_image_size[0], int(space_between_vbucks_text / 2))
+
+        # pasting image overlay on top of wip image
+        wip_image.paste(self.overlay_image, (0, pasting_offset), self.overlay_image)
+        wip_image = Image.alpha_composite(wip_image, self.overlay_image)
+
+        return wip_image
 
 
 class NewsInfo:
@@ -308,3 +371,39 @@ class FortniteItemShopAPI:
         if self.__api_update_id is None:
             self.__generate_update_id()
         return self.__api_update_id
+
+def draw_centered_text_lines(
+        canvas,
+        lines_list,
+        lines_font,
+        lines_color,
+        starting_drawing_height,
+        canvas_width,
+        lines_width_shift=0,
+        jump_between_lines=10):
+    for line_num in range(len(lines_list)):
+        line_height = starting_drawing_height + (line_num * jump_between_lines)
+        line_width = lines_font.getsize(lines_list[line_num])[0]
+        line_starting_width = ((canvas_width - line_width) / 2) + lines_width_shift
+        canvas.text(
+            (line_starting_width, line_height),
+            lines_list[line_num],
+            font=lines_font,
+            fill=lines_color)
+
+def word_list_to_line_list(words_list, max_line_ch):
+    lines_list = []
+    current_line = ''
+    approved_line = ''
+    for word in words_list:
+        current_line = current_line + word + ' '
+        if len(current_line) < max_line_ch:
+            approved_line = current_line
+        else:
+            approved_line = approved_line[0:-1]
+            lines_list.append(approved_line)
+            current_line = word + ' '
+            approved_line = word + ' '
+    approved_line = approved_line[0:-1]
+    lines_list.append(approved_line)
+    return lines_list
