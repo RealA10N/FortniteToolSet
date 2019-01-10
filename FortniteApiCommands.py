@@ -65,6 +65,43 @@ class ShopInfo:
         return featured_image
 
 
+# a class that will load all the needed assets and save them.
+class Assets:
+
+    def __init__(self):
+
+        # save paths to assets folders
+        self.__assets_folder_path = os.getcwd() + '\\Items Assets'
+        self.__additional_assets_path = self.__assets_folder_path + "\\Additional files"
+
+        # load all images
+        self.__pasting_image_resolution = (512, 512)
+        self.__shadow_box_one_line = Image.open(self.__additional_assets_path + '\\ItemShopShadowBoxOneLine.png')
+        self.__shadow_box_two_lines = Image.open(self.__additional_assets_path + '\\ItemShopShadowBoxTwoLines.png')
+        self.__vbucks_image = Image.open(self.__additional_assets_path + '\\icon_vbucks.png').resize((40, 40))
+        self.__overlay_image = Image.open(self.__additional_assets_path + '\\ItemShopOutlineBox_BottomOnly.png')
+        self.__name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
+        self.__cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 40)
+
+    def get_shadow_image_one_line(self):
+        return self.__shadow_box_one_line
+
+    def get_shadow_image_two_lines(self):
+        return self.__shadow_box_two_lines
+
+    def get_vbucks_small_icon(self):
+        return self.__vbucks_image
+
+    def get_overlay_image(self):
+        return self.__overlay_image
+
+    def get_name_font(self):
+        return self.__name_font
+
+    def get_cost_font(self):
+        return self.__cost_font
+
+
 class DrawingItems:
     assets_folder_path = os.getcwd() + '\\Items Assets'
     background_assets_path = assets_folder_path + "\\Background Images"
@@ -80,7 +117,6 @@ class DrawingItems:
         self.__background_1on2_image = None
         self.__final_1on1_image = None
         self.__final_1on2_image = None
-
 
     def __build_rarity_path(self, size):
         temp_path = self.background_assets_path\
