@@ -73,6 +73,7 @@ class Assets:
         # save paths to assets folders
         self.__assets_folder_path = os.getcwd() + '\\Items Assets'
         self.__additional_assets_path = self.__assets_folder_path + "\\Additional files"
+        self.__background_assets_path = self.__assets_folder_path + "\\Background Images"
 
         # load all images
         self.__pasting_image_resolution = (512, 512)
@@ -82,6 +83,18 @@ class Assets:
         self.__overlay_image = Image.open(self.__additional_assets_path + '\\ItemShopOutlineBox_BottomOnly.png')
         self.__name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
         self.__cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 40)
+
+    def get_assets_folder_path(self):
+        return self.__assets_folder_path
+
+    def get_additional_assets_path(self):
+        return self.__additional_assets_path
+
+    def get_background_assets_path(self):
+        return self.__background_assets_path
+
+    def get_pasting_image_resolution(self):
+        return self.__pasting_image_resolution
 
     def get_shadow_image_one_line(self):
         return self.__shadow_box_one_line
@@ -103,9 +116,8 @@ class Assets:
 
 
 class DrawingItems:
-    assets_folder_path = os.getcwd() + '\\Items Assets'
-    background_assets_path = assets_folder_path + "\\Background Images"
-    additional_assets_path = assets_folder_path + "\\Additional files"
+
+    assets = Assets()  # imports assets from "Assets" class
 
     def __init__(self, name, rarity, cost, icon_image, featured_image=None):
         self.__name = name
@@ -119,12 +131,12 @@ class DrawingItems:
         self.__final_1on2_image = None
 
     def __build_rarity_path(self, size):
-        temp_path = self.background_assets_path\
-               + '\\' + self.__rarity + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
+        temp_path = self.assets.get_background_assets_path()\
+                    + '\\' + self.__rarity + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
         if os.path.isfile(temp_path):
             return temp_path
         else:
-            return self.background_assets_path\
+            return self.assets.get_background_assets_path()\
                + '\\' + "common" + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
 
     def __generate_1on1_image(self):
@@ -161,36 +173,32 @@ class DrawingItems:
             self.__generate_1on2_image()
         return self.__final_1on2_image
 
-    # settings for generate_info_image:
-    __pasting_image_resolution = (512, 512)
-    shadow_box_one_line = Image.open(additional_assets_path + '\\ItemShopShadowBoxOneLine.png')
-    shadow_box_two_lines = Image.open(additional_assets_path + '\\ItemShopShadowBoxTwoLines.png')
-    vbucks_image = Image.open(additional_assets_path + '\\icon_vbucks.png').resize((40, 40))
-    overlay_image = Image.open(assets_folder_path + '\\Additional files\\ItemShopOutlineBox_BottomOnly.png')
-    name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
-    cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 40)
-
     def generate_info_image(self, base_image):
 
         base_image_size = base_image.size
 
         # resize "base_image", so the width will math the "pasting_image" width
-        multiplier = base_image_size[0] / self.__pasting_image_resolution[0]
-        base_image = base_image.resize((self.__pasting_image_resolution[0], int(self.__pasting_image_resolution[1] * multiplier)))
+        multiplier = base_image_size[0] / self.assets.get_pasting_image_resolution()[0]
+        base_image = base_image.resize((self.assets.get_pasting_image_resolution()[0],
+                                        int(self.assets.get_pasting_image_resolution()[1] * multiplier)))
 
         base_image_size = base_image.size  # update to new size
         wip_image = Image.new('RGBA', base_image_size, (0, 0, 0, 0))  # creates new transparent image
-        pasting_offset = base_image_size[1] - self.__pasting_image_resolution[1]  # calculating pasting offset
+        pasting_offset = base_image_size[1] - self.assets.get_pasting_image_resolution()[1]  # calculating pasting offset
 
         # pasting "shadow" effect on images
-        if self.name_font.getsize(self.__name)[0] + 30 < base_image_size[0]:  # checks if the name is fitting in one line.
+        if self.assets.get_name_font().getsize(self.__name)[0] + 30 < base_image_size[0]:  # checks if the name is fitting in one line.
             # if name is one line:
             more_then_one_line = False
-            wip_image.paste(self.shadow_box_one_line, (0, pasting_offset), self.shadow_box_one_line)
+            wip_image.paste(self.assets.get_shadow_image_one_line(),
+                            (0, pasting_offset),
+                            self.assets.get_shadow_image_one_line())
         else:
             # if name longer then one line:
             more_then_one_line = True
-            wip_image.paste(self.shadow_box_one_line, (0, pasting_offset), self.shadow_box_two_lines)
+            wip_image.paste(self.assets.get_shadow_image_two_lines(),
+                            (0, pasting_offset),
+                            self.assets.get_shadow_image_two_lines())
 
         wip_image = Image.alpha_composite(base_image, wip_image)
         wip_canvas = ImageDraw.Draw(wip_image)
@@ -198,28 +206,28 @@ class DrawingItems:
         # drawing name text on image
         if not more_then_one_line:
             name_starting_height = base_image_size[1] - 112
-            draw_centered_text_lines(wip_canvas, [self.__name], self.name_font, "#ffffff", name_starting_height,
-                                     base_image_size[0])
+            draw_centered_text_lines(wip_canvas, [self.__name], self.assets.get_name_font(), "#ffffff",
+                                     name_starting_height, base_image_size[0])
         else:
             jumps_between_lines = 45
             name_starting_height = base_image_size[1] - 112 - jumps_between_lines
             lines_list = word_list_to_line_list(self.__name.split(' '), 18)
-            draw_centered_text_lines(wip_canvas, lines_list, self.name_font, "#ffffff", name_starting_height,
-                                     base_image_size[0], 0, jumps_between_lines)
+            draw_centered_text_lines(wip_canvas, lines_list, self.assets.get_name_font(), "#ffffff",
+                                     name_starting_height, base_image_size[0], 0, jumps_between_lines)
 
         # drawing vbucks icon on image
         cost_starting_height = base_image_size[1] - 57
         space_between_vbucks_text = 43  # space between the vbucks icon and the price text
-        cost_width = self.cost_font.getsize(self.__cost)[0]
+        cost_width = self.assets.get_cost_font().getsize(self.__cost)[0]
         vbucks_image_pasting_location = (int((base_image_size[0] - cost_width - space_between_vbucks_text) / 2), cost_starting_height - 5)
-        wip_image.paste(self.vbucks_image, vbucks_image_pasting_location, self.vbucks_image)
+        wip_image.paste(self.assets.get_vbucks_small_icon(), vbucks_image_pasting_location, self.assets.get_vbucks_small_icon())
 
         # drawing cost number on image
-        draw_centered_text_lines(wip_canvas, [self.__cost], self.cost_font, "#ffffff", cost_starting_height, base_image_size[0], int(space_between_vbucks_text / 2))
+        draw_centered_text_lines(wip_canvas, [self.__cost], self.assets.get_cost_font(), "#ffffff", cost_starting_height, base_image_size[0], int(space_between_vbucks_text / 2))
 
         # pasting image overlay on top of wip image
-        wip_image.paste(self.overlay_image, (0, pasting_offset), self.overlay_image)
-        wip_image = Image.alpha_composite(wip_image, self.overlay_image)
+        wip_image.paste(self.assets.get_overlay_image(), (0, pasting_offset), self.assets.get_overlay_image())
+        wip_image = Image.alpha_composite(wip_image, self.assets.get_overlay_image())
 
         return wip_image
 
