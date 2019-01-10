@@ -3,6 +3,7 @@ from PIL import Image, ImageDraw, ImageFont  # TO EDIT IMAGES
 from io import BytesIO  # TO LOAD IMAGE FROM API
 import os.path
 
+
 # input: the dictionary item form the api
 # parses back: item info
 class ShopInfo:
@@ -180,7 +181,7 @@ class DrawingItems:
         # resize "base_image", so the width will math the "pasting_image" width
         multiplier = base_image_size[0] / self.assets.get_pasting_image_resolution()[0]
         base_image = base_image.resize((self.assets.get_pasting_image_resolution()[0],
-                                        int(self.assets.get_pasting_image_resolution()[1] * multiplier)))
+                                        int(base_image_size[1] * multiplier)))
 
         base_image_size = base_image.size  # update to new size
         wip_image = Image.new('RGBA', base_image_size, (0, 0, 0, 0))  # creates new transparent image
@@ -227,7 +228,6 @@ class DrawingItems:
 
         # pasting image overlay on top of wip image
         wip_image.paste(self.assets.get_overlay_image(), (0, pasting_offset), self.assets.get_overlay_image())
-        wip_image = Image.alpha_composite(wip_image, self.assets.get_overlay_image())
 
         return wip_image
 
