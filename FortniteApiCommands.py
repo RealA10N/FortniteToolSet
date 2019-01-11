@@ -227,9 +227,11 @@ class DrawingItems:
         draw_centered_text_lines(wip_canvas, [self.__cost], self.assets.get_cost_font(), "#ffffff", cost_starting_height, base_image_size[0], int(space_between_vbucks_text / 2))
 
         # pasting image overlay on top of wip image
+        overlay_wip_image = Image.new('RGBA', base_image_size, (0, 0, 0, 0))  # creates new transparent image
         wip_image.paste(self.assets.get_overlay_image(), (0, pasting_offset), self.assets.get_overlay_image())
+        wip_image = Image.alpha_composite(wip_image, overlay_wip_image)
 
-        return wip_image
+        return wip_image.convert("RGB")
 
 
 class NewsInfo:
@@ -376,6 +378,7 @@ class FortniteItemShopAPI:
         self.__api_json_data = None
         self.__api_date_string = None
         self.__api_update_id = None
+        self.__items_json_list = None
 
     def __get_api_request(self, request_url, request_headers):
         return requests.request("GET", request_url, headers=request_headers)
@@ -391,6 +394,16 @@ class FortniteItemShopAPI:
     def get_item_shop_json(self):
         self.__generate_json_data()
         return self.__api_json_data
+
+    def __generate_items_json_list(self):
+        if self.__api_json_data is None:
+            self.__generate_json_data()
+        self.__items_json_list = self.__api_json_data["items"]
+
+    def get_items_json_list(self):
+        if self.__items_json_list is None:
+            self.__generate_items_json_list()
+        return self.__items_json_list
 
     def get_json_reader(self):
         self.__generate_json_reader()

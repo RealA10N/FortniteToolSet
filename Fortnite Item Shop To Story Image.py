@@ -18,16 +18,16 @@ class ItemShopInfo:
         return self.item_dict['itemid']
 
     def get_name(self):
-        return self.item_dict['__name']
+        return self.item_dict['name']
 
     def get_cost(self):
-        return self.item_dict['__cost']
+        return self.item_dict['cost']
 
     def get_type(self):
         return self.item_dict['item']['type']
 
     def get_rarity(self):
-        return self.item_dict['item']['__rarity']
+        return self.item_dict['item']['rarity']
 
     def get_if_featured(self):
         return bool(self.item_dict['featured'])
