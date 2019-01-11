@@ -1,5 +1,5 @@
 from FortniteApiCommands import *
-
+from ConsoleFunctions import *
 
 class ItemsList:
 
@@ -65,6 +65,9 @@ class ItemsList:
         normal_places = len(self.get_not_feauterd_items())
         return featured_places + normal_places
 
+
+console = ConsolePrintFunctions()
+console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
 
 fortnite_api = FortniteItemShopAPI()
 items_list_class = ItemsList(fortnite_api.get_item_shop_json()['items'])
