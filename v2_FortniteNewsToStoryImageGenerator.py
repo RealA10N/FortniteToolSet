@@ -152,10 +152,10 @@ print()  # to go one line down.
 api = \
     JsonReader('https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game')
 
-assets_folder_path = os.getcwd() + '\\News Generator Assets'
-final_image_folder = os.getcwd() + '\\News Final Images'
+assets_folder_path = os.getcwd() + '\\NewsGeneratorAssets'
+final_image_folder = os.getcwd() + '\\NewsFinalImages'
 
-# makes "News Final Images" folder if it is not found.
+# makes "NewsFinalImages" folder if it is not found.
 if not os.path.exists(final_image_folder):
     os.makedirs(final_image_folder)
 

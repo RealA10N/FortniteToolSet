@@ -72,7 +72,7 @@ class Assets:
     def __init__(self):
 
         # save paths to assets folders
-        self.__assets_folder_path = os.getcwd() + '\\Items Assets'
+        self.__assets_folder_path = os.getcwd() + '\\ItemsAssets'
         self.__additional_assets_path = self.__assets_folder_path + "\\Additional files"
         self.__background_assets_path = self.__assets_folder_path + "\\Background Images"
 

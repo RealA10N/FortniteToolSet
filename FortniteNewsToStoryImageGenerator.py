@@ -82,8 +82,8 @@ def string_to_word_list(input_string):
 #    GENERATING IMAGE    #
 ##########################
 
-assets_folder_path = os.getcwd() + '\\News Generator Assets'
-final_image_folder = os.getcwd() + '\\News Final Images'
+assets_folder_path = os.getcwd() + '\\NewsGeneratorAssets'
+final_image_folder = os.getcwd() + '\\NewsFinalImages'
 api_url = 'https://api.gamingsdk.com/client/game/fortnite/scope/news/type/br/language/en/'
 api_headers = {'Authorization': 'c738e77d4212930fd8a1721fd9511c15'}
 print("| Progress | Downloading \"News\" from API.")

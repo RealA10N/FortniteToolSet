@@ -45,7 +45,7 @@ class RaritySet:
 
 
 class GenericItem:
-    assets_folder_path = os.getcwd() + '\\Items Assets'
+    assets_folder_path = os.getcwd() + '\\ItemsAssets'
     item_name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
     item_name_color = '#ffffff'
     item_cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 50)
@@ -345,7 +345,7 @@ console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA
 print()  # to go one line down.
 
 base_folder_path = os.getcwd()
-assets_folder_path = base_folder_path + '\\Items Assets'
+assets_folder_path = base_folder_path + '\\ItemsAssets'
 
 console.print_replaceable_line('Downloading \"Store Info\" from API.')
 

@@ -5,41 +5,41 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
 ## **"News"** script
 - First version: [_FortniteNewsToStoryImageGenerator.py_](FortniteNewsToStoryImageGenerator.py)
-- Second version **(Recommended):** [_v2 FortniteNewsToStoryImageGenerator.py_](v2 FortniteNewsToStoryImageGenerator.py)
-- _Assets folder:_ [_/News Generator Assets_](/News Generator Assets)
+- Second version **(Recommended):** [_v2_FortniteNewsToStoryImageGenerator.py_](v2_FortniteNewsToStoryImageGenerator.py)
+- _Assets folder:_ [_/NewsGeneratorAssets_](/NewsGeneratorAssets)
 
 #### What does it do?
 1. The script will download the current Fortnite news info from an api.
 2. The script will let the user select one news item from the 3 of the api. 
-3. The script will import the needed assets from the [_assets folder_](/News Generator Assets).
+3. The script will import the needed assets from the [_assets folder_](/NewsGeneratorAssets).
 4. The script will create a image from the news info.
 
 #### Example
 - The script will download all the info from the api:<br />
 ![Fortnite in game news](https://i.imgur.com/rA5KOOw.png)
-- It will then go to the [_assets folder_](/News Generator Assets) and import all the needed assets:<br />
+- It will then go to the [_assets folder_](/NewsGeneratorAssets) and import all the needed assets:<br />
 ![News assets](https://i.imgur.com/MPprH8P.png)
 - Finally, the script will put all the images together and save the result:<br />
 ![News script result](https://i.imgur.com/p3EZqw7.png) 
 
 ## **"ItemShop"** script
 - First version: [_Fortnite Item Shop To Story Image.py_](Fortnite Item Shop To Story Image.py)
-- Second version **(recommended)**: [_v2 Fortnite Item Shop To Story Image.py_](v2 Fortnite Item Shop To Story Image.py)
+- Second version **(recommended)**: [_v2_Fortnite Item Shop To Story Image.py_](v2_Fortnite Item Shop To Story Image.py)
 - Third version **(Still in development)**: [_v3_FortniteItemShopToStoryImage.py_](v3_FortniteItemShopToStoryImage.py)
-- _Assets folder:_ [_/Items Assets_](/Items Assets)
+- _Assets folder:_ [_/ItemsAssets_](/ItemsAssets)
 
 #### What does it do?
 The script is the complicated one from the three.
 1. The script will download the current Fortnite item shop info from an api.
 2. It will run an algorithm to check how many featured and non-featured items there are in the shop (version 3+ only).
-3. The script will create icons of every item, and place them in order on a [_background image_](/Items Assets/Additional files/ItemShopStoryTemplate.png).
+3. The script will create icons of every item, and place them in order on a background image.
 
 #### Example
 - The script will download all the info from the api:<br />
 ![Fortnite Item Shop](https://i.imgur.com/Yt0YR4R.png)
-- It will then go to the [_assets folder_](/Items Assets) and import all the needed images:<br />
+- It will then go to the [_assets folder_](/ItemsAssets) and import all the needed images:<br />
 ![Item shop assets image](https://i.imgur.com/f80DOoa.png)
-- Finally, the script will put all the items on the [_background image_](/Items Assets/Additional files/ItemShopStoryTemplate.png):<br />
+- Finally, the script will put all the items on the background image:<br />
 ![Item shop assets image](https://i.imgur.com/nDCEHNE.png)
 
 
@@ -58,7 +58,7 @@ The script is the complicated one from the three.
 ![Skin image](https://i.imgur.com/vwa2uqi.png)
 - It will then go to the [_assets folder_](/FeaturedSkinToStoryAssets) and get the matching assets:<br />
 ![Assets image](https://i.imgur.com/bU0WgNa.png)
-- The script will put the skin image on the [_background image_](/FeaturedSkinToStoryAssets/FeaturedSkinToStory Legendary.png), with the [_overlay image_](/FeaturedSkinToStoryAssets/FeaturedSkinToStory Overlay.png) on top:<br />
+- The script will put the skin image on the background image, with the overlay image on top:<br />
 ![Final result](https://i.imgur.com/X9HN6RX.png)
 
 
