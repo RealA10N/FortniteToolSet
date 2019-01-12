@@ -15,11 +15,11 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 4. The script will create a image from the news info.
 
 #### Example
-- The script will download all the info from the api:
+- The script will download all the info from the api:<br />
 ![Fortnite in game news](https://i.imgur.com/rA5KOOw.png)
-- It will then go to the [_assets folder_](/News Generator Assets) and import all the needed assets:
+- It will then go to the [_assets folder_](/News Generator Assets) and import all the needed assets:<br />
 ![News assets](https://i.imgur.com/MPprH8P.png)
-- Finally, the script will put all the images together and save the result:
+- Finally, the script will put all the images together and save the result:<br />
 ![News script result](https://i.imgur.com/p3EZqw7.png) 
 
 ## **"ItemShop"** script
@@ -35,11 +35,11 @@ The script is the complicated one from the three.
 3. The script will create icons of every item, and place them in order on a [_background image_](/Items Assets/Additional files/ItemShopStoryTemplate.png).
 
 #### Example
-- The script will download all the info from the api:
+- The script will download all the info from the api:<br />
 ![Fortnite Item Shop](https://i.imgur.com/Yt0YR4R.png)
-- It will then go to the [_assets folder_](/Items Assets) and import all the needed images:
+- It will then go to the [_assets folder_](/Items Assets) and import all the needed images:<br />
 ![Item shop assets image](https://i.imgur.com/f80DOoa.png)
-- Finally, the script will put all the items on the [_background image_](/Items Assets/Additional files/ItemShopStoryTemplate.png):
+- Finally, the script will put all the items on the [_background image_](/Items Assets/Additional files/ItemShopStoryTemplate.png):<br />
 ![Item shop assets image](https://i.imgur.com/nDCEHNE.png)
 
 
@@ -54,11 +54,11 @@ The script is the complicated one from the three.
 4. The script will generate an image with matching background and save it.
 
 #### Example
-- The script will download and get this image from the api:
+- The script will download and get this image from the api:<br />
 ![Skin image](https://i.imgur.com/vwa2uqi.png)
-- It will then go to the [_assets folder_](/FeaturedSkinToStoryAssets) and get the matching assets:
+- It will then go to the [_assets folder_](/FeaturedSkinToStoryAssets) and get the matching assets:<br />
 ![Assets image](https://i.imgur.com/bU0WgNa.png)
-- The script will put the skin image on the [_background image_](/FeaturedSkinToStoryAssets/FeaturedSkinToStory Legendary.png), with the [_overlay image_](/FeaturedSkinToStoryAssets/FeaturedSkinToStory Overlay.png) on top:
+- The script will put the skin image on the [_background image_](/FeaturedSkinToStoryAssets/FeaturedSkinToStory Legendary.png), with the [_overlay image_](/FeaturedSkinToStoryAssets/FeaturedSkinToStory Overlay.png) on top:<br />
 ![Final result](https://i.imgur.com/X9HN6RX.png)
 
 
