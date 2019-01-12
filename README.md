@@ -5,7 +5,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
 ## **"News"** script
 - First version: [_FortniteNewsToStoryImageGenerator.py_](FortniteNewsToStoryImageGenerator.py)
-- Second version **(Recommended):** [_v2_FortniteNewsToStoryImageGenerator.py_](v2_FortniteNewsToStoryImageGenerator.py)
+- Second version **(Recommended):** [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
 - _Assets folder:_ [_/NewsGeneratorAssets_](/NewsGeneratorAssets)
 
 #### What does it do?
@@ -24,8 +24,8 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
 ## **"ItemShop"** script
 - First version: [_Fortnite Item Shop To Story Image.py_](Fortnite Item Shop To Story Image.py)
-- Second version **(recommended)**: [_v2_Fortnite Item Shop To Story Image.py_](v2_Fortnite Item Shop To Story Image.py)
-- Third version **(Still in development)**: [_v3_FortniteItemShopToStoryImage.py_](v3_FortniteItemShopToStoryImage.py)
+- Second version **(recommended)**: [_v2_Fortnite Item Shop To Story Image.py_](v2_ItemShopToStoryImage.py)
+- Third version **(Still in development)**: [_v3_FortniteItemShopToStoryImage.py_](v3_ItemShopToStoryImage.py)
 - _Assets folder:_ [_/ItemsAssets_](/ItemsAssets)
 
 #### What does it do?
