@@ -68,5 +68,6 @@ The script is the complicated one from the three.
 - [x] Create a better looking and more detailed "readme" file! :blush:
 - [x] Improve the "ItemShop" script, and create a third version of it. (In progress)
   - [x] Create an algorithm that will choose a way to display the items in the final image. (Done in update 3.0)
-  - [ ] Create a new 4on5 grid to display more then 12 items (3on4 grid) like now. 
+  - [ ] Create a new 4on5 grid to display more then 12 items (3on4 grid) like now.
+  - [ ] Create a feature that determines if an item is making the first appearance in the item shop, and display it differently.
 - [ ] Automate all the scripts, to work automatically and detect updates when needed.
