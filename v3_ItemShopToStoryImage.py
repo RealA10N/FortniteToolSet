@@ -12,6 +12,8 @@ class ItemsList:
         self.__items_class_list = None
         self.__generate_all_info_classes()
 
+        self.__icons_only_drawing_images = None
+
     # generate ShopInfo class for every item
     # save the classes in list
     def __generate_all_info_classes(self):
@@ -65,6 +67,29 @@ class ItemsList:
         normal_places = len(self.get_not_feauterd_items())
         return featured_places + normal_places
 
+    def __generate_icons_only_images(self):
+        wip_images_list = []
+        for item_class in self.get_items_classes_list():
+            item_drawing = DrawingItems(name=item_class.get_name(),
+                         rarity=item_class.get_rarity(),
+                         cost=item_class.get_cost(),
+                         icon_image=item_class.get_transparent_image())
+            wip_images_list.append(item_drawing.get_1on1_image())
+        self.__icons_only_drawing_images = wip_images_list
+
+    # "icons_only" script. will return only 1on1 images in list.
+    def get_icons_only_images(self):
+        if self.__icons_only_drawing_images is None:
+            self.__generate_icons_only_images()
+        return self.__icons_only_drawing_images
+
+
+class SortingItemShop:
+
+    def __init__(self, sorting_method):
+        self.sorting_type = sorting_method[0]  # "default" or "icons_only"
+        self.grid_size = sorting_method[1]  # will return tuple. for example: (4, 3)\
+
 
 console = ConsolePrintFunctions()
 console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
@@ -72,29 +97,19 @@ console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA
 fortnite_api = FortniteItemShopAPI()
 items_list_class = ItemsList(fortnite_api.get_item_shop_json()['items'])
 
+# algorithm that decides how to sort the items in the final image.
 places_in_small_grid = 12
 places_in_large_grid = 20
+sorting_method = (None, None)
+# first index is "default" sorting (with big featured images) or "icons_only" (small only) sorting.
+# second index is the grid size, in tuple.
 if items_list_class.get_number_of_items() <= places_in_small_grid:
     if items_list_class.get_default_places() <= places_in_small_grid:
-        print("print as default")
+        sorting_method = ('default', (3, 4))
     else:
-        print("print all small items")
+        sorting_method = ('icons_only', (3, 4))
 else:
     if items_list_class.get_default_places() <= places_in_large_grid:
-        print("print as default in large grid")
+        sorting_method = ('default', (4, 5))
     else:
-        print('print all small items in large grid, with "might be more items box')
-
-
-'''
-practice script. don't mind for now.
-icon_image = Image.open(r'D:\Downloads\icon.png')
-feauterd_image = Image.open(r'D:\Downloads\featured.png')
-drawing_items = DrawingItems("Arachne", "legendary", 2000, icon_image, feauterd_image)
-
-background_image = drawing_items.get_1on2_image()
-drawing_items.generate_info_image(background_image).save("1on2.png")
-
-background_image = drawing_items.get_1on1_image()
-drawing_items.generate_info_image(background_image).save("1on1.png")
-'''
+        sorting_method = ('icons_only', (4, 5))
