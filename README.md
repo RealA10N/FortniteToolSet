@@ -72,3 +72,4 @@ The script is the complicated one from the three.
   - [ ] Create a feature that determines if an item is making the first appearance in the item shop, and display it differently.
 - [ ] Create an "Morning routine" script, that will run "News", "ItemShop" and "Featured" scripts automaticlly.
 - [ ] Automate all the scripts, to work automatically and detect updates when needed.
+- [ ] Add a "BeforeYouStart.md" file to repo. it will explaine how to install all the needed liberies, and more!
