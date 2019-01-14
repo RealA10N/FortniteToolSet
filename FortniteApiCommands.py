@@ -120,7 +120,7 @@ class DrawingItems:
 
     assets = Assets()  # imports assets from "Assets" class
 
-    def __init__(self, name, rarity, cost, icon_image, featured_image=None):
+    def __init__(self, name, rarity, cost, icon_image=None, featured_image=None):
         self.__name = name
         self.__rarity = rarity
         self.__cost = str(cost)
@@ -141,6 +141,9 @@ class DrawingItems:
                + '\\' + "common" + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
 
     def __generate_1on1_image(self):
+        if self.__icon_image is None:
+            self.__final_1on1_image = 'NoImage'
+            return
         wip_image = Image.open(self.__build_rarity_path((1, 1)))
         icon_image = self.__icon_image.resize(wip_image.size)  # resize icon image to wip image size
         self.__final_1on1_image = Image.alpha_composite(wip_image, icon_image)
@@ -154,8 +157,9 @@ class DrawingItems:
         featured_image = self.__featured_image
         wip_image = Image.open(self.__build_rarity_path((1, 2)))
 
-        if featured_image == None:
-            return None
+        if featured_image is None:
+            self.__final_1on2_image = 'NoImage'
+            return
 
         featured_image_size = featured_image.size
         wip_image_size = wip_image.size

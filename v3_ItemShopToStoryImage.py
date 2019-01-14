@@ -13,6 +13,7 @@ class ItemsList:
         self.__generate_all_info_classes()
 
         self.__icons_only_drawing_images = None
+        self.__default_drawing_images = None
 
     # generate ShopInfo class for every item
     # save the classes in list
@@ -68,27 +69,62 @@ class ItemsList:
         return featured_places + normal_places
 
     def __generate_icons_only_images(self):
-        wip_images_list = []
+        wip_dicts_list = []
         for item_class in self.get_items_classes_list():
+            wip_current_dict = {}
             item_drawing = DrawingItems(name=item_class.get_name(),
                          rarity=item_class.get_rarity(),
                          cost=item_class.get_cost(),
                          icon_image=item_class.get_transparent_image())
-            wip_images_list.append(item_drawing.get_1on1_image())
-        self.__icons_only_drawing_images = wip_images_list
+            wip_current_dict['image'] = item_drawing.get_1on1_image()
+            wip_current_dict['size'] = (1, 1)
+            wip_dicts_list.append(wip_current_dict)
+        self.__icons_only_drawing_images = wip_dicts_list
 
-    # "icons_only" script. will return only 1on1 images in list.
+    # "icons_only" script. will return only 1on1 images in dict, with the key 'image'
     def get_icons_only_images(self):
         if self.__icons_only_drawing_images is None:
             self.__generate_icons_only_images()
         return self.__icons_only_drawing_images
 
+    def __generate_default_images(self):
+        wip_dicts_list = []
 
-class SortingItemShop:
+        for item_class in self.get_items_classes_list():
+            wip_current_dict = {}
 
-    def __init__(self, sorting_method):
-        self.sorting_type = sorting_method[0]  # "default" or "icons_only"
-        self.grid_size = sorting_method[1]  # will return tuple. for example: (4, 3)\
+            if item_class.get_if_image_featured():
+                wip_current_dict['size'] = (1, 2)
+                item_drawing = DrawingItems(name=item_class.get_name(),
+                                            rarity=item_class.get_rarity(),
+                                            cost=item_class.get_cost(),
+                                            featured_image=item_class.get_featured_image())
+                wip_current_dict['image'] = item_drawing.get_1on2_image()
+            else:
+                wip_current_dict['size'] = (1, 1)
+                item_drawing = DrawingItems(name=item_class.get_name(),
+                                            rarity=item_class.get_rarity(),
+                                            cost=item_class.get_cost(),
+                                            icon_image=item_class.get_transparent_image())
+                wip_current_dict['image'] = item_drawing.get_1on1_image()
+
+            wip_dicts_list.append(wip_current_dict)
+
+        self.__default_drawing_images = wip_dicts_list
+
+    # "default" script. will return list of dictionaries.
+    # 'image' key in every dictionary will return the item image, featured if possible.
+    # 'size' key in every dictionary will return the size of the image. for example: (1, 1) or (1, 2)
+    def get_default_images(self):
+        if self.__default_drawing_images is None:
+            self.__generate_default_images()
+        return self.__default_drawing_images
+
+    def get_images_by_sorting_method(self, sorting_type):
+        if sorting_type == 'default':
+            return self.get_default_images()
+        elif sorting_type == 'icons_only':
+            return self.get_icons_only_images()
 
 
 console = ConsolePrintFunctions()
@@ -113,3 +149,6 @@ else:
         sorting_method = ('default', (4, 5))
     else:
         sorting_method = ('icons_only', (4, 5))
+
+for image in items_list_class.get_images_by_sorting_method(sorting_method[0]):
+    image['image'].show()
