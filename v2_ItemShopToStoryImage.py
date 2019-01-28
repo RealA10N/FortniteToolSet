@@ -339,22 +339,37 @@ def paste_images_on_canvas(canvas, table, pasting_starting_position, pasting_jum
 def get_api_request(request_url, request_headers):
     return requests.request("GET", request_url, headers=request_headers)
 
+# if __name__ == "__main__" will print regular text.
+# if __name__ != "__main__" will print text with the script name in front.
+def get_print_text(text):
+    if __name__ == "__main__":
+        return text
+    else:
+        return __name__ + ' | ' + text
 
+
+if_main = __name__ == "__main__"
 console = ConsoleFunctions.ConsolePrintFunctions()
-console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
-print()  # to go one line down.
+if if_main:
+    console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
+    print()  # to go one line down.
 
 base_folder_path = os.getcwd()
 assets_folder_path = base_folder_path + '\\ItemsAssets'
-
-console.print_replaceable_line('Downloading \"Store Info\" from API.')
+console.print_replaceable_line(get_print_text('Downloading \"Store Info\" from API.'))
 
 fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
 items_info_list = fortnite_api.get_item_shop_json()['items']
-console.print_replaceable_line("Info downloaded and saved successfully.\n\n")
+console.print_replaceable_line(get_print_text("Info downloaded and saved successfully.\n"))
 
-if input("Whould you like to shuffle the image? 'y' for yes: ") == 'y':
-    if_shuffle = True
+if if_main:
+
+    print()  # to go one line down
+
+    if input("Whould you like to shuffle the image? 'y' for yes: ") == 'y':
+        if_shuffle = True
+    else:
+        if_shuffle = False
 else:
     if_shuffle = False
 
@@ -363,8 +378,8 @@ for item_dict in items_info_list:
     generic_item = GenericItem(item_dict)
     generic_item.generate_final_item_images()
     generic_items_list.append(generic_item)
-    console.print_replaceable_line(generic_item.get_description_string())
-console.print_replaceable_line('All items possessed successfully!\n')
+    console.print_replaceable_line(get_print_text(generic_item.get_description_string()))
+console.print_replaceable_line(get_print_text('All items possessed successfully!\n'))
 
 items_container = GenericItemsContainer(generic_items_list)
 table = ItemsPlacementTable(4, 3)
@@ -384,5 +399,8 @@ final_image_path_name = base_folder_path + "\\LastItemShopUpload.png"
 item_shop_canvas.save(final_image_path_name)
 os.startfile(final_image_path_name)
 
-print()  # to go one line down.
-input("Final Image saved! Press ENTER to exit.")
+if if_main:
+    print()  # to go one line down.
+    input("Final Image saved! Press ENTER to exit.")
+else:
+    print(get_print_text(r'Final image is saved as "LastItemShopUpload.png" and its now opened.'))

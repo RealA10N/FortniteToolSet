@@ -161,16 +161,16 @@ class DrawingItems:
             self.__final_1on2_image = 'NoImage'
             return
 
-        featured_image_size = featured_image.size
         wip_image_size = wip_image.size
 
-        featured_image = featured_image.resize((wip_image_size[1], wip_image_size[1])) # resize featured image to wip image
+        # resize featured image to wip image
+        featured_image = featured_image.resize((wip_image_size[1], wip_image_size[1]))
 
-        if featured_image_size[0] >= wip_image_size[0]:
-            cropping_size = int((featured_image_size[0] - wip_image_size[0]) / 2)
-            featured_image = featured_image.crop((cropping_size, 0, featured_image_size[0] - cropping_size, wip_image_size[1]))
-        else:
-            featured_image = featured_image.resize(wip_image_size)
+        featured_image_size = featured_image.size # saves image size after resizing.
+
+        cropping_size = int((featured_image_size[0] - wip_image_size[0]) / 2)
+        featured_image = featured_image.crop((cropping_size, 0, (featured_image_size[0] - cropping_size), wip_image_size[1]))
+        featured_image = featured_image.resize(wip_image_size)
         self.__final_1on2_image = Image.alpha_composite(wip_image.convert("RGBA"), featured_image.convert("RGBA"))
 
     def get_1on2_image(self):
