@@ -71,5 +71,9 @@ The script is the complicated one from the three.
   - [ ] Create a new 4on5 grid to display more then 12 items (3on4 grid) like now.
   - [ ] Create a feature that determines if an item is making the first appearance in the item shop, and display it differently.
 - [ ] Create an "Morning routine" script, that will run "News", "ItemShop" and "Featured" scripts automaticlly.
+  - [ ] Make all the scripts compatible with importing them.
+    - [x] [_v2_ItemShopToStoryImage.py_](v2_ItemShopToStoryImage.py)
+    - [ ] [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
+    - [ ] [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
 - [ ] Automate all the scripts, to work automatically and detect updates when needed.
 - [ ] Add a "BeforeYouStart.md" file to repo. it will explaine how to install all the needed liberies, and more!
