@@ -75,6 +75,7 @@ The script is the complicated one from the three.
     - [x] [_v2_ItemShopToStoryImage.py_](v2_ItemShopToStoryImage.py)
     - [ ] [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
     - [ ] [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
-- [ ] Add "Burbank" font to the repo.
+  - [ ] Write a script that will import all the scripts.
+- [x] Add "Burbank" font to the repo.
 - [ ] Automate all the scripts, to work automatically and detect updates when needed.
-- [ ] Add a "BeforeYouStart.md" file to repo. it will explaine how to install all the needed liberies, and more!
+- [ ] Add a "BeforeYouStart.md" file to repo. it will explain how to install all the needed libraries, and more!
