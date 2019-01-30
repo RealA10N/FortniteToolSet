@@ -1,4 +1,3 @@
-import requests  # TO GET API
 from PIL import Image, ImageDraw, ImageFont  # TO EDIT IMAGES
 import os
 from random import shuffle
@@ -226,7 +225,7 @@ class GenericItemsContainer:
 
     def __init__(self, generic_items_list):
         self.items_list = generic_items_list
-        if if_shuffle:
+        if shuffle:
             shuffle(self.items_list)
         self.slot_count = self.count_items_slots()
 
@@ -336,9 +335,6 @@ def paste_images_on_canvas(canvas, table, pasting_starting_position, pasting_jum
         canvas.paste(item_image, item_pasting_location)
 
 
-def get_api_request(request_url, request_headers):
-    return requests.request("GET", request_url, headers=request_headers)
-
 # if __name__ == "__main__" will print regular text.
 # if __name__ != "__main__" will print text with the script name in front.
 def get_print_text(text):
@@ -348,59 +344,52 @@ def get_print_text(text):
         return __name__ + ' | ' + text
 
 
-if_main = __name__ == "__main__"
-console = ConsoleFunctions.ConsolePrintFunctions()
-if if_main:
+def get_final_item_shop_image(assets_folder_path, shuffle=False):
+
+    console = ConsoleFunctions.ConsolePrintFunctions()
+    console.print_replaceable_line(get_print_text('Downloading \"Store Info\" from API...'))
+
+    fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
+    items_info_list = fortnite_api.get_item_shop_json()['items']
+    console.print_replaceable_line(get_print_text("Info downloaded and saved successfully.\n"))
+
+    generic_items_list = []
+    for item_dict in items_info_list:
+        generic_item = GenericItem(item_dict)
+        generic_item.generate_final_item_images()
+        generic_items_list.append(generic_item)
+        console.print_replaceable_line(get_print_text(generic_item.get_description_string()))
+    console.print_replaceable_line(get_print_text('All items possessed successfully!\n'))
+
+    items_container = GenericItemsContainer(generic_items_list)
+    table = ItemsPlacementTable(4, 3)
+    for item in items_container.items_list:
+        table.place_item(item)
+
+    item_shop_canvas = Image.open(assets_folder_path + '\\Additional files\\ItemShopStoryTemplate.png')
+    pasting_sp = (500, 75)
+    pasting_j = (300, 300)
+    final_1on1_size = (250, 250)
+    final_1on2_size = (250, 550)
+
+    paste_images_on_canvas(item_shop_canvas, table, pasting_sp, pasting_j, final_1on1_size, final_1on2_size)
+    return item_shop_canvas
+
+
+if __name__ == "__main__":
+
+    console = ConsoleFunctions.ConsolePrintFunctions()
     console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
     print()  # to go one line down.
 
-base_folder_path = os.getcwd()
-assets_folder_path = base_folder_path + '\\ItemsAssets'
-console.print_replaceable_line(get_print_text('Downloading \"Store Info\" from API.'))
+    base_folder_path = os.getcwd()
+    assets_folder_path = base_folder_path + '\\ItemsAssets'
+    final_image = get_final_item_shop_image(assets_folder_path)
 
-fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
-items_info_list = fortnite_api.get_item_shop_json()['items']
-console.print_replaceable_line(get_print_text("Info downloaded and saved successfully.\n"))
+    # saving and opening saved file.
+    final_image_path_name = base_folder_path + "\\LastItemShopUpload.png"
+    final_image.save(final_image_path_name)
+    os.startfile(final_image_path_name)
 
-if if_main:
-
-    print()  # to go one line down
-
-    if input("Whould you like to shuffle the image? 'y' for yes: ") == 'y':
-        if_shuffle = True
-    else:
-        if_shuffle = False
-else:
-    if_shuffle = False
-
-generic_items_list = []
-for item_dict in items_info_list:
-    generic_item = GenericItem(item_dict)
-    generic_item.generate_final_item_images()
-    generic_items_list.append(generic_item)
-    console.print_replaceable_line(get_print_text(generic_item.get_description_string()))
-console.print_replaceable_line(get_print_text('All items possessed successfully!\n'))
-
-items_container = GenericItemsContainer(generic_items_list)
-table = ItemsPlacementTable(4, 3)
-for item in items_container.items_list:
-    table.place_item(item)
-
-item_shop_canvas = Image.open(assets_folder_path + '\\Additional files\\ItemShopStoryTemplate.png')
-pasting_sp = (500, 75)
-pasting_j = (300, 300)
-final_1on1_size = (250, 250)
-final_1on2_size = (250, 550)
-
-paste_images_on_canvas(item_shop_canvas, table, pasting_sp, pasting_j, final_1on1_size, final_1on2_size)
-
-# saving and opening saved file.
-final_image_path_name = base_folder_path + "\\LastItemShopUpload.png"
-item_shop_canvas.save(final_image_path_name)
-os.startfile(final_image_path_name)
-
-if if_main:
-    print()  # to go one line down.
-    input("Final Image saved! Press ENTER to exit.")
-else:
     print(get_print_text(r'Final image is saved as "LastItemShopUpload.png" and its now opened.'))
+

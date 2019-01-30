@@ -42,7 +42,6 @@ The script is the complicated one from the three.
 - Finally, the script will put all the items on the background image:<br />
 ![Item shop assets image](https://i.imgur.com/nDCEHNE.png)
 
-
 ## **"Featured"** script
 - The script: [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
 - _Assets folder:_ [_/FeaturedSkinToStoryAssets_](/FeaturedSkinToStoryAssets)
@@ -61,8 +60,6 @@ The script is the complicated one from the three.
 - The script will put the skin image on the background image, with the overlay image on top:<br />
 ![Final result](https://i.imgur.com/X9HN6RX.png)
 
-
-
 ## The Future
 **This is what i'm planning on developing and upgrading next in this project!**
 - [x] Create a better looking and more detailed "readme" file! :blush:
@@ -70,7 +67,7 @@ The script is the complicated one from the three.
   - [x] Create an algorithm that will choose a way to display the items in the final image. (Done in update 3.0)
   - [ ] Create a new 4on5 grid to display more then 12 items (3on4 grid) like now.
   - [ ] Create a feature that determines if an item is making the first appearance in the item shop, and display it differently.
-- [ ] Create an "Morning routine" script, that will run "News", "ItemShop" and "Featured" scripts automaticlly.
+- [ ] Create an "Morning routine" script, that will run "News", "ItemShop" and "Featured" scripts automatically.
   - [ ] Make all the scripts compatible with importing them.
     - [x] [_v2_ItemShopToStoryImage.py_](v2_ItemShopToStoryImage.py)
     - [ ] [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
@@ -79,3 +76,4 @@ The script is the complicated one from the three.
 - [x] Add "Burbank" font to the repo.
 - [ ] Automate all the scripts, to work automatically and detect updates when needed.
 - [ ] Add a "BeforeYouStart.md" file to repo. it will explain how to install all the needed libraries, and more!
+- [ ] Create a new script named "LeakedFilesToInstagramPost", that will get all leaked and not released files from "fnbr.co" api, and will create an image to post on instagram.
