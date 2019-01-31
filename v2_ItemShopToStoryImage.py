@@ -44,25 +44,32 @@ class RaritySet:
 
 
 class GenericItem:
-    assets_folder_path = os.getcwd() + '\\ItemsAssets'
-    item_name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
-    item_name_color = '#ffffff'
-    item_cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 50)
-    item_cost_color = '#ffffff'
-    space_between_vbuck_image_text = 43
-    item_shadow_box_one_line_1on1 = Image.open(assets_folder_path + '\\Additional files\\ItemShopShadowBoxOneLine.png')
-    item_shadow_box_two_lines_1on1 = Image.open(assets_folder_path + '\\Additional files\\ItemShopShadowBoxTwoLines.png')
-    item_shadow_box_one_line_1on2 = Image.open(assets_folder_path + '\\Additional files\\ItemShop1on2ShadowBoxOneLine.png')
-    item_shadow_box_two_lines_1on2 = Image.open(assets_folder_path + '\\Additional files\\ItemShop1on2ShadowBoxTwoLines.png')
-    item_outline_box_1on1 = Image.open(assets_folder_path + '\\Additional files\\ItemShopOutlineBox_BottomOnly.png')
-    item_outline_box_1on2 = Image.open(assets_folder_path + '\\Additional files\\ItemShop_1on2_OutlineBox_BottomOnly.png')
-    vbucks_image = Image.open(assets_folder_path + '\\Additional files\\icon_vbucks.png').resize((40, 40))
 
-    def __init__(self, item_dict):
+    def __init__(self, item_dict, assets_folder_path):
+
         self.item_shop_info = FortniteApiCommands.ShopInfo(item_dict)
         self.final_image_1on1 = None
         self.final_image_1on2 = None
         self.actual_slot_count = self.get_default_slot_count()
+
+        self.assets_folder_path = assets_folder_path
+        self.item_name_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 60)
+        self.item_name_color = '#ffffff'
+        self.item_cost_font = ImageFont.truetype("BurbankBigRegular-Black.otf", 50)
+        self.item_cost_color = '#ffffff'
+        self.space_between_vbuck_image_text = 43
+        self.item_shadow_box_one_line_1on1 = Image.open(
+            assets_folder_path + '\\Additional files\\ItemShopShadowBoxOneLine.png')
+        self.item_shadow_box_two_lines_1on1 = Image.open(
+            assets_folder_path + '\\Additional files\\ItemShopShadowBoxTwoLines.png')
+        self.item_shadow_box_one_line_1on2 = Image.open(
+            assets_folder_path + '\\Additional files\\ItemShop1on2ShadowBoxOneLine.png')
+        self.item_shadow_box_two_lines_1on2 = Image.open(
+            assets_folder_path + '\\Additional files\\ItemShop1on2ShadowBoxTwoLines.png')
+        self.item_outline_box_1on1 = Image.open(assets_folder_path + '\\Additional files\\ItemShopOutlineBox_BottomOnly.png')
+        self.item_outline_box_1on2 = Image.open(
+            assets_folder_path + '\\Additional files\\ItemShop_1on2_OutlineBox_BottomOnly.png')
+        self.vbucks_image = Image.open(assets_folder_path + '\\Additional files\\icon_vbucks.png').resize((40, 40))
 
     def get_font_width_from_variable(self, variable, font):
         width = font.getsize(variable)[0]  # 0 to get first index, and not list with w and h
@@ -355,7 +362,7 @@ def get_final_item_shop_image(assets_folder_path, shuffle=False):
 
     generic_items_list = []
     for item_dict in items_info_list:
-        generic_item = GenericItem(item_dict)
+        generic_item = GenericItem(item_dict, assets_folder_path)
         generic_item.generate_final_item_images()
         generic_items_list.append(generic_item)
         console.print_replaceable_line(get_print_text(generic_item.get_description_string()))
@@ -392,4 +399,3 @@ if __name__ == "__main__":
     os.startfile(final_image_path_name)
 
     print(get_print_text(r'Final image is saved as "LastItemShopUpload.png" and its now opened.'))
-

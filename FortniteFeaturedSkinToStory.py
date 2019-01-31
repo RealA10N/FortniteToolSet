@@ -48,7 +48,7 @@ featured_image = selected_item.get_featured_image()
 featured_image = featured_image.resize((wip_image_h, wip_image_h))
 featured_im_w, featured_im_h = featured_image.size
 cropping_size = int((featured_im_w - wip_image_w)/2)
-featured_image = featured_image.crop((cropping_size + offset, 0, featured_im_w - cropping_size + offset, wip_image_h))
+featured_image = featured_image.crop((cropping_size - offset, 0, featured_im_w - cropping_size - offset, wip_image_h))
 finished_image = Image.alpha_composite(background_image, featured_image)
 
 overlay_text_image = Image.open(background_assets_path + "\\FeaturedSkinToStory Overlay.png")

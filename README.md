@@ -1,9 +1,9 @@
-# **FortniteToolSet**
+# FortniteToolSet
 A Tool-Set for my personal use.
 Accesses different fortnite api's and generates info and images from them.
 used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
-## **"News"** script
+## "News" script
 - First version: [_FortniteNewsToStoryImageGenerator.py_](FortniteNewsToStoryImageGenerator.py)
 - Second version **(Recommended):** [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
 - _Assets folder:_ [_/NewsGeneratorAssets_](/NewsGeneratorAssets)
@@ -22,7 +22,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 - Finally, the script will put all the images together and save the result:<br />
 ![News script result](https://i.imgur.com/p3EZqw7.png) 
 
-## **"ItemShop"** script
+## "ItemShop" script
 - First version: [_Fortnite Item Shop To Story Image.py_](Fortnite Item Shop To Story Image.py)
 - Second version **(recommended)**: [_v2_Fortnite Item Shop To Story Image.py_](v2_ItemShopToStoryImage.py)
 - Third version **(Still in development)**: [_v3_FortniteItemShopToStoryImage.py_](v3_ItemShopToStoryImage.py)
@@ -42,7 +42,7 @@ The script is the complicated one from the three.
 - Finally, the script will put all the items on the background image:<br />
 ![Item shop assets image](https://i.imgur.com/nDCEHNE.png)
 
-## **"Featured"** script
+## "Featured" script
 - The script: [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
 - _Assets folder:_ [_/FeaturedSkinToStoryAssets_](/FeaturedSkinToStoryAssets)
 
@@ -59,6 +59,13 @@ The script is the complicated one from the three.
 ![Assets image](https://i.imgur.com/bU0WgNa.png)
 - The script will put the skin image on the background image, with the overlay image on top:<br />
 ![Final result](https://i.imgur.com/X9HN6RX.png)
+
+## "Routine" script
+- The script: [_AllScriptsRoutine.py_](AllScriptsRoutine.py)
+
+#### What does it do?
+This script will import the [_ItemShop_](#itemshop-script), [_News_](#news-script) and [_Featured_](#featured-script) scripts, and will run them all together.
+**THIS SCRIPT IS NOT READY YET AND IS UNDER WORK! (:**
 
 ## The Future
 **This is what i'm planning on developing and upgrading next in this project!**
