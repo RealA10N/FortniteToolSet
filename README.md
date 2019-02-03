@@ -67,6 +67,35 @@ The script is the complicated one from the three.
 This script will import the [_ItemShop_](#itemshop-script), [_News_](#news-script) and [_Featured_](#featured-script) scripts, and will run them all together.
 **THIS SCRIPT IS NOT READY YET AND IS UNDER WORK! (:**
 
+## "Email" Script
+- The script: [_SendEmail.py_](SendEmail.py)
+
+#### What does it do?
+This script is for import only. by using the `send_email()` command, you will be able to send emails easily!
+
+#### `send_email()` function inputs
+- **user_email:** your email address. REQUIRED
+- **user_password:** your email password. REQUIRED
+- **recipient:** email address to send the email to. REQUIRED
+- **subject:** the email subject.
+- **body:** the email body.
+- **attchments:** file attchments. can be string or list of strings to file paths.
+
+#### Example
+Running:  
+```
+import SendEmail
+send_email(user_email='me@email.com',
+          user_password='mypassword123',
+          recipient='recipient@email.com',
+          subject='this is the title!',
+          body='some text here',
+          attchments="LastItemShopUpload.png")
+```
+Result should be something like this:
+![Email script result](https://i.imgur.com/5ZIiD2m.png)
+
+
 ## The Future
 **This is what i'm planning on developing and upgrading next in this project!**
 - [x] Create a better looking and more detailed "readme" file! :blush:
