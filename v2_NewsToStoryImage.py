@@ -154,47 +154,53 @@ def get_print_text(text):
         return __name__ + ' | ' + text
 
 
-if_main = __name__ == "__main__"
-console = ConsolePrintFunctions()
-if if_main:
+def get_news_database():
+    api = JsonReader('https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game')
+    database = Database(api.get_json_data())
+    return FortniteDatabase(database)
+
+
+def craft_news_image(news, assets_folder):
+
+    # setting up canvas
+    news_canvas = Image.open(assets_folder + "\\FortniteNewsStoryTemplate.png")
+    console.print_replaceable_line(get_print_text("Background image drawn successfully."))
+
+    newsfunctions = NewsFunctions(news)
+    newsfunctions.generate_story_image(news_canvas)
+    console.print_replaceable_line(get_print_text("Body drawn successfully."))
+    return news_canvas
+
+
+if __name__ == "__main__":
+
+    console = ConsolePrintFunctions()
     console.print_one_line_title("Fortnite News Generator. // Created by @RealA10N", "single heavy square")
-    print()  # to go one line down
-print(get_print_text('Downloading \"News Info\" from API...'))  # to go one line down.
+    print('\n' + get_print_text('Downloading \"News Info\" from API...'))
 
-api = \
-    JsonReader('https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game')
+    assets_folder_path = os.getcwd() + '\\NewsGeneratorAssets'
+    final_image_folder = os.getcwd() + '\\NewsFinalImages'
 
-assets_folder_path = os.getcwd() + '\\NewsGeneratorAssets'
-final_image_folder = os.getcwd() + '\\NewsFinalImages'
+    # makes "NewsFinalImages" folder if it is not found.
+    if not os.path.exists(final_image_folder):
+        os.makedirs(final_image_folder)
 
-# makes "NewsFinalImages" folder if it is not found.
-if not os.path.exists(final_image_folder):
-    os.makedirs(final_image_folder)
+    news_database = get_news_database()
 
-database = Database(api.get_json_data())
-fortnite_database = FortniteDatabase(database)
+    select_index_news_list = []
+    for news in news_database.get_news_list():
+        select_index_news_list.append(get_news_print_title(news))
 
-select_index_news_list = []
-for news in fortnite_database.get_news_list():
-    select_index_news_list.append(get_news_print_title(news))
+    news_index = console.select_by_index(select_index_news_list,
+                                           "Please select the image that you want to make by index:")
+    print()  # to go down one line
+    wanted_news = news_database.get_news_list()[int(news_index)]
 
-wanted_index = console.select_by_index(select_index_news_list, "Please select the image that you want to make by index:")
-wanted_news = fortnite_database.get_news_list()[int(wanted_index)]
-print()
+    final_image_name = "Generated News Image - " + wanted_news.get_title() + ".png"
+    final_image_location = final_image_folder + "\\" + final_image_name
 
-# SETTING UP CANVAS
-news_canvas = Image.open(assets_folder_path + "\\FortniteNewsStoryTemplate.png")
-new_card_canvas = Image.open(assets_folder_path + "\\FortniteNewsStoryTemplate onlycard.png")
-console.print_replaceable_line("Background image drawn successfully.")
+    craft_news_image(wanted_news, assets_folder_path).save(final_image_location)
+    os.startfile(final_image_location)
 
-newsfunctions = NewsFunctions(wanted_news)
-newsfunctions.generate_story_image(news_canvas)
-console.print_replaceable_line("Body drawn successfully.")
-
-final_image_name = "Generated News Image - " + wanted_news.get_title() + ".png"
-final_image_location = final_image_folder + "\\" + final_image_name
-news_canvas.save(final_image_location)
-os.startfile(final_image_location)
-
-console.print_replaceable_line("Final Image saved! Press ENTER to exit.")
-input()
+    console.print_replaceable_line(get_print_text("Final Image saved! Press ENTER to exit."))
+    input()

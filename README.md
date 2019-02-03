@@ -92,7 +92,7 @@ send_email(user_email='me@email.com',
           body='some text here',
           attchments="LastItemShopUpload.png")
 ```
-Result should be something like this:
+Result should be something like this:  
 ![Email script result](https://i.imgur.com/5ZIiD2m.png)
 
 
@@ -106,7 +106,7 @@ Result should be something like this:
 - [ ] Create an "Morning routine" script, that will run "News", "ItemShop" and "Featured" scripts automatically.
   - [ ] Make all the scripts compatible with importing them.
     - [x] [_v2_ItemShopToStoryImage.py_](v2_ItemShopToStoryImage.py)
-    - [ ] [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
+    - [x] [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
     - [ ] [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
   - [ ] Write a script that will import all the scripts.
 - [x] Add "Burbank" font to the repo.

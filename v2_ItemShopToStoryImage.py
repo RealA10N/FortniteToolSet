@@ -394,8 +394,8 @@ if __name__ == "__main__":
     final_image = get_final_item_shop_image(assets_folder_path)
 
     # saving and opening saved file.
-    final_image_path_name = base_folder_path + "\\LastItemShopUpload.png"
+    final_image_path_name = base_folder_path + "\\LastItemShop.png"
     final_image.save(final_image_path_name)
     os.startfile(final_image_path_name)
 
-    print(get_print_text(r'Final image is saved as "LastItemShopUpload.png" and its now opened.'))
+    print(get_print_text(r'Final image is saved as "LastItemShop.png" and its now opened.'))

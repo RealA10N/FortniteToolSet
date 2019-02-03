@@ -26,3 +26,6 @@ base_folder_path = os.getcwd()
 assets_folder_path = base_folder_path + '\\ItemsAssets'
 final_image = get_final_item_shop_image(assets_folder_path)
 final_image.show()
+
+# v2_NewsToStoryImage script
+script_open("v2_ItemSho")

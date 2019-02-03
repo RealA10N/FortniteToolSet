@@ -4,7 +4,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 
-
 def __attach_file(file_path):
     file = open(file_path, 'rb')
     part = MIMEBase('application', 'octet-stream')
