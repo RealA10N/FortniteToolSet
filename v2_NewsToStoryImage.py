@@ -145,9 +145,21 @@ def string_to_word_list(input_string):
     return words_list
 
 
+# if __name__ == "__main__" will print regular text.
+# if __name__ != "__main__" will print text with the script name in front.
+def get_print_text(text):
+    if __name__ == "__main__":
+        return text
+    else:
+        return __name__ + ' | ' + text
+
+
+if_main = __name__ == "__main__"
 console = ConsolePrintFunctions()
-console.print_one_line_title("Fortnite News Generator. // Created by @RealA10N", "single heavy square")
-print()  # to go one line down.
+if if_main:
+    console.print_one_line_title("Fortnite News Generator. // Created by @RealA10N", "single heavy square")
+    print()  # to go one line down
+print(get_print_text('Downloading \"News Info\" from API...'))  # to go one line down.
 
 api = \
     JsonReader('https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game')

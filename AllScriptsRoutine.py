@@ -1,6 +1,9 @@
 import os
 from ConsoleFunctions import *
 
+#importing scripts
+from v2_ItemShopToStoryImage import get_final_item_shop_image
+
 
 def script_open(name):
     # print("\nOpening " + name + "...")
@@ -19,7 +22,6 @@ console.print_one_line_title(os.path.basename(__file__) + " // Created by @RealA
 
 # v2_ItemShopToStoryImage script
 script_open("v2_ItemShopToStoryImage")
-from v2_ItemShopToStoryImage import get_final_item_shop_image
 base_folder_path = os.getcwd()
 assets_folder_path = base_folder_path + '\\ItemsAssets'
 final_image = get_final_item_shop_image(assets_folder_path)

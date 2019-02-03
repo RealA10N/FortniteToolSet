@@ -13,6 +13,7 @@ class ItemsList:
         self.__generate_all_info_classes()
 
         self.__icons_only_drawing_images = None
+        self.__featured_only_drawing_images = None
         self.__default_drawing_images = None
 
     # generate ShopInfo class for every item
@@ -76,7 +77,7 @@ class ItemsList:
                          rarity=item_class.get_rarity(),
                          cost=item_class.get_cost(),
                          icon_image=item_class.get_transparent_image())
-            wip_current_dict['image'] = item_drawing.get_1on1_image()
+            wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.get_1on1_image())
             wip_current_dict['size'] = (1, 1)
             wip_dicts_list.append(wip_current_dict)
         self.__icons_only_drawing_images = wip_dicts_list
@@ -86,6 +87,24 @@ class ItemsList:
         if self.__icons_only_drawing_images is None:
             self.__generate_icons_only_images()
         return self.__icons_only_drawing_images
+
+    def __generate_featured_only_images(self):
+        wip_dict_list = []
+        for item_class in self.get_featured_items():
+            wip_current_dict = {'size': (1, 2)}
+            item_drawing = DrawingItems(name=item_class.get_name(),
+                                        rarity=item_class.get_rarity(),
+                                        cost=item_class.get_cost(),
+                                        featured_image=item_class.get_featured_image())
+            wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.get_1on2_image())
+            wip_dict_list.append(wip_current_dict)
+        self.__featured_only_drawing_images = wip_dict_list
+
+    # will return only 1on2 images in dict, with the key 'image'
+    def get_featured_only_images(self):
+        if self.__featured_only_drawing_images is None:
+            self.__generate_featured_only_images()
+        return self.__featured_only_drawing_images
 
     def __generate_default_images(self):
         wip_dicts_list = []
@@ -99,14 +118,14 @@ class ItemsList:
                                             rarity=item_class.get_rarity(),
                                             cost=item_class.get_cost(),
                                             featured_image=item_class.get_featured_image())
-                wip_current_dict['image'] = item_drawing.get_1on2_image()
+                wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.get_1on2_image())
             else:
                 wip_current_dict['size'] = (1, 1)
                 item_drawing = DrawingItems(name=item_class.get_name(),
                                             rarity=item_class.get_rarity(),
                                             cost=item_class.get_cost(),
                                             icon_image=item_class.get_transparent_image())
-                wip_current_dict['image'] = item_drawing.get_1on1_image()
+                wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.get_1on1_image())
 
             wip_dicts_list.append(wip_current_dict)
 
@@ -150,5 +169,6 @@ else:
     else:
         sorting_method = ('icons_only', (4, 5))
 
-for image in items_list_class.get_images_by_sorting_method(sorting_method[0]):
+for image in items_list_class.get_default_images():
+    print(image['size'])
     image['image'].show()
