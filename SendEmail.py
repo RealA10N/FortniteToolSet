@@ -4,47 +4,78 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 
-def __attach_file(file_path):
-    file = open(file_path, 'rb')
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload(file.read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', "attachment; filename= " + file_path)
-    return part
 
+class SendEmail:
 
-def send_email(user_email, user_password, recipient, subject=None, body=None, attchments=None):
+    def __init__(self):
+        self.__user_email = None
+        self.__user_password = None
+        self.__recipients_email = []
+        self.__attachments = []
+        self.__if_login = False
 
-    msg = MIMEMultipart()
+        self.__msg = MIMEMultipart()
+        self.__server = None
 
-    # attach email details to msg
-    msg['Form'] = user_email
-    msg['To'] = recipient
+    def set_subject(self, subject):
+        self.__msg['Subject'] = subject
 
-    # add subject
-    if subject is not None:
-        msg['Subject'] = subject
+    def add_body(self, body):
+        self.__msg.attach(MIMEText(body, 'plain'))
 
-    # add body
-    if body is not None:
-        msg.attach(MIMEText(body, 'plain'))
+    def add_file(self, file_path):
+        self.__attachments.append(file_path)
 
-    # attach files to msg
-    if attchments is not None:
-        if type(attchments) is list:
-            for file in attchments:
-                part = __attach_file(file)
-                msg.attach(part)
-        elif type(attchments) is str:
-            part = __attach_file(attchments)
-            msg.attach(part)
+    def clear_files(self):
+        self.__attachments = []
 
-    # connect to google servers
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login(user_email, user_password)
+    def add_recipient_address(self, email):
+        self.__recipients_email.append(email)
 
-    # send email and quit
-    send_text = msg.as_string()
-    server.sendmail(user_email, recipient, send_text)
-    server.quit()
+    def clear_recipients(self):
+        self.__recipients_email = []
+
+    def login(self, user_email, user_password):
+
+        self.__user_email = user_email
+        self.__user_password = user_password
+
+        # logging to gmail servers
+        self.__server = smtplib.SMTP('smtp.gmail.com', 587)
+        self.__server.starttls()
+        self.__server.login(user_email, user_password)
+
+        self.__if_login = True
+
+    def __attach_file(self, file_path):
+        file = open(file_path, 'rb')
+        part = MIMEBase('application', 'octet-stream')
+        part.set_payload(file.read())
+        encoders.encode_base64(part)
+        part.add_header('Content-Disposition', "attachment; filename= " + file_path)
+        return part
+
+    def send_mail(self):
+
+        # check if logged to server
+        if not self.__if_login:
+            raise Exception('You must login first')
+
+        # check if at least one recipient
+        if self.__recipients_email == []:
+            raise Exception('Please add a least one recipient')
+
+        # attach email details to msg
+        self.__msg['Form'] = self.__user_email
+        self.__msg['To'] = ", ".join(self.__recipients_email)
+
+        # attach files to msg
+        for file in self.__attachments:
+            part = self.__attach_file(file)
+            self.__msg.attach(part)
+
+        # sending the email
+        send_body = self.__msg.as_string()
+        self.__server.sendmail(self.__user_email, self.__recipients_email, send_body)
+        self.__server.quit()
+

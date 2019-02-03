@@ -71,29 +71,41 @@ This script will import the [_ItemShop_](#itemshop-script), [_News_](#news-scrip
 - The script: [_SendEmail.py_](SendEmail.py)
 
 #### What does it do?
-This script is for import only. by using the `send_email()` command, you will be able to send emails easily!
+This script is for import only. by using the `SendEmail()` class, you will be able to send emails easily!
 
-#### `send_email()` function inputs
-- **user_email:** your email address. REQUIRED
-- **user_password:** your email password. REQUIRED
-- **recipient:** email address to send the email to. REQUIRED
-- **subject:** the email subject.
-- **body:** the email body.
-- **attchments:** file attchments. can be string or list of strings to file paths.
+#### class functions
+- `.login(your_gmail, your_password)`  
+Will login you to gmail servers.
+- `.add_recipient_address('recipient@mail.com')`  
+Adds recipient email.
+- `.clear_recipients()`  
+Will clear all recipients from the list. you can still add new ones!
+- `set_subject('my title!')`  
+Will set the the title of the email.
+- `.add_body('this is the text in the mail')`  
+Will add text to the email's body.
+- `.add_file('file_path')`  
+Will add file to the attachments list.
+- `.clear_files()`  
+Will clear all files from attachments list. you can still add new ones!
+- `.send_mail()`  
+Will push all the info to the server, and send the email!
 
 #### Example
 Running:  
 ```
-import SendEmail
-send_email(user_email='me@email.com',
-          user_password='mypassword123',
-          recipient='recipient@email.com',
-          subject='this is the title!',
-          body='some text here',
-          attchments="LastItemShopUpload.png")
+from SendEmail import SendEmail
+
+mail = SendEmail()
+mail.add_recipient_address('daniel@gmail.com')
+mail.add_recipient_address('bob@gmail.com')
+mail.set_subject('this is my title!')
+mail.add_body('this is my body (:')
+mail.login('your_mail@gmail.com', 'PasswordToMail')
+mail.send_mail()
 ```
 Result should be something like this:  
-![Email script result](https://i.imgur.com/5ZIiD2m.png)
+![Email script result](https://i.imgur.com/fSbBoWG.png)
 
 
 ## The Future
