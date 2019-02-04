@@ -34,8 +34,9 @@ class FortniteDatabase:
 
 class NewsFunctions:
 
-    def __init__(self, news):
+    def __init__(self, news, assets_folder_path):
         self.news = news
+        self.assets_folder_path = assets_folder_path
 
     def generate_story_image(self, canvas):
         wip_canvas = self.__paste_news_image(canvas, pasting_position=(50, 638), news_image_size=(900, 450))
@@ -84,7 +85,7 @@ class NewsFunctions:
         if self.news.get_ad_space() is None:
             return canvas
 
-        ad_space_image_path = assets_folder_path + "\\FortniteNewsStory " + self.news.get_ad_space() + ".png"
+        ad_space_image_path = self.assets_folder_path + "\\FortniteNewsStory " + self.news.get_ad_space() + ".png"
 
         try:
             ad_space_image = Image.open(ad_space_image_path).convert("RGBA")
@@ -162,13 +163,16 @@ def get_news_database():
 
 def craft_news_image(news, assets_folder):
 
+    # creates a new console. there are better solutions, still need to be looked at!
+    console = ConsolePrintFunctions()
+
     # setting up canvas
     news_canvas = Image.open(assets_folder + "\\FortniteNewsStoryTemplate.png")
-    console.print_replaceable_line(get_print_text("Background image drawn successfully."))
+    console.print_replaceable_line(get_print_text("Drawing news image for '" + news.get_title() + "'!"))
 
-    newsfunctions = NewsFunctions(news)
+    newsfunctions = NewsFunctions(news, assets_folder)
     newsfunctions.generate_story_image(news_canvas)
-    console.print_replaceable_line(get_print_text("Body drawn successfully."))
+    console.print_replaceable_line(get_print_text("Generated '" + news.get_title() + "' news image successfully!\n"))
     return news_canvas
 
 
