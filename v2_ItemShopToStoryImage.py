@@ -232,8 +232,6 @@ class GenericItemsContainer:
 
     def __init__(self, generic_items_list):
         self.items_list = generic_items_list
-        if shuffle:
-            shuffle(self.items_list)
         self.slot_count = self.count_items_slots()
 
     def get_items_count(self):
@@ -247,6 +245,9 @@ class GenericItemsContainer:
 
     def get_items_slot_count(self):
         return self.slot_count
+
+    def shuffle_items(self):
+        shuffle(self.items_list)
 
 
 # class that represents item placement table
@@ -369,6 +370,8 @@ def get_final_item_shop_image(assets_folder_path, shuffle=False):
     console.print_replaceable_line(get_print_text('All items possessed successfully!\n'))
 
     items_container = GenericItemsContainer(generic_items_list)
+    if shuffle:
+        items_container.shuffle_items()
     table = ItemsPlacementTable(4, 3)
     for item in items_container.items_list:
         table.place_item(item)
@@ -391,7 +394,7 @@ if __name__ == "__main__":
 
     base_folder_path = os.getcwd()
     assets_folder_path = base_folder_path + '\\ItemsAssets'
-    final_image = get_final_item_shop_image(assets_folder_path)
+    final_image = get_final_item_shop_image(assets_folder_path, shuffle=True)
 
     # saving and opening saved file.
     final_image_path_name = base_folder_path + "\\LastItemShop.png"
