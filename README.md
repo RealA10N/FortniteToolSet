@@ -115,14 +115,14 @@ Result should be something like this:
   - [x] Create an algorithm that will choose a way to display the items in the final image. (Done in update 3.0)
   - [ ] Create a new 4on5 grid to display more then 12 items (3on4 grid) like now.
   - [ ] Create a feature that determines if an item is making the first appearance in the item shop, and display it differently.
-- [ ] Create a "Routine" script, that will run "News", "ItemShop" and "Featured" scripts automatically.
+- [x] Create a "Routine" script, that will run "News", "ItemShop" and "Featured" scripts automatically.
   - [x] Make all the scripts compatible with importing them.
     - [x] [_v2_ItemShopToStoryImage.py_](v2_ItemShopToStoryImage.py)
     - [x] [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
     - [x] [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
-  - [ ] Write a script that will import all the scripts.
+  - [x] Write a script that will import all the scripts.
   - [x] Send all the generated files to my email automatically!
-  - [ ] Upload the files to instagram automatically!
+- [ ] Upload the files to instagram automatically!
 - [x] Add "Burbank" font to the repo.
 - [ ] Automate all the scripts, to work automatically and detect updates when needed.
 - [ ] Add a "BeforeYouStart.md" file to repo. it will explain how to install all the needed libraries, and more!

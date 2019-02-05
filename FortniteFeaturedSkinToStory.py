@@ -32,6 +32,10 @@ class GenerateFeaturedImage:
     def set_image_offset(self, offset):
         self.offset = int(offset)
 
+    def __generate_item_save_name(self, item):
+        saving_name = item.get_name() + " - " + item.get_rarity() + ' ' + item.get_type()
+        return saving_name
+
     def get_requested_image(self):
 
         # check if rarity is valid
@@ -64,6 +68,16 @@ def generate_print_title(item):
     return item.get_name() + ' | ' + item.get_rarity() + ' ' + item.get_type()
 
 
+def search_featured_only(shop_api_class):
+    items_list = shop_api_class.get_items_json_list()
+    featured_items = []
+    for item in items_list:
+        item_info = FortniteApiCommands.ShopInfo(item)
+        if item_info.get_if_image_featured():
+            featured_items.append(item_info)
+    return featured_items
+
+
 if __name__ == "__main__":
 
     # print credits
@@ -74,15 +88,10 @@ if __name__ == "__main__":
     # getting info from api
     console.print_replaceable_line('Loading "Fortnite API" data...')
     fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
-    items_info_list = fortnite_api.get_item_shop_json()["items"]
 
     # searching featured only items
     console.print_replaceable_line('Searching for "Featured" items only...')
-    featured_items = []
-    for item in items_info_list:
-        item_info = FortniteApiCommands.ShopInfo(item)
-        if item_info.get_if_image_featured():
-            featured_items.append(item_info)
+    featured_items = search_featured_only(fortnite_api)
     console.print_replaceable_line('All data loaded successfully!\n\n')
 
     # print all skins list, and let the user select one of them

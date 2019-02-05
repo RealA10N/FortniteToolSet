@@ -7,6 +7,7 @@ from FortniteApiCommands import *
 # importing scripts
 from v2_ItemShopToStoryImage import get_final_item_shop_image
 from v2_NewsToStoryImage import craft_news_image, get_news_database
+from FortniteFeaturedSkinToStory import GenerateFeaturedImage, search_featured_only
 
 
 def script_open(name):
@@ -17,6 +18,11 @@ def delete_dir_content(dir_path):
     for file in os.listdir(dir_path):
         file_path = os.path.join(dir_path, file)
         os.unlink(file_path)
+
+def generate_item_save_name(item):
+    saving_name = item.get_name() + " - " + item.get_rarity() + ' ' + item.get_type()
+    return saving_name
+
 
 
 print('''
@@ -33,24 +39,41 @@ delete_dir_content(final_images_dir)
 console = ConsolePrintFunctions()
 console.print_one_line_title(os.path.basename(__file__) + " // Created by @RealA10N", "single heavy square")
 
+
 # v2_ItemShopToStoryImage script
 script_open("v2_ItemShopToStoryImage")
-itemshop_assets_folder_path = base_folder_path + r'\ItemsAssets'
-final_image = get_final_item_shop_image(itemshop_assets_folder_path)
+itemshop_assets_path = base_folder_path + r'\ItemsAssets'
+itemshop_api = FortniteItemShopAPI()
+final_image = get_final_item_shop_image(itemshop_assets_path, itemshop_api=itemshop_api)
 shop_image_path = final_images_dir + r"\ItemShopUpload.png"
 final_image.save(shop_image_path)
 
+
 # v2_NewsIoStoryImage script
 script_open("v2_NewsIoStoryImage")
-news_assets_folder_path = base_folder_path + r'\NewsGeneratorAssets'
+news_assets_path = base_folder_path + r'\NewsGeneratorAssets'
 news_database = get_news_database()
 for news in news_database.get_news_list():
     final_image_name = "News Image - " + news.get_title() + ".png"
     final_image_path = final_images_dir + '\\' + final_image_name
-    craft_news_image(news, news_assets_folder_path).save(final_image_path)
+    craft_news_image(news, news_assets_path).save(final_image_path)
+
 
 # FortniteFeaturedSkinToStory script
-# add script here! (:
+script_open("FortniteFeaturedSkinToStory")
+featured_assets_path = base_folder_path + r'\FeaturedSkinToStoryAssets'
+featured_items = search_featured_only(itemshop_api)
+
+# generate the images. NEEDS TO BE IMPROVED!
+for item in featured_items:
+    generate_image = GenerateFeaturedImage(featured_assets_path)
+    generate_image.set_image(item.get_featured_image())
+    generate_image.set_rarity(item.get_rarity())
+    saving_name = generate_item_save_name(item)
+    saving_path = final_images_dir + '\\' + saving_name + '.png'
+    generate_image.get_requested_image().save(saving_path)
+    print('FortniteFeaturedSkinToStory | Saved featured image of "' + generate_item_save_name(item) + '"!')
+
 
 # send email
 email = SendEmail()

@@ -352,13 +352,16 @@ def get_print_text(text):
         return __name__ + ' | ' + text
 
 
-def get_final_item_shop_image(assets_folder_path, shuffle=False):
+def get_final_item_shop_image(assets_folder_path,itemshop_api=None ,shuffle=False):
 
     console = ConsoleFunctions.ConsolePrintFunctions()
     console.print_replaceable_line(get_print_text('Downloading \"Store Info\" from API...'))
 
-    fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
-    items_info_list = fortnite_api.get_item_shop_json()['items']
+    if itemshop_api is None:
+        fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
+    else:
+        fortnite_api = itemshop_api
+    items_info_list = fortnite_api.get_items_json_list()
     console.print_replaceable_line(get_print_text("Info downloaded and saved successfully.\n"))
 
     generic_items_list = []
