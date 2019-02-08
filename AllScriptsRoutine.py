@@ -19,10 +19,10 @@ def delete_dir_content(dir_path):
         file_path = os.path.join(dir_path, file)
         os.unlink(file_path)
 
+
 def generate_item_save_name(item):
     saving_name = item.get_name() + " - " + item.get_rarity() + ' ' + item.get_type()
     return saving_name
-
 
 
 print('''
@@ -86,3 +86,4 @@ for image in os.listdir(final_images_dir):
 
 email.login(input('enter your email: '), input('enter your password: '))
 email.send_mail()
+email.server_quit()

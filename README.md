@@ -103,6 +103,7 @@ mail.set_subject('this is my title!')
 mail.add_body('this is my body (:')
 mail.login('your_mail@gmail.com', 'PasswordToMail')
 mail.send_mail()
+mail.server_quit()
 ```
 Result should be something like this:  
 ![Email script result](https://i.imgur.com/fSbBoWG.png)

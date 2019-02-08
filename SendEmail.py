@@ -48,6 +48,11 @@ class SendEmail:
 
         self.__if_login = True
 
+    def server_quit(self):
+        if self.__if_login:
+            self.__server.quit()
+            self.__if_login = False
+
     def __attach_file(self, file_path):
         file = open(file_path, 'rb')
         part = MIMEBase('application', 'octet-stream')
@@ -78,5 +83,32 @@ class SendEmail:
         # sending the email
         send_body = self.__msg.as_string()
         self.__server.sendmail(self.__user_email, self.__recipients_email, send_body)
-        self.__server.quit()
 
+
+if __name__ == "__main__":
+    # import tkinter
+    import tkinter as tk
+    from tkinter import filedialog
+
+    # let user select files
+    root = tk.Tk()
+    root.withdraw()  # get rid of tkinter default window
+    files = filedialog.askopenfilenames(parent=root, title='Choose files')
+    files_list = root.tk.splitlist(files)
+
+    send_email_to = input('send email to: ')
+    sender_email = input('sender username: ')
+    sender_password = input('sender password: ')
+
+    email = SendEmail()
+    email.add_recipient_address(send_email_to)
+    email.set_subject('Here are your files!')
+    email.add_body('Sent automatically by a bot. Created by @RealA10N')
+
+    for file in files_list:
+        email.add_file(file)
+
+    email.login(sender_email, sender_password)
+    email.send_mail()
+    email.server_quit()
+    print('email sent successfully!')
