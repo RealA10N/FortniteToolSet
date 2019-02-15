@@ -376,8 +376,8 @@ class JsonReader:
 class FortniteItemShopAPI:
 
     def __init__(self):
-        self.__api_url = "https://api.gamingsdk.com/client/game/fortnite/scope/store/"
-        self.__api_headers = {'Authorization': 'c738e77d4212930fd8a1721fd9511c15'}
+        self.__api_url = "https://fortnite-public-api.theapinetwork.com/prod09/store/get"
+        self.__api_headers = {}  # no headers with new api.
         self.__api_json_reader = None
         self.__api_json_data = None
         self.__api_date_string = None

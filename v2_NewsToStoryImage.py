@@ -176,6 +176,14 @@ def craft_news_image(news, assets_folder):
     return news_canvas
 
 
+def give_proper_file_name(file_name):
+
+    invalid_char_list = ['\\', '/', ':', '*', '?', '"', '<', '>', '|']
+    for char in invalid_char_list:
+        file_name = file_name.replace(char, '')
+    return file_name
+
+
 if __name__ == "__main__":
 
     console = ConsolePrintFunctions()
@@ -200,7 +208,7 @@ if __name__ == "__main__":
     print()  # to go down one line
     wanted_news = news_database.get_news_list()[int(news_index)]
 
-    final_image_name = "Generated News Image - " + wanted_news.get_title() + ".png"
+    final_image_name = "Generated News Image - " + give_proper_file_name(wanted_news.get_title()) + ".png"
     final_image_location = final_image_folder + "\\" + final_image_name
 
     craft_news_image(wanted_news, assets_folder_path).save(final_image_location)
