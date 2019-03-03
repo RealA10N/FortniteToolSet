@@ -1,6 +1,6 @@
 import os
 from ConsoleFunctions import *
-from SendEmail import SendEmail
+from SendEmail import SendEmail, EmailSendingDetails
 from FortniteApiCommands import *
 
 
@@ -75,15 +75,20 @@ for item in featured_items:
     print('FortniteFeaturedSkinToStory | Saved featured image of "' + generate_item_save_name(item) + '"!')
 
 
+# get email sending details from settings file
+email_details = EmailSendingDetails('ToolSetSettings.txt')
+
 # send email
 email = SendEmail()
-email.add_recipient_address('downtown2u@gmail.com')
+email.add_recipient_address(email_details.get_email_to_send_to())
 email.set_subject('Your Instagram Routine!')
 email.add_body('Sent automatically by a bot. Created by @RealA10N')
 for image in os.listdir(final_images_dir):
     file_path = os.path.join(final_images_dir, image)
     email.add_file(file_path)
 
-email.login(input('enter your email: '), input('enter your password: '))
+print('Connecting to google servers...')
+email.login(email_details.get_sender_username(), email_details.get_sender_password())
 email.send_mail()
 email.server_quit()
+print('Files are sent successfully!')
