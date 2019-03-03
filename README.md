@@ -123,6 +123,7 @@ Result should be something like this:
     - [x] [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
   - [x] Write a script that will import all the scripts.
   - [x] Send all the generated files to my email automatically!
+  - [ ] Update the 'README' file with the new version of the script.
 - [ ] Upload the files to instagram automatically!
 - [x] Add "Burbank" font to the repo.
 - [ ] Automate all the scripts, to work automatically and detect updates when needed.

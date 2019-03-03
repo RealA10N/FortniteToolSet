@@ -258,10 +258,12 @@ class NewsInfo:
         print("get if spotlight:", self.get_if_spotlight())
 
     def __generate_news_image(self):
-        news_image = Image.open(
-            BytesIO(requests.get(self.database.find_value_by_key('image')[0]).content)).convert("RGBA")
+        try:
+            self.__news_image = Image.open(
+                BytesIO(requests.get(self.database.find_value_by_key('image')[0]).content)).convert("RGBA")
+        except OSError:
+            self.__news_image = Image.new('RGBA', (900, 450), '#FFFFFF')
         self.__image_already_saved = True
-        self.__news_image = news_image
 
     def get_image(self):
         if self.__image_already_saved is False:

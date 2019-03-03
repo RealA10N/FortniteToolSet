@@ -4,6 +4,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
+import TxtFileManager
 
 
 class SendEmail:
@@ -85,30 +86,64 @@ class SendEmail:
         self.__server.sendmail(self.__user_email, self.__recipients_email, send_body)
 
 
-if __name__ == "__main__":
+class EmailSendingDetails(TxtFileManager.ValuesTxtFile):
+
+    def get_sender_username(self):
+        return self.get_value_by_key('Sender Email')
+
+    def get_sender_password(self):
+        return self.get_value_by_key('Sender Password')
+
+    def get_email_to_send_to(self):
+        return self.get_value_by_key('Send Emails To')
+
+
+def ask_user_for_files_gui(title='Choose files'):
+
     # import tkinter
     import tkinter as tk
     from tkinter import filedialog
 
-    # let user select files
     root = tk.Tk()
     root.withdraw()  # get rid of tkinter default window
-    files = filedialog.askopenfilenames(parent=root, title='Choose files')
-    files_list = root.tk.splitlist(files)
+    files = filedialog.askopenfilenames(parent=root, title=title)
+    return root.tk.splitlist(files)
 
-    send_email_to = input('send email to: ')
-    sender_email = input('sender username: ')
-    sender_password = input('sender password: ')
+
+if __name__ == "__main__":
+
+    # importing console functions
+    import ConsoleFunctions
+    console = ConsoleFunctions.ConsolePrintFunctions()
+    console.print_one_line_title("Email Sender // Created by @RealA10N", "single heavy square")
+    print()  # to go down one line
+
+    # let user select files
+    console.print_replaceable_line('Please select all the files you want to attach your email')
+    files_list = ask_user_for_files_gui()
+
+    files_string = ''
+    for file in files_list:
+        files_string = files_string + str(os.path.basename(file)) + ', '
+    files_string = files_string[0:-2]  # remove the last ', '
+
+    console.print_replaceable_line('The Selected files are: ')
+    print(files_string)
+
+    # load info from 'ToolSetSettings' file
+    email_details = EmailSendingDetails('ToolSetSettings.txt')
 
     email = SendEmail()
-    email.add_recipient_address(send_email_to)
+    email.add_recipient_address(email_details.get_email_to_send_to())
     email.set_subject('Here are your files!')
     email.add_body('Sent automatically by a bot. Created by @RealA10N')
 
+    # add all the files to the email
     for file in files_list:
         email.add_file(file)
 
-    email.login(sender_email, sender_password)
+    console.print_replaceable_line('Connecting to google servers...')
+    email.login(email_details.get_sender_username(), email_details.get_sender_password())
     email.send_mail()
     email.server_quit()
-    print('email sent successfully!')
+    console.print_replaceable_line('Email sent successfully!')
