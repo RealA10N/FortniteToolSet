@@ -5,7 +5,7 @@ Please enter the values for the settings under each 'key' without changing the '
 
 Send Emails To
 test@email.com
-ENTER ABOVE the email address that will be RECIVING all the automated email by the project.
+ENTER ABOVE the email address that will be RECEIVING all the automated email by the project.
 
 Sender Email
 my@email.com
