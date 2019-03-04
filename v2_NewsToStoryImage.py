@@ -1,8 +1,6 @@
 from ConsoleFunctions import *
 from FortniteApiCommands import *
 import os
-from PIL import *
-import subprocess
 
 
 class FortniteDatabase:

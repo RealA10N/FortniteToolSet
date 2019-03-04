@@ -1,5 +1,5 @@
 
-class TxtFileManager:
+class ValuesTxtFile:
 
     def __init__(self, file_path):
 
@@ -16,13 +16,10 @@ class TxtFileManager:
         content = [x.strip() for x in content]  # remove '/n' at the end of the lines
         self.__file_lines_list = content
 
-
-class ValuesTxtFile(TxtFileManager):
-
-    ''' Value must be one line under the key line for function to work
-    If a key is not found, the function will raise an error. '''
-
     def get_value_by_key(self, key):
+
+        ''' Value must be one line under the key line for function to work
+            If a key is not found, the function will raise an error. '''
 
         # search for key line
         try:
