@@ -4,7 +4,7 @@ import sys
 class ConsolePrintFunctions:
 
     frames_collaction = {
-        'default x': {'TR': '╳', 'TL': '╳', 'BR': '╳', 'BL': '╳', 'HO': '╳', 'VE': '╳'},
+        'default': {'TR': '/', 'TL': '\\', 'BR': '\\', 'BL': '/', 'HO': '-', 'VE': '|'},
         'double square': {'TR': '╔', 'TL': '╗', 'BR': '╚', 'BL': '╝', 'HO': '═', 'VE': '║'},
         'single round': {"TR": "╭", "TL": "╮", "BR": "╰", "BL": "╯", "HO": "─", "VE": "│"},
         'single heavy square': {"TR": "┏", "TL": "┓", "BR": "┗", "BL": "┛", "HO": "━", "VE": "┃"},
@@ -13,19 +13,23 @@ class ConsolePrintFunctions:
         'double dash heavy': {"TR": "┏", "TL": "┓", "BR": "┗", "BL": "┛", "HO": "╍", "VE": "╏"}
     }
 
-
     def print_one_line_title(self, text, frame_name):
         # fix illegal frame name
         if frame_name not in self.frames_collaction:
-            frame_name = 'default x'
-        frame = self.frames_collaction[frame_name]
+            frame_name = 'default'
+
+        try:
+            self.__print_one_line_title_by_frame(text, self.frames_collaction[frame_name])
+        except UnicodeEncodeError:
+            self.__print_one_line_title_by_frame(text, self.frames_collaction['default'])
+
+    def __print_one_line_title_by_frame(self, text, frame_dict):
         lines_add = ''
         for i in text:
-            lines_add = lines_add + frame['HO']
-
-        print(frame['TR'] + frame['HO'] + lines_add + frame['HO'] + frame['TL'])
-        print(frame['VE'] + ' ' + text + ' ' + frame['VE'])
-        print(frame['BR'] + frame['HO'] + lines_add + frame['HO'] + frame['BL'])
+            lines_add = lines_add + frame_dict['HO']
+        print(frame_dict['TR'] + frame_dict['HO'] + lines_add + frame_dict['HO'] + frame_dict['TL'])
+        print(frame_dict['VE'] + ' ' + text + ' ' + frame_dict['VE'])
+        print(frame_dict['BR'] + frame_dict['HO'] + lines_add + frame_dict['HO'] + frame_dict['BL'])
 
     def test_all_frames(self, text):
         for frame in self.frames_collaction:
@@ -46,4 +50,3 @@ class ConsolePrintFunctions:
             print(loop_index, self.text_index_sepatator, title)
             loop_index += 1
         return input()
-
