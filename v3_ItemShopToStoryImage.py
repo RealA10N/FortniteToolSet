@@ -1,6 +1,7 @@
 from FortniteApiCommands import *
 from ConsoleFunctions import *
 
+
 class ItemsList:
 
     def __init__(self, items_list):
@@ -77,7 +78,7 @@ class ItemsList:
                          rarity=item_class.get_rarity(),
                          cost=item_class.get_cost(),
                          icon_image=item_class.get_transparent_image())
-            wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.get_1on1_image())
+            wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.__get_1on1_background_image())
             wip_current_dict['size'] = (1, 1)
             wip_dicts_list.append(wip_current_dict)
         self.__icons_only_drawing_images = wip_dicts_list
@@ -96,7 +97,7 @@ class ItemsList:
                                         rarity=item_class.get_rarity(),
                                         cost=item_class.get_cost(),
                                         featured_image=item_class.get_featured_image())
-            wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.get_1on2_image())
+            wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.__get_1on2_background_image())
             wip_dict_list.append(wip_current_dict)
         self.__featured_only_drawing_images = wip_dict_list
 
@@ -118,14 +119,14 @@ class ItemsList:
                                             rarity=item_class.get_rarity(),
                                             cost=item_class.get_cost(),
                                             featured_image=item_class.get_featured_image())
-                wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.get_1on2_image())
+                wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.__get_1on2_background_image())
             else:
                 wip_current_dict['size'] = (1, 1)
                 item_drawing = DrawingItems(name=item_class.get_name(),
                                             rarity=item_class.get_rarity(),
                                             cost=item_class.get_cost(),
                                             icon_image=item_class.get_transparent_image())
-                wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.get_1on1_image())
+                wip_current_dict['image'] = item_drawing.generate_info_image(item_drawing.__get_1on1_background_image())
 
             wip_dicts_list.append(wip_current_dict)
 
@@ -150,6 +151,15 @@ console = ConsolePrintFunctions()
 console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
 
 fortnite_api = FortniteItemShopAPI()
+items_list = fortnite_api.get_item_shop_json()['items']
+
+for item_dict in items_list:
+    item_class = DrawingShopItem(item_dict)
+    item_class.get_deafult_info_image().show()
+
+
+'''
+fortnite_api = FortniteItemShopAPI()
 items_list_class = ItemsList(fortnite_api.get_item_shop_json()['items'])
 
 # algorithm that decides how to sort the items in the final image.
@@ -172,3 +182,4 @@ else:
 for image in items_list_class.get_default_images():
     print(image['size'])
     image['image'].show()
+'''
