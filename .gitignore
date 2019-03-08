@@ -4,6 +4,9 @@ LastItemShop.png
 /ReadmeAssets
 /NewsFinalImages
 
+# settings file
+ToolSetSettings.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
