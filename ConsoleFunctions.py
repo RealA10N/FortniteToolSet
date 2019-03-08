@@ -4,7 +4,7 @@ import sys
 class ConsolePrintFunctions:
 
     frames_collaction = {
-        'default': {'TR': '/', 'TL': '\\', 'BR': '\\', 'BL': '/', 'HO': '-', 'VE': '|'},
+        'default': {'TR': '-', 'TL': '-', 'BR': '-', 'BL': '-', 'HO': '-', 'VE': '|'},
         'double square': {'TR': '╔', 'TL': '╗', 'BR': '╚', 'BL': '╝', 'HO': '═', 'VE': '║'},
         'single round': {"TR": "╭", "TL": "╮", "BR": "╰", "BL": "╯", "HO": "─", "VE": "│"},
         'single heavy square': {"TR": "┏", "TL": "┓", "BR": "┗", "BL": "┛", "HO": "━", "VE": "┃"},
