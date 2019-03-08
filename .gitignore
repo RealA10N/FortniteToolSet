@@ -3,9 +3,16 @@ LastFeaturedSkinToStory.png
 LastItemShop.png
 /ReadmeAssets
 /NewsFinalImages
+/RoutineFinalImages
 
 # settings file
 ToolSetSettings.txt
+
+# photoshop files
+*.psd
+
+# pycharm files
+/.idea
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
