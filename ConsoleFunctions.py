@@ -3,17 +3,24 @@ import sys
 
 class ConsolePrintFunctions:
 
-    frames_collaction = {
-        'default': {'TR': '-', 'TL': '-', 'BR': '-', 'BL': '-', 'HO': '-', 'VE': '|'},
-        'double square': {'TR': '╔', 'TL': '╗', 'BR': '╚', 'BL': '╝', 'HO': '═', 'VE': '║'},
-        'single round': {"TR": "╭", "TL": "╮", "BR": "╰", "BL": "╯", "HO": "─", "VE": "│"},
-        'single heavy square': {"TR": "┏", "TL": "┓", "BR": "┗", "BL": "┛", "HO": "━", "VE": "┃"},
-        'single light square': {"TR": "┌", "TL": "┐", "BR": "└", "BL": "┘", "HO": "─", "VE": "│"},
-        'double dash light': {"TR": "┌", "TL": "┐", "BR": "└", "BL": "┘", "HO": "╌", "VE": "╎"},
-        'double dash heavy': {"TR": "┏", "TL": "┓", "BR": "┗", "BL": "┛", "HO": "╍", "VE": "╏"}
-    }
+    def __init__(self):
+
+        self.frames_collaction = {
+            'default': {'TR': '-', 'TL': '-', 'BR': '-', 'BL': '-', 'HO': '-', 'VE': '|'},
+            'double square': {'TR': '╔', 'TL': '╗', 'BR': '╚', 'BL': '╝', 'HO': '═', 'VE': '║'},
+            'single round': {"TR": "╭", "TL": "╮", "BR": "╰", "BL": "╯", "HO": "─", "VE": "│"},
+            'single heavy square': {"TR": "┏", "TL": "┓", "BR": "┗", "BL": "┛", "HO": "━", "VE": "┃"},
+            'single light square': {"TR": "┌", "TL": "┐", "BR": "└", "BL": "┘", "HO": "─", "VE": "│"},
+            'double dash light': {"TR": "┌", "TL": "┐", "BR": "└", "BL": "┘", "HO": "╌", "VE": "╎"},
+            'double dash heavy': {"TR": "┏", "TL": "┓", "BR": "┗", "BL": "┛", "HO": "╍", "VE": "╏"}
+        }
+        self.__opened_script = None
+        self.text_index_separator = ' ➔ '
 
     def print_one_line_title(self, text, frame_name):
+
+        text = self.__add_open_text(text)
+
         # fix illegal frame name
         if frame_name not in self.frames_collaction:
             frame_name = 'default'
@@ -36,9 +43,8 @@ class ConsolePrintFunctions:
             self.print_one_line_title(text, frame)
 
     def print_replaceable_line(self, text):
+        text = self.__add_open_text(text)
         return sys.stdout.write('\r' + text)
-
-    text_index_sepatator = ' ➔ '
 
     def select_by_index(self, titles_list, print_before_input=None):
 
@@ -47,6 +53,25 @@ class ConsolePrintFunctions:
 
         loop_index = 0
         for title in titles_list:
-            print(loop_index, self.text_index_sepatator, title)
+            print(loop_index, self.text_index_separator, title)
             loop_index += 1
         return input()
+
+    def script_open(self, name):
+        self.__opened_script = name
+        print("\n" + name + " | Importing...")
+
+    def script_close(self):
+        self.__opened_script = None
+
+    def __add_open_text(self, text):
+        if self.__opened_script is not None:
+            return self.__opened_script + ' | ' + text
+        else:
+            return text
+
+    def regular_print(self, text):
+        print(self.__add_open_text(text))
+
+    def regular_input(self, text):
+        return input(self.__add_open_text(text))
