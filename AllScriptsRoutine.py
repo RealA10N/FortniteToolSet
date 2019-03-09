@@ -20,20 +20,13 @@ def generate_item_save_name(item):
     return saving_name
 
 
-print('''
-About the script:
-this script will import the ItemShop, News and Featured scripts, and will run them all together.
-THIS SCRIPT IS NOT READY YET AND IS UNDER WORK.
-''')
-
-base_folder_path = os.getcwd()
-final_images_dir = base_folder_path + '\\RoutineFinalImages'
-delete_dir_content(final_images_dir)
-
 # print title
 console = ConsolePrintFunctions()
 console.print_one_line_title(os.path.basename(__file__) + " // Created by @RealA10N", "single heavy square")
 
+base_folder_path = os.getcwd()
+final_images_dir = base_folder_path + '\\RoutineFinalImages'
+delete_dir_content(final_images_dir)
 
 # v3_ItemShopToStoryImage script
 console.script_open("v3_ItemShopToStoryImage")
