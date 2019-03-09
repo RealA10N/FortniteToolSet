@@ -53,31 +53,39 @@ class ItemsContainer:
         return self.__items_tables
 
 
-def paste_images_on_canvas(canvas, table, pasting_starting_position, pasting_jumps):
+def paste_images_on_canvas(canvas, table):
+
+    normal_psp = (75, 500)  # normal_pasting_starting_position
+    pasting_jumps = (300, 300)
 
     row_index = 0
     for items_row in table:
 
-        column_index = 0
+        if 'taken' not in items_row:
+            starting_position = (75 + (150*items_row.count(None)), 500)
+            while None in items_row: items_row.remove(None)  # remove all 'None' from items_row
+        else:  # list has 'taken'
+            starting_position = (75, 500)
+
+        item_index = 0
         for item in items_row:
 
             # if item is not image
-            if item == None or item == 'taken':
-                column_index += 1
+            if item == 'taken' or item is None:
+                item_index += 1
                 continue
 
-            # check if its a 1on2
-            if item.size[0] == item.size[1]:
+            if item.size[0] == item.size[1]:  # check if its a 1on2
                 item = item.resize((250, 250))
             else:
                 item = item.resize((250, 550))
 
             # paste on canvas
-            pasting_location = (pasting_starting_position[0] + column_index * pasting_jumps[0],
-                                pasting_starting_position[1] + row_index * pasting_jumps[1])
+            pasting_location = (starting_position[0] + item_index * pasting_jumps[0],
+                                starting_position[1] + row_index * pasting_jumps[1])
             canvas.paste(item, pasting_location)
 
-            column_index += 1
+            item_index += 1
         row_index += 1
 
     return canvas
@@ -122,9 +130,12 @@ if __name__ == "__main__":
     for table in items_container.get_tables_list():
 
         item_shop_canvas = Image.open(canvas_path)
-        paste_images_on_canvas(item_shop_canvas, table, (75, 500), (300, 300))
+        paste_images_on_canvas(item_shop_canvas, table)
         file_name = 'LastItemShop(' + str(photo_index) + ').png'
         image_saving_path = os.path.join(result_folder_path, file_name)
         item_shop_canvas.save(image_saving_path)
-        print("File '" + file_name + "' is now saved in the 'ItemShopFinalImages' folder.")
+        os.startfile(image_saving_path)
+        print("File '" + file_name + "' is now opened and saved in the 'ItemShopFinalImages' folder.")
         photo_index += 1
+
+    input('\nPress any key to exit. ')

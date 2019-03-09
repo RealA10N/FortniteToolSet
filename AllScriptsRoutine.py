@@ -65,7 +65,7 @@ for news in news_database.get_news_list():
     final_image_name = "News Image - " + give_proper_file_name(news.get_title()) + ".png"
     final_image_path = final_images_dir + '\\' + final_image_name
     craft_news_image(news, news_assets_path).save(final_image_path)
-
+print()  # to go down one line
 
 # FortniteFeaturedSkinToStory script
 console.script_open("FortniteFeaturedSkinToStory")
