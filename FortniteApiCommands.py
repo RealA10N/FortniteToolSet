@@ -235,13 +235,11 @@ class DrawingShopItem(ShopInfo):
 
         return wip_image.convert("RGB")
 
-    def get_deafult_info_image(self):
-
+    def get_default_info_image(self):
         # will return 1on2 image if possible.
         return self.__generate_info_image(self.__get_default_background_image())
 
     def get_icon_info_image(self):
-
         # always will return 1on1 image.
         return self.__generate_info_image(self.__get_1on1_background_image())
 
