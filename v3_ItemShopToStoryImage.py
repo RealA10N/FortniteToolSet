@@ -49,14 +49,82 @@ class ItemsContainer:
             temp_list = []
         self.__items_tables.append(final_list)
 
-console = ConsolePrintFunctions()
-console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
+    def get_tables_list(self):
+        return self.__items_tables
 
-fortnite_api = FortniteItemShopAPI()
-items_list = fortnite_api.get_items_json_list()
 
-items_container = ItemsContainer((3, 4))
+def paste_images_on_canvas(canvas, table, pasting_starting_position, pasting_jumps):
 
-for item_dict in items_list:
-    item_class = DrawingShopItem(item_dict)
-    items_container.append_item(item_class)
+    row_index = 0
+    for items_row in table:
+
+        column_index = 0
+        for item in items_row:
+
+            # if item is not image
+            if item == None or item == 'taken':
+                column_index += 1
+                continue
+
+            # check if its a 1on2
+            if item.size[0] == item.size[1]:
+                item = item.resize((250, 250))
+            else:
+                item = item.resize((250, 550))
+
+            # paste on canvas
+            pasting_location = (pasting_starting_position[0] + column_index * pasting_jumps[0],
+                                pasting_starting_position[1] + row_index * pasting_jumps[1])
+            canvas.paste(item, pasting_location)
+
+            column_index += 1
+        row_index += 1
+
+    return canvas
+
+
+def delete_dir_content(dir_path):
+
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+    for file in os.listdir(dir_path):
+        file_path = os.path.join(dir_path, file)
+        os.unlink(file_path)
+
+
+if __name__ == "__main__":
+
+    console = ConsolePrintFunctions()
+    console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
+    print()  # to go down one line
+
+    base_folder_path = os.getcwd()
+    assets_folder_path = os.path.join(base_folder_path, 'ItemsAssets')
+    result_folder_path = os.path.join(base_folder_path, 'ItemShopFinalImages')
+    delete_dir_content(result_folder_path)
+
+    console.print_replaceable_line('Downloading itemshop info from api...')
+    fortnite_api = FortniteItemShopAPI()
+    items_list = fortnite_api.get_items_json_list()
+    console.print_replaceable_line('Downloaded itemshop info from api.\n')
+
+    items_container = ItemsContainer((3, 4))
+    for item_dict in items_list:
+        item_class = DrawingShopItem(item_dict)
+        console.print_replaceable_line(item_class.get_description_string())
+        items_container.append_item(item_class)
+    console.print_replaceable_line('All items possessed successfully.\n\n')
+
+    canvas_path = os.path.join(assets_folder_path, 'Additional files', 'ItemShopStoryTemplate.png')
+
+    photo_index = 1
+    for table in items_container.get_tables_list():
+
+        item_shop_canvas = Image.open(canvas_path)
+        paste_images_on_canvas(item_shop_canvas, table, (75, 500), (300, 300))
+        file_name = 'LastItemShop(' + str(photo_index) + ').png'
+        image_saving_path = os.path.join(result_folder_path, file_name)
+        item_shop_canvas.save(image_saving_path)
+        print("File '" + file_name + "' is now saved in the 'ItemShopFinalImages' folder.")
+        photo_index += 1

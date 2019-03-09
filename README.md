@@ -24,15 +24,15 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
 ## "ItemShop" script
 - First version: [_Fortnite Item Shop To Story Image.py_](Fortnite Item Shop To Story Image.py)
-- Second version **(recommended)**: [_v2_Fortnite Item Shop To Story Image.py_](v2_ItemShopToStoryImage.py)
-- Third version **(Still in development)**: [_v3_FortniteItemShopToStoryImage.py_](v3_ItemShopToStoryImage.py)
+- Second version: [_v2_Fortnite Item Shop To Story Image.py_](v2_ItemShopToStoryImage.py)
+- Third version **(recommended)**: [_v3_FortniteItemShopToStoryImage.py_](v3_ItemShopToStoryImage.py)
 - _Assets folder:_ [_/ItemsAssets_](/ItemsAssets)
 
 #### What does it do?
-The script is the complicated one from the three.
 1. The script will download the current Fortnite item shop info from an api.
 2. It will run an algorithm to check how many featured and non-featured items there are in the shop (version 3+ only).
 3. The script will create icons of every item, and place them in order on a background image.
+4. If needed, more then one image will be created and saved (version 3+ only).
 
 #### Example
 - The script will download all the info from the api:<br />
@@ -114,7 +114,7 @@ Result should be something like this:
 - [x] Create a better looking and more detailed "readme" file! :blush:
 - [x] Improve the "ItemShop" script, and create a third version of it. (In progress)
   - [x] Create an algorithm that will choose a way to display the items in the final image. (Done in update 3.0)
-  - [ ] Create a new 4on5 grid to display more then 12 items (3on4 grid) like now.
+  - [x] Add a support to more then one itemshop image. (Added in [_v3_ItemShopToStoryImage.py_](v3_ItemShopToStoryImage.py))
   - [ ] Create a feature that determines if an item is making the first appearance in the item shop, and display it differently.
 - [x] Create a "Routine" script, that will run "News", "ItemShop" and "Featured" scripts automatically.
   - [x] Make all the scripts compatible with importing them.

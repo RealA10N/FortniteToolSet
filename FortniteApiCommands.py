@@ -65,6 +65,12 @@ class ShopInfo:
         self.featured_image_already_saved = True
         return featured_image
 
+    def get_description_string(self):
+        return ("Processing Item: " +
+                self.get_name() + ' | ' +
+                self.get_rarity() + ' ' +
+                self.get_type() + '.')
+
 
 # a class that will load all the needed assets and save them.
 class Assets:
