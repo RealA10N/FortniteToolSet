@@ -49,7 +49,7 @@ canvas_path = os.path.join(itemshop_assets_path, 'Additional files', 'ItemShopSt
 photo_index = 1
 for table in items_container.get_tables_list():
     item_shop_canvas = Image.open(canvas_path)
-    paste_images_on_canvas(item_shop_canvas, table, (75, 500), (300, 300))
+    paste_images_on_canvas(item_shop_canvas, table)
     file_name = 'LastItemShop(' + str(photo_index) + ').png'
     image_saving_path = os.path.join(final_images_dir, file_name)
     item_shop_canvas.save(image_saving_path)

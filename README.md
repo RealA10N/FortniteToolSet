@@ -65,7 +65,6 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
 #### What does it do?
 This script will import the [_ItemShop_](#itemshop-script), [_News_](#news-script) and [_Featured_](#featured-script) scripts, and will run them all together.
-**THIS SCRIPT IS NOT READY YET AND IS UNDER WORK! (:**
 
 ## "Email" Script
 - The script: [_SendEmail.py_](SendEmail.py)

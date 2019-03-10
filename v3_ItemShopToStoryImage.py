@@ -55,7 +55,6 @@ class ItemsContainer:
 
 def paste_images_on_canvas(canvas, table):
 
-    normal_psp = (75, 500)  # normal_pasting_starting_position
     pasting_jumps = (300, 300)
 
     row_index = 0
