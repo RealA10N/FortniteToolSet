@@ -4,12 +4,16 @@ from SendEmail import SendEmail, EmailSendingDetails
 from FortniteApiCommands import *
 
 # importing scripts
-from v3_ItemShopToStoryImage import *
+from v3_ItemShopToStoryImage import ItemsContainer, paste_images_on_canvas
 from v2_NewsToStoryImage import craft_news_image, get_news_database, give_proper_file_name
 from FortniteFeaturedSkinToStory import GenerateFeaturedImage, search_featured_only
 
 
 def delete_dir_content(dir_path):
+
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
     for file in os.listdir(dir_path):
         file_path = os.path.join(dir_path, file)
         os.unlink(file_path)
@@ -39,7 +43,7 @@ console.print_replaceable_line('Downloaded itemshop info from api.\n')
 
 items_container = ItemsContainer((3, 4))
 for item_dict in items_list:
-    item_class = DrawingShopItem(item_dict)
+    item_class = DrawingShopInfo(item_dict)
     console.print_replaceable_line(item_class.get_description_string())
     items_container.append_item(item_class)
 console.print_replaceable_line('All items possessed successfully.\n')
@@ -98,4 +102,4 @@ console.regular_print('Connecting to google servers...')
 email.login(email_details.get_sender_username(), email_details.get_sender_password())
 email.send_mail()
 email.server_quit()
-console.regular_input('Files are sent successfully!')
+console.regular_input('Files are sent successfully! Type anything to exit. ')

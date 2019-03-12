@@ -15,3 +15,6 @@ Sender Password
 mypassword123
 ENTER ABOVE the password to the 'sender email' account.
 
+fnbr.co Key
+xxxx-xxxx-xxxx-xxxx
+ENTER ABOVE your api key for 'fnbr.co' api.

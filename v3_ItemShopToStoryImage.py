@@ -18,7 +18,7 @@ class ItemsContainer:
             self.__add_table((self.__table_width, self.__table_height), None)
 
         if self.__items_tables[c_table][c_row][c_column] is None:  # if the place is empty
-            if item.get_if_image_featured():
+            if item.info_class.get_if_image_featured():
                 if c_row == self.__table_height:  # if its the last line
                     self.__items_tables[c_table][c_row][c_column] = item.get_icon_info_image()
                 else:  # if the item is featured and not the last one
@@ -118,7 +118,7 @@ if __name__ == "__main__":
 
     items_container = ItemsContainer((3, 4))
     for item_dict in items_list:
-        item_class = DrawingShopItem(item_dict)
+        item_class = DrawingShopInfo(item_dict)
         console.print_replaceable_line(item_class.get_description_string())
         items_container.append_item(item_class)
     console.print_replaceable_line('All items possessed successfully.\n\n')
