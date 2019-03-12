@@ -368,6 +368,12 @@ class DrawingInfo():
         # always will return 1on1 image.
         return self.__generate_info_image(self.__get_1on1_background_image())
 
+    def get_description_string(self):
+        return ("Processing Item: " +
+                self.info_class.get_name() + ' | ' +
+                self.info_class.get_rarity() + ' ' +
+                self.info_class.get_type() + '.')
+
 
 class DrawingShopInfo(DrawingInfo):
 
@@ -375,11 +381,6 @@ class DrawingShopInfo(DrawingInfo):
         DrawingInfo.__init__(self)
         self.info_class = ShopInfo(item_dict)
 
-    def get_description_string(self):
-        return ("Processing Item: " +
-                self.info_class.get_name() + ' | ' +
-                self.info_class.get_rarity() + ' ' +
-                self.info_class.get_type() + '.')
 
 
 class DrawingUpcomingInfo(DrawingInfo):
