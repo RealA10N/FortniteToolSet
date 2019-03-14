@@ -5,7 +5,7 @@ from FortniteApiCommands import *
 
 # importing scripts
 from v3_ItemShopToStoryImage import ItemsContainer, paste_images_on_canvas
-from v2_NewsToStoryImage import craft_news_image, get_news_database, give_proper_file_name
+from v2_NewsToStoryImage import craft_news_image, give_proper_file_name
 from FortniteFeaturedSkinToStory import GenerateFeaturedImage, search_featured_only
 
 
@@ -64,12 +64,12 @@ for table in items_container.get_tables_list():
 # v2_NewsIoStoryImage script
 console.script_open("v2_NewsIoStoryImage")
 news_assets_path = base_folder_path + r'\NewsGeneratorAssets'
-news_database = get_news_database()
+news_database = FortniteNewsAPI()
 for news in news_database.get_news_list():
     final_image_name = "News Image - " + give_proper_file_name(news.get_title()) + ".png"
     final_image_path = final_images_dir + '\\' + final_image_name
     craft_news_image(news, news_assets_path).save(final_image_path)
-print()  # to go down one line
+
 
 # FortniteFeaturedSkinToStory script
 console.script_open("FortniteFeaturedSkinToStory")

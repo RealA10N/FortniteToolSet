@@ -3,33 +3,6 @@ from FortniteApiCommands import *
 import os
 
 
-class FortniteDatabase:
-
-    def __init__(self, database):
-        self.__database = database
-        self.__news_dict = None
-        self.__news_list = []
-
-    def __generate_news_dict(self):
-        self.__news_dict = self.__database.find_value_by_key(['battleroyalenews', 'messages'])[0]
-
-    def __generate_news_list(self):
-        if self.__news_dict is None:
-            self.__generate_news_dict()
-        for news in self.__news_dict:
-            self.__news_list.append(NewsInfo(news))
-
-    def get_news_list(self):
-        if self.__news_list == []:
-            self.__generate_news_list()
-        return self.__news_list
-
-    def get_news_dict(self):
-        if self.__news_dict is None:
-            self.__generate_news_dict()
-        return self.__news_dict
-
-
 class NewsFunctions:
 
     def __init__(self, news, assets_folder_path):
@@ -153,12 +126,6 @@ def get_print_text(text):
         return __name__ + ' | ' + text
 
 
-def get_news_database():
-    api = JsonReader('https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game')
-    database = Database(api.get_json_data())
-    return FortniteDatabase(database)
-
-
 def craft_news_image(news, assets_folder):
 
     # creates a new console. there are better solutions, still need to be looked at!
@@ -195,16 +162,16 @@ if __name__ == "__main__":
     if not os.path.exists(final_image_folder):
         os.makedirs(final_image_folder)
 
-    news_database = get_news_database()
+    news_api = FortniteNewsAPI()
 
     select_index_news_list = []
-    for news in news_database.get_news_list():
+    for news in news_api.get_news_list():
         select_index_news_list.append(get_news_print_title(news))
 
     news_index = console.select_by_index(select_index_news_list,
                                            "Please select the image that you want to make by index:")
     print()  # to go down one line
-    wanted_news = news_database.get_news_list()[int(news_index)]
+    wanted_news = news_api.get_news_list()[int(news_index)]
 
     final_image_name = "Generated News Image - " + give_proper_file_name(wanted_news.get_title()) + ".png"
     final_image_location = final_image_folder + "\\" + final_image_name

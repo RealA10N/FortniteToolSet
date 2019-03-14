@@ -524,6 +524,7 @@ class FortniteItemShopAPI(FortniteAPI):
                              api_url="https://fortnite-public-api.theapinetwork.com/prod09/store/get",
                              api_headers={})
         self.__items_json_list = None
+        self.__api_update_id = None
 
     def get_item_shop_json(self):
         self.generate_json_data()
@@ -571,6 +572,36 @@ class FortniteUpcomingAPI(FortniteAPI):
     def get_upcoming_items_json(self):
         self.generate_json_data()
         return self.api_json_data['data']
+
+
+class FortniteNewsAPI(FortniteAPI):
+
+    def __init__(self):
+        FortniteAPI.__init__(self,
+                             'https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game',
+                             {})
+        self.__news_dict = None
+        self.__news_list = []
+        self.__database = Database(self.get_json_data())
+
+    def __generate_news_dict(self):
+        self.__news_dict = self.__database.find_value_by_key(['battleroyalenews', 'messages'])[0]
+
+    def __generate_news_list(self):
+        if self.__news_dict is None:
+            self.__generate_news_dict()
+        for news in self.__news_dict:
+            self.__news_list.append(NewsInfo(news))
+
+    def get_news_list(self):
+        if self.__news_list == []:
+            self.__generate_news_list()
+        return self.__news_list
+
+    def get_news_dict(self):
+        if self.__news_dict is None:
+            self.__generate_news_dict()
+        return self.__news_dict
 
 
 class ApiSettingsDetails(ValuesTxtFile):
