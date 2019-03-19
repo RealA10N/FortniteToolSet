@@ -19,7 +19,7 @@ class ItemsContainer:
 
         if self.__items_tables[c_table][c_row][c_column] is None:  # if the place is empty
             if item.info_class.get_if_image_featured():
-                if c_row == self.__table_height:  # if its the last line
+                if c_row == self.__table_height - 1:  # if its the last line
                     self.__items_tables[c_table][c_row][c_column] = item.get_icon_info_image()
                 else:  # if the item is featured and not the last one
                     self.__items_tables[c_table][c_row][c_column] = item.get_default_info_image()

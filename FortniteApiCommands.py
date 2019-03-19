@@ -252,6 +252,9 @@ class DrawingInfo():
         self.__final_1on1_image = None
         self.__final_1on2_image = None
 
+    def get_info_class(self):
+        return self.info_class
+
     def __build_rarity_path(self, size):
         temp_path = self.assets.get_item_background_assets_path()\
                     + '\\' + self.info_class.get_rarity() + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
@@ -380,7 +383,6 @@ class DrawingShopInfo(DrawingInfo):
     def __init__(self, item_dict):
         DrawingInfo.__init__(self)
         self.info_class = ShopInfo(item_dict)
-
 
 
 class DrawingUpcomingInfo(DrawingInfo):
