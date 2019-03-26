@@ -26,7 +26,8 @@ def generate_item_save_name(item):
 
 # print title
 console = ConsolePrintFunctions()
-console.print_one_line_title(os.path.basename(__file__) + " // Created by @RealA10N", "single heavy square")
+console.print_one_line_title(os.path.basename(
+    __file__) + " // Created by @RealA10N", "single heavy square")
 
 base_folder_path = os.getcwd()
 final_images_dir = base_folder_path + '\\RoutineFinalImages'
@@ -57,7 +58,8 @@ for table in items_container.get_tables_list():
     file_name = 'LastItemShop(' + str(photo_index) + ').png'
     image_saving_path = os.path.join(final_images_dir, file_name)
     item_shop_canvas.save(image_saving_path)
-    console.regular_print("File '" + file_name + "' is now saved in the 'ItemShopFinalImages' folder.")
+    console.regular_print("File '" + file_name +
+                          "' is now saved in the 'ItemShopFinalImages' folder.")
     photo_index += 1
 
 
@@ -84,7 +86,8 @@ for item in featured_items:
     saving_name = generate_item_save_name(item)
     saving_path = final_images_dir + '\\' + saving_name + '.png'
     generate_image.get_requested_image().save(saving_path)
-    print('FortniteFeaturedSkinToStory | Saved featured image of "' + generate_item_save_name(item) + '"!')
+    print('FortniteFeaturedSkinToStory | Saved featured image of "' +
+          generate_item_save_name(item) + '"!')
 
 
 # send email

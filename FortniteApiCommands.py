@@ -14,6 +14,12 @@ class FortniteItemInfo:
         self.featured_image = None
         self.featured_image_already_saved = False
 
+        self.__assets = Assets()  # imports assets from "Assets" class
+        self.__assets.load_item_assets()
+
+    def get_assets_class(self):
+        return self.__assets
+
     def get_itemid(self):
         pass
 
@@ -80,8 +86,12 @@ class ShopInfo(FortniteItemInfo):
         return self.transparent_image
 
     def __generate_transparent_image(self):
-        transparent_image = Image.open(BytesIO(requests.get(self.item_dict['item']['images']['transparent']).content)).resize(
-            (512, 512)).convert("RGBA")
+        try:
+            transparent_image = Image.open(BytesIO(requests.get(self.item_dict['item']['images']['transparent']).content)).resize(
+                (512, 512)).convert("RGBA")
+        except OSError:
+            transparent_image = Assets.get_error_image()
+
         self.image_already_saved = True
         return transparent_image
 
@@ -91,8 +101,12 @@ class ShopInfo(FortniteItemInfo):
         return self.featured_image
 
     def __generate_featured_image(self):
-        featured_image = Image.open(BytesIO(requests.get(
-            self.item_dict['item']['images']['featured']['transparent']).content)).resize((1024, 1024)).convert("RGBA")
+        try:
+            featured_image = Image.open(BytesIO(requests.get(
+                self.item_dict['item']['images']['featured']['transparent']).content)).resize((1024, 1024)).convert("RGBA")
+        except OSError:
+            featured_image = Assets.get_error_image()
+
         self.featured_image_already_saved = True
         return featured_image
 
@@ -117,7 +131,8 @@ class UpcomingInfo(FortniteItemInfo):
     def get_if_featured(self):
         if self.item_dict['images']['featured'] == 'False':
             return False
-        else: return True
+        else:
+            return True
 
     def get_if_image_featured(self):
         if self.get_if_featured() and self.get_type() == 'outfit':
@@ -135,9 +150,13 @@ class UpcomingInfo(FortniteItemInfo):
         return self.transparent_image
 
     def __generate_transparent_image(self):
-        transparent_image = Image.open(
-            BytesIO(requests.get(self.item_dict['images']['icon']).content)).resize(
-            (512, 512)).convert("RGBA")
+        try:
+            transparent_image = Image.open(
+                BytesIO(requests.get(self.item_dict['images']['icon']).content)).resize(
+                (512, 512)).convert("RGBA")
+        except OSError:
+            transparent_image = Assets.get_error_image()
+
         self.image_already_saved = True
         return transparent_image
 
@@ -147,8 +166,12 @@ class UpcomingInfo(FortniteItemInfo):
         return self.featured_image
 
     def __generate_featured_transparent_image(self):
-        featured_image = Image.open(BytesIO(requests.get(
-            self.item_dict['images']['featured']).content)).resize((1024, 1024)).convert("RGBA")
+        try:
+            featured_image = Image.open(BytesIO(requests.get(
+                self.item_dict['images']['featured']).content)).resize((1024, 1024)).convert("RGBA")
+        except OSError:
+            featured_image = Assets.get_error_image()
+
         self.featured_image_already_saved = True
         return featured_image
 
@@ -164,15 +187,21 @@ class Assets:
     def load_item_assets(self):
 
         self.__assets_folder_path = os.path.join(self.__this_folder, 'ItemsAssets')
-        self.__additional_assets_path = self.__assets_folder_path + "\\Additional files"
-        self.__background_assets_path = self.__assets_folder_path + "\\Background Images"
+        self.__additional_assets_path = os.path.join(self.__assets_folder_path, "Additional files")
+        self.__background_assets_path = os.path.join(self.__assets_folder_path, "Background Images")
 
         # load all images
         self.__pasting_image_resolution = (512, 512)
-        self.__shadow_box_one_line = self.open_image(self.__additional_assets_path + '\\ItemShopShadowBoxOneLine.png')
-        self.__shadow_box_two_lines = self.open_image(self.__additional_assets_path + '\\ItemShopShadowBoxTwoLines.png')
-        self.__vbucks_image = self.open_image(self.__additional_assets_path + '\\icon_vbucks.png').resize((40, 40))
-        self.__overlay_image = self.open_image(self.__additional_assets_path + '\\ItemShopOutlineBox_BottomOnly.png')
+        self.__shadow_box_one_line = self.open_image(os.path.join(
+            self.__additional_assets_path, 'ItemShopShadowBoxOneLine.png'))
+        self.__shadow_box_two_lines = self.open_image(os.path.join(
+            self.__additional_assets_path, 'ItemShopShadowBoxTwoLines.png'))
+        self.__vbucks_image = self.open_image(os.path.join(
+            self.__additional_assets_path, 'icon_vbucks.png')).resize((40, 40))
+        self.__overlay_image = self.open_image(os.path.join(
+            self.__additional_assets_path, 'ItemShopOutlineBox_BottomOnly.png'))
+        self.__error_image = self.open_image(os.path.join(
+            self.__additional_assets_path, 'ItemErrorImage.png'))
         self.__name_font = self.open_font("BurbankBigRegular-Black.otf", 60)
         self.__cost_font = self.open_font("BurbankBigRegular-Black.otf", 40)
 
@@ -235,6 +264,9 @@ Please follow the "README.md" file instructions. Press any key to exit.''')
     def get_item_overlay_image(self):
         return self.__overlay_image
 
+    def get_error_image(self):
+        return self.__error_image
+
     def get_item_name_font(self):
         return self.__name_font
 
@@ -244,32 +276,32 @@ Please follow the "README.md" file instructions. Press any key to exit.''')
 
 class DrawingInfo():
 
-    assets = Assets()  # imports assets from "Assets" class
-    assets.load_item_assets()
-
     def __init__(self):
         self.info_class = None
         self.__final_1on1_image = None
         self.__final_1on2_image = None
+        self.assets = None
 
     def get_info_class(self):
         return self.info_class
 
     def __build_rarity_path(self, size):
         temp_path = self.assets.get_item_background_assets_path()\
-                    + '\\' + self.info_class.get_rarity() + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
+            + '\\' + self.info_class.get_rarity() + ' ' + \
+            str(size[0]) + '_' + str(size[1]) + ' background.png'
         if os.path.isfile(temp_path):
             return temp_path
         else:
             return self.assets.get_item_background_assets_path()\
-               + '\\' + "common" + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
+                + '\\' + "common" + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
 
     def __generate_1on1_image(self):
         if self.info_class.get_transparent_image() is None:
             self.__final_1on1_image = 'NoImage'
             return
         wip_image = Image.open(self.__build_rarity_path((1, 1)))
-        icon_image = self.info_class.get_transparent_image().resize(wip_image.size)  # resize icon image to wip image size
+        icon_image = self.info_class.get_transparent_image().resize(
+            wip_image.size)  # resize icon image to wip image size
         self.__final_1on1_image = Image.alpha_composite(wip_image, icon_image)
 
     def __get_1on1_background_image(self):
@@ -285,13 +317,16 @@ class DrawingInfo():
             return
 
         # resize featured image to wip image
-        featured_image = self.info_class.get_featured_image().resize((wip_image.size[1], wip_image.size[1]))
+        featured_image = self.info_class.get_featured_image().resize(
+            (wip_image.size[1], wip_image.size[1]))
         featured_image_size = featured_image.size  # saves image size after resizing.
 
         cropping_size = int((featured_image_size[0] - wip_image.size[0]) / 2)
-        featured_image = featured_image.crop((cropping_size, 0, (featured_image_size[0] - cropping_size), wip_image.size[1]))
+        featured_image = featured_image.crop(
+            (cropping_size, 0, (featured_image_size[0] - cropping_size), wip_image.size[1]))
         featured_image = featured_image.resize(wip_image.size)
-        self.__final_1on2_image = Image.alpha_composite(wip_image.convert("RGBA"), featured_image.convert("RGBA"))
+        self.__final_1on2_image = Image.alpha_composite(
+            wip_image.convert("RGBA"), featured_image.convert("RGBA"))
 
     def __get_1on2_background_image(self):
         if self.__final_1on2_image is None:
@@ -303,9 +338,9 @@ class DrawingInfo():
         # will return 1on2 if possible.
         # if not possible will return 1on1
         if self.info_class.get_if_image_featured():
-             return self.__get_1on2_background_image()
+            return self.__get_1on2_background_image()
         else:
-             return self.__get_1on1_background_image()
+            return self.__get_1on1_background_image()
 
     def __generate_info_image(self, base_image):
 
@@ -314,11 +349,14 @@ class DrawingInfo():
         base_image = base_image.resize((self.assets.get_item_pasting_image_resolution()[0],
                                         int(base_image.size[1] * multiplier)))
 
-        wip_image = Image.new('RGBA', base_image.size, (0, 0, 0, 0))  # creates new transparent image
-        pasting_offset = base_image.size[1] - self.assets.get_item_pasting_image_resolution()[1]  # calculating pasting offset
+        wip_image = Image.new('RGBA', base_image.size, (0, 0, 0, 0)
+                              )  # creates new transparent image
+        # calculating pasting offset
+        pasting_offset = base_image.size[1] - self.assets.get_item_pasting_image_resolution()[1]
 
         # pasting "shadow" effect on images
-        if self.assets.get_item_name_font().getsize(self.info_class.get_name())[0] + 30 < base_image.size[0]:  # checks if the name is fitting in one line.
+        # checks if the name is fitting in one line.
+        if self.assets.get_item_name_font().getsize(self.info_class.get_name())[0] + 30 < base_image.size[0]:
             # if name is one line:
             more_then_one_line = False
             wip_image.paste(self.assets.get_item_shadow_image_one_line(),
@@ -350,15 +388,20 @@ class DrawingInfo():
         cost_starting_height = base_image.size[1] - 57
         space_between_vbucks_text = 43  # space between the vbucks icon and the price text
         cost_width = self.assets.get_item_cost_font().getsize(self.info_class.get_cost())[0]
-        vbucks_image_pasting_location = (int((base_image.size[0] - cost_width - space_between_vbucks_text) / 2), cost_starting_height - 5)
-        wip_image.paste(self.assets.get_item_vbucks_small_icon(), vbucks_image_pasting_location, self.assets.get_item_vbucks_small_icon())
+        vbucks_image_pasting_location = (
+            int((base_image.size[0] - cost_width - space_between_vbucks_text) / 2), cost_starting_height - 5)
+        wip_image.paste(self.assets.get_item_vbucks_small_icon(),
+                        vbucks_image_pasting_location, self.assets.get_item_vbucks_small_icon())
 
         # drawing cost number on image
-        draw_centered_text_lines(wip_canvas, [self.info_class.get_cost()], self.assets.get_item_cost_font(), "#ffffff", cost_starting_height, base_image.size[0], int(space_between_vbucks_text / 2))
+        draw_centered_text_lines(wip_canvas, [self.info_class.get_cost()], self.assets.get_item_cost_font(
+        ), "#ffffff", cost_starting_height, base_image.size[0], int(space_between_vbucks_text / 2))
 
         # pasting image overlay on top of wip image
-        overlay_wip_image = Image.new('RGBA', base_image.size, (0, 0, 0, 0))  # creates new transparent image
-        wip_image.paste(self.assets.get_item_overlay_image(), (0, pasting_offset), self.assets.get_item_overlay_image())
+        # creates new transparent image
+        overlay_wip_image = Image.new('RGBA', base_image.size, (0, 0, 0, 0))
+        wip_image.paste(self.assets.get_item_overlay_image(),
+                        (0, pasting_offset), self.assets.get_item_overlay_image())
         wip_image = Image.alpha_composite(wip_image, overlay_wip_image)
 
         return wip_image.convert("RGB")
@@ -383,6 +426,7 @@ class DrawingShopInfo(DrawingInfo):
     def __init__(self, item_dict):
         DrawingInfo.__init__(self)
         self.info_class = ShopInfo(item_dict)
+        self.assets = self.info_class.get_assets_class()
 
 
 class DrawingUpcomingInfo(DrawingInfo):
@@ -390,6 +434,7 @@ class DrawingUpcomingInfo(DrawingInfo):
     def __init__(self, item_dict):
         DrawingInfo.__init__(self)
         self.info_class = UpcomingInfo(item_dict)
+        self.assets = self.info_class.get_assets_class()
 
 
 class NewsInfo:
@@ -466,7 +511,7 @@ class Database:
         elif type(search_key) is list:
             wip_database = database
             for key in search_key:
-               wip_database = self.__find_value_by_key(key, wip_database)
+                wip_database = self.__find_value_by_key(key, wip_database)
             return wip_database
 
         return []
@@ -630,6 +675,7 @@ def draw_centered_text_lines(
             lines_list[line_num],
             font=lines_font,
             fill=lines_color)
+
 
 def word_list_to_line_list(words_list, max_line_ch):
     lines_list = []
