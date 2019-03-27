@@ -87,11 +87,10 @@ class ShopInfo(FortniteItemInfo):
 
     def __generate_transparent_image(self):
         try:
-            transparent_image = Image.open(BytesIO(requests.get(self.item_dict['item']['images']['transparent']).content)).resize(
-                (512, 512)).convert("RGBA")
+            transparent_image = Image.open(BytesIO(requests.get(self.item_dict['item']['images']['transparent']).content))
         except OSError:
-            transparent_image = Assets.get_error_image()
-
+            transparent_image = self.get_assets_class().get_error_image()
+        transparent_image = transparent_image.resize((512, 512)).convert("RGBA")
         self.image_already_saved = True
         return transparent_image
 
@@ -103,10 +102,10 @@ class ShopInfo(FortniteItemInfo):
     def __generate_featured_image(self):
         try:
             featured_image = Image.open(BytesIO(requests.get(
-                self.item_dict['item']['images']['featured']['transparent']).content)).resize((1024, 1024)).convert("RGBA")
+                self.item_dict['item']['images']['featured']['transparent']).content))
         except OSError:
-            featured_image = Assets.get_error_image()
-
+            featured_image = self.get_assets_class().get_error_image()
+        featured_image = featured_image.resize((1024, 1024)).convert("RGBA")
         self.featured_image_already_saved = True
         return featured_image
 
@@ -152,11 +151,10 @@ class UpcomingInfo(FortniteItemInfo):
     def __generate_transparent_image(self):
         try:
             transparent_image = Image.open(
-                BytesIO(requests.get(self.item_dict['images']['icon']).content)).resize(
-                (512, 512)).convert("RGBA")
+                BytesIO(requests.get(self.item_dict['images']['icon']).content))
         except OSError:
-            transparent_image = Assets.get_error_image()
-
+            transparent_image = self.get_assets_class().get_error_image()
+        transparent_image = transparent_image.resize((512, 512)).convert("RGBA")
         self.image_already_saved = True
         return transparent_image
 
@@ -168,10 +166,10 @@ class UpcomingInfo(FortniteItemInfo):
     def __generate_featured_transparent_image(self):
         try:
             featured_image = Image.open(BytesIO(requests.get(
-                self.item_dict['images']['featured']).content)).resize((1024, 1024)).convert("RGBA")
+                self.item_dict['images']['featured']).content))
         except OSError:
-            featured_image = Assets.get_error_image()
-
+            featured_image = self.get_assets_class().get_error_image()
+        featured_image = featured_image.resize((1024, 1024)).convert("RGBA")
         self.featured_image_already_saved = True
         return featured_image
 
