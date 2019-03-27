@@ -3,8 +3,8 @@ from PIL import Image, ImageDraw, ImageFont  # TO EDIT IMAGES
 from io import BytesIO  # TO LOAD IMAGE FROM API
 import os
 import subprocess
-from ConsoleFunctions import *
-from FortniteApiCommands import *
+import sys
+
 
 class NewsInfo:
 
@@ -19,7 +19,8 @@ class NewsInfo:
     def get_news(self, news_num):
         original_news_dictionary = self.request_list.json()['entries'][news_num]
         try:
-            self.image = Image.open(BytesIO(requests.get(original_news_dictionary['image']).content))
+            self.image = Image.open(BytesIO(requests.get(
+                original_news_dictionary['image']).content))
         except OSError:
             self.image = Image.open(assets_folder_path + "\\NewsErrorImage.png")
         self.title = original_news_dictionary['title']
@@ -90,7 +91,8 @@ print("| Progress | Downloading \"News\" from API.")
 api_list = get_api_request(api_url, api_headers)
 print("| Progress | Info downloaded and saved successfully.")
 if len(sys.argv) == 1:
-    wanted_index = input("|  Input   | Please enter the index of the news you want to generate (0 for latest): ")
+    wanted_index = input(
+        "|  Input   | Please enter the index of the news you want to generate (0 for latest): ")
 else:
     wanted_index = int(sys.argv[1])
 
@@ -153,7 +155,8 @@ subprocess.Popen(open_command)
 
 # SAVE ONLY NEWS ORIGINAL IMAGE
 if save_only_image:
-    original_news_save_location = final_image_folder + "\\Original News Image - " + wanted_news_info.title + ".png"
+    original_news_save_location = final_image_folder + \
+        "\\Original News Image - " + wanted_news_info.title + ".png"
     wanted_news_info.image.save(original_news_save_location)
     original_image_open_command = r'explorer /select,"' + original_news_save_location + r'"'
     subprocess.Popen(original_image_open_command)

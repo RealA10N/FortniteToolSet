@@ -87,7 +87,8 @@ class ShopInfo(FortniteItemInfo):
 
     def __generate_transparent_image(self):
         try:
-            transparent_image = Image.open(BytesIO(requests.get(self.item_dict['item']['images']['transparent']).content))
+            transparent_image = Image.open(BytesIO(requests.get(
+                self.item_dict['item']['images']['transparent']).content))
         except OSError:
             transparent_image = self.get_assets_class().get_error_image()
         transparent_image = transparent_image.resize((512, 512)).convert("RGBA")
@@ -413,10 +414,7 @@ class DrawingInfo():
         return self.__generate_info_image(self.__get_1on1_background_image())
 
     def get_description_string(self):
-        return ("Processing Item: " +
-                self.info_class.get_name() + ' | ' +
-                self.info_class.get_rarity() + ' ' +
-                self.info_class.get_type() + '.')
+        return ("Processing Item: " + self.info_class.get_name() + ' | ' + self.info_class.get_rarity() + ' ' + self.info_class.get_type() + '.')
 
 
 class DrawingShopInfo(DrawingInfo):
@@ -691,3 +689,13 @@ def word_list_to_line_list(words_list, max_line_ch):
     approved_line = approved_line[0:-1]
     lines_list.append(approved_line)
     return lines_list
+
+
+def delete_dir_content(dir_path):
+
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+    for file in os.listdir(dir_path):
+        file_path = os.path.join(dir_path, file)
+        os.unlink(file_path)

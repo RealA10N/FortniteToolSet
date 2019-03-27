@@ -1,4 +1,7 @@
-from FortniteApiCommands import *
+from PIL import Image
+from os import path, curdir, startfile
+
+from FortniteApiCommands import FortniteUpcomingAPI, DrawingUpcomingInfo, delete_dir_content
 import ConsoleFunctions
 
 
@@ -11,7 +14,8 @@ class ItemsContainer:
         self.__num_item_one_table = self.__table_width * self.__table_height
 
     def append_item(self, item):
-        c_table, c_row, c_column = self.__index_to_table_value(self.__current_item_index)  # c = current
+        c_table, c_row, c_column = self.__index_to_table_value(
+            self.__current_item_index)  # c = current
         self.__current_item_index += 1
 
         if len(self.__items_tables) == c_table:
@@ -54,7 +58,8 @@ def paste_images_on_canvas(canvas, table):
         item_index = 0
         for item in items_row:
 
-            if item is None: continue
+            if item is None:
+                continue
 
             item = item.resize((300, 300))
             # paste on canvas
@@ -67,20 +72,32 @@ def paste_images_on_canvas(canvas, table):
 
     return canvas
 
+
+def generate_saving_name(i):
+    return path.join(curdir, 'UpcomingItemsFinalImages', 'UpcomingItems(' + str(i) + ').png')
+
+
 print('''This script is still at work, and may not work as expected or will not work optimally.''')
 
 console = ConsoleFunctions.ConsolePrintFunctions()
-console.print_one_line_title(os.path.basename(__file__) + " // Created by @RealA10N", "single heavy square")
+console.print_one_line_title(path.basename(
+    __file__) + " // Created by @RealA10N", "single heavy square")
+
+delete_dir_content(path.join(curdir, 'UpcomingItemsFinalImages'))
 
 table = ItemsContainer((5, 3))
 api = FortniteUpcomingAPI()
 for item in api.get_upcoming_items_json():
     item_class = DrawingUpcomingInfo(item)
     table.append_item(item_class)
-    #item_class.get_icon_info_image().save('F:\\Projects\\Programming\\FortniteToolSet\\TestImages\\' + item_class.get_info_class().get_name() + '.png')
+    # item_class.get_icon_info_image().save('F:\\Projects\\Programming\\FortniteToolSet\\TestImages\\' + item_class.get_info_class().get_name() + '.png')
     print(item_class.get_description_string())
 
+i = 1
 for table in table.get_tables_list():
-    canvas = Image.open(r'C:\Users\RealA\Desktop\!.png')
+    canvas = Image.open(path.join(curdir, 'UpcomingItemsAssets', 'UpcomingItemAssetsCanvas.png'))
     paste_images_on_canvas(canvas, table)
-    canvas.show()
+    saving_name = generate_saving_name(i)
+    canvas.save(saving_name)
+    startfile(saving_name)
+    i += 1

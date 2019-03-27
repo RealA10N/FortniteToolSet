@@ -1,5 +1,7 @@
-from FortniteApiCommands import *
-from ConsoleFunctions import *
+import os
+from PIL import Image
+from FortniteApiCommands import DrawingShopInfo, FortniteItemShopAPI, delete_dir_content
+from ConsoleFunctions import ConsolePrintFunctions
 
 
 class ItemsContainer:
@@ -11,7 +13,8 @@ class ItemsContainer:
         self.__num_item_one_table = self.__table_width * self.__table_height
 
     def append_item(self, item):
-        c_table, c_row, c_column = self.__index_to_table_value(self.__current_item_index)  # c = current
+        c_table, c_row, c_column = self.__index_to_table_value(
+            self.__current_item_index)  # c = current
         self.__current_item_index += 1
 
         if len(self.__items_tables) == c_table:
@@ -61,8 +64,9 @@ def paste_images_on_canvas(canvas, table):
     for items_row in table:
 
         if 'taken' not in items_row:
-            starting_position = (75 + (150*items_row.count(None)), 500)
-            while None in items_row: items_row.remove(None)  # remove all 'None' from items_row
+            starting_position = (75 + (150 * items_row.count(None)), 500)
+            while None in items_row:
+                items_row.remove(None)  # remove all 'None' from items_row
         else:  # list has 'taken'
             starting_position = (75, 500)
 
@@ -90,20 +94,11 @@ def paste_images_on_canvas(canvas, table):
     return canvas
 
 
-def delete_dir_content(dir_path):
-
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
-
-    for file in os.listdir(dir_path):
-        file_path = os.path.join(dir_path, file)
-        os.unlink(file_path)
-
-
 if __name__ == "__main__":
 
     console = ConsolePrintFunctions()
-    console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
+    console.print_one_line_title(
+        "Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
     print()  # to go down one line
 
     base_folder_path = os.getcwd()

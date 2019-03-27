@@ -3,6 +3,7 @@ import ConsoleFunctions
 import os
 from PIL import Image
 
+
 class GenerateFeaturedImage:
 
     def __init__(self, assets_folder):
@@ -24,7 +25,8 @@ class GenerateFeaturedImage:
     def __check_valid_rarity(self, rarity):
         if rarity in ["legendary", "epic", "rare", "uncommon", "common"]:
             return True
-        else: return False
+        else:
+            return False
 
     def set_rarity(self, rarity):
         self.rarity = rarity
@@ -82,7 +84,8 @@ if __name__ == "__main__":
 
     # print credits
     console = ConsoleFunctions.ConsolePrintFunctions()
-    console.print_one_line_title("Fortnite Featured Image Generator. // Created by @RealA10N", "single heavy square")
+    console.print_one_line_title(
+        "Fortnite Featured Image Generator. // Created by @RealA10N", "single heavy square")
     print()  # to go one line down.
 
     # getting info from api
@@ -98,7 +101,8 @@ if __name__ == "__main__":
     titles_list = []
     for item in featured_items:
         titles_list.append(generate_print_title(item))
-    selected_index = console.select_by_index(titles_list, 'Please select the image that you want to make by index:')
+    selected_index = console.select_by_index(
+        titles_list, 'Please select the image that you want to make by index:')
     selected_item = featured_items[int(selected_index)]
 
     # create a "GenerateFeaturedImage" class
