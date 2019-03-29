@@ -1,8 +1,8 @@
 import requests  # TO GET API
 from PIL import Image, ImageDraw, ImageFont  # TO EDIT IMAGES
 from io import BytesIO  # TO LOAD IMAGE FROM API
-import os.path
-from TxtFileManager import ValuesTxtFile
+import os
+from JsonFileManager import ToolSetSettingsJson
 
 
 class FortniteItemInfo:
@@ -607,10 +607,10 @@ class FortniteItemShopAPI(FortniteAPI):
 class FortniteUpcomingAPI(FortniteAPI):
 
     def __init__(self):
-        api_settings = ApiSettingsDetails('ToolSetSettings.txt')
+        json_settings = ToolSetSettingsJson()
         FortniteAPI.__init__(self,
                              api_url="https://fnbr.co/api/upcoming",
-                             api_headers={'x-api-key': api_settings.get_fnbrco_api_key()})
+                             api_headers={'x-api-key': json_settings.get_fnbrco_api_key()})
 
     def get_upcoming_items_json(self):
         self.generate_json_data()
@@ -645,12 +645,6 @@ class FortniteNewsAPI(FortniteAPI):
         if self.__news_dict is None:
             self.__generate_news_dict()
         return self.__news_dict
-
-
-class ApiSettingsDetails(ValuesTxtFile):
-
-    def get_fnbrco_api_key(self):
-        return self.get_value_by_key('fnbr.co Key')
 
 
 def draw_centered_text_lines(

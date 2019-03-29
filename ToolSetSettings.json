@@ -1,0 +1,18 @@
+{
+  "addressee_email": {
+    "value": "test@email.com",
+    "__description": "The email address that will be RECEIVING all the automated emails by the project."
+  },
+  "sender_email": {
+    "value": "my@email.com",
+    "__description": "The email address that will be SENDING all the automated email by the project. You must have acsess to this email account!"
+  },
+  "sender_password": {
+    "value": "mypassword123",
+    "__description": "The password to the 'sender_email' account."
+  },
+  "fnbr.co_api_key": {
+    "value": "xxxx-xxxx-xxxx-xxxx",
+    "__description": "Your api key for 'fnbr.co' api. required only for certain scripts."
+  }
+}

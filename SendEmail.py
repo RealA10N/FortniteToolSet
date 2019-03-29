@@ -4,7 +4,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
-import TxtFileManager
+from JsonFileManager import ToolSetSettingsJson
 
 
 class SendEmail:
@@ -59,7 +59,8 @@ class SendEmail:
         part = MIMEBase('application', 'octet-stream')
         part.set_payload(file.read())
         encoders.encode_base64(part)
-        part.add_header('Content-Disposition', "attachment; filename= " + os.path.basename(file_path))
+        part.add_header('Content-Disposition', "attachment; filename= " +
+                        os.path.basename(file_path))
         return part
 
     def send_mail(self):
@@ -84,18 +85,6 @@ class SendEmail:
         # sending the email
         send_body = self.__msg.as_string()
         self.__server.sendmail(self.__user_email, self.__recipients_email, send_body)
-
-
-class EmailSendingDetails(TxtFileManager.ValuesTxtFile):
-
-    def get_sender_username(self):
-        return self.get_value_by_key('Sender Email')
-
-    def get_sender_password(self):
-        return self.get_value_by_key('Sender Password')
-
-    def get_email_to_send_to(self):
-        return self.get_value_by_key('Send Emails To')
 
 
 def ask_user_for_files_gui(title='Choose files'):
@@ -131,10 +120,10 @@ if __name__ == "__main__":
     print(files_string)
 
     # load info from 'ToolSetSettings' file
-    email_details = EmailSendingDetails('ToolSetSettings.txt')
+    json_settings = ToolSetSettingsJson()
 
     email = SendEmail()
-    email.add_recipient_address(email_details.get_email_to_send_to())
+    email.add_recipient_address(json_settings.get_addressee_email())
     email.set_subject('Here are your files!')
     email.add_body('Sent automatically by a bot. Created by @RealA10N')
 
@@ -143,7 +132,7 @@ if __name__ == "__main__":
         email.add_file(file)
 
     console.print_replaceable_line('Connecting to google servers...')
-    email.login(email_details.get_sender_username(), email_details.get_sender_password())
+    email.login(json_settings.get_sender_email, json_settings.get_sender_password())
     email.send_mail()
     email.server_quit()
     console.print_replaceable_line('Email sent successfully!')
