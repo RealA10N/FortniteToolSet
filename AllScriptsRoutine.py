@@ -1,7 +1,8 @@
 import os
 from ConsoleFunctions import *
-from SendEmail import SendEmail, EmailSendingDetails
+from SendEmail import SendEmail
 from FortniteApiCommands import *
+from JsonFileManager import ToolSetSettingsJson
 
 # importing scripts
 from v3_ItemShopToStoryImage import ItemsContainer, paste_images_on_canvas
@@ -92,9 +93,9 @@ for item in featured_items:
 
 # send email
 console.script_open('SendEmail')
-email_details = EmailSendingDetails('ToolSetSettings.txt')
+json_settings = ToolSetSettingsJson()
 email = SendEmail()
-email.add_recipient_address(email_details.get_email_to_send_to())
+email.add_recipient_address(json_settings.get_addressee_email())
 email.set_subject('Your Instagram Routine!')
 email.add_body('Sent automatically by a bot. Created by @RealA10N')
 for image in os.listdir(final_images_dir):
@@ -102,7 +103,7 @@ for image in os.listdir(final_images_dir):
     email.add_file(file_path)
 
 console.regular_print('Connecting to google servers...')
-email.login(email_details.get_sender_username(), email_details.get_sender_password())
+email.login(json_settings.get_sender_email(), json_settings.get_sender_password())
 email.send_mail()
 email.server_quit()
 console.regular_input('Files are sent successfully! Type anything to exit. ')

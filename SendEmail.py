@@ -132,7 +132,7 @@ if __name__ == "__main__":
         email.add_file(file)
 
     console.print_replaceable_line('Connecting to google servers...')
-    email.login(json_settings.get_sender_email, json_settings.get_sender_password())
+    email.login(json_settings.get_sender_email(), json_settings.get_sender_password())
     email.send_mail()
     email.server_quit()
     console.print_replaceable_line('Email sent successfully!')
