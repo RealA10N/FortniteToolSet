@@ -10,7 +10,8 @@ class NewsFunctions:
         self.assets_folder_path = assets_folder_path
 
     def generate_story_image(self, canvas):
-        wip_canvas = self.__paste_news_image(canvas, pasting_position=(50, 638), news_image_size=(900, 450))
+        wip_canvas = self.__paste_news_image(
+            canvas, pasting_position=(50, 638), news_image_size=(900, 450))
         wip_drawing_canvas = ImageDraw.Draw(wip_canvas)
         self.__draw_text(wip_drawing_canvas)
         self.__paste_card_image(wip_canvas)
@@ -56,13 +57,15 @@ class NewsFunctions:
         if self.news.get_ad_space() is None:
             return canvas
 
-        ad_space_image_path = self.assets_folder_path + "\\FortniteNewsStory " + self.news.get_ad_space() + ".png"
+        ad_space_image_path = self.assets_folder_path + "\\FortniteNewsStory " + self.news.get_ad_space() + \
+            ".png"
 
         try:
             ad_space_image = Image.open(ad_space_image_path).convert("RGBA")
             return canvas.paste(ad_space_image, (0, 0), ad_space_image)
         except FileNotFoundError:
             return canvas
+
 
 def get_news_print_title(news):
     if news.get_ad_space() is None:
@@ -133,11 +136,13 @@ def craft_news_image(news, assets_folder):
 
     # setting up canvas
     news_canvas = Image.open(assets_folder + "\\FortniteNewsStoryTemplate.png")
-    console.print_replaceable_line(get_print_text("Drawing news image for '" + news.get_title() + "'!"))
+    console.print_replaceable_line(get_print_text(
+        "Drawing news image for '" + news.get_title() + "'!"))
 
     newsfunctions = NewsFunctions(news, assets_folder)
     newsfunctions.generate_story_image(news_canvas)
-    console.print_replaceable_line(get_print_text("Generated '" + news.get_title() + "' news image successfully!\n"))
+    console.print_replaceable_line(get_print_text(
+        "Generated '" + news.get_title() + "' news image successfully!\n"))
     return news_canvas
 
 
@@ -152,7 +157,8 @@ def give_proper_file_name(file_name):
 if __name__ == "__main__":
 
     console = ConsolePrintFunctions()
-    console.print_one_line_title("Fortnite News Generator. // Created by @RealA10N", "single heavy square")
+    console.print_one_line_title(
+        "Fortnite News Generator. // Created by @RealA10N", "single heavy square")
     print('\n' + get_print_text('Downloading \"News Info\" from API...'))
 
     assets_folder_path = os.getcwd() + '\\NewsGeneratorAssets'
@@ -169,11 +175,12 @@ if __name__ == "__main__":
         select_index_news_list.append(get_news_print_title(news))
 
     news_index = console.select_by_index(select_index_news_list,
-                                           "Please select the image that you want to make by index:")
+                                         "Please select the image that you want to make by index:")
     print()  # to go down one line
     wanted_news = news_api.get_news_list()[int(news_index)]
 
-    final_image_name = "Generated News Image - " + give_proper_file_name(wanted_news.get_title()) + ".png"
+    final_image_name = "Generated News Image - " + \
+        give_proper_file_name(wanted_news.get_title()) + ".png"
     final_image_location = final_image_folder + "\\" + final_image_name
 
     craft_news_image(wanted_news, assets_folder_path).save(final_image_location)

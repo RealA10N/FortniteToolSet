@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont  # TO EDIT IMAGES
 import os
 from random import shuffle
-import FortniteApiCommands
+from FortniteApiCommands import ShopInfo, FortniteItemShopAPI
 import ConsoleFunctions
 
 
@@ -14,30 +14,33 @@ class RaritySet:
         self.background_assets_path = self.assets_path + "\\Background Images"
 
     def apply_rarity(self, rarity, size, image=None, featured_image=None):
+        try:
+            working_image = Image.open(self.build_image_path(rarity, size)).convert("RGBA")
+        except FileNotFoundError:
+            working_image = Image.open(self.build_image_path('common', size)).convert("RGBA")
+
+        if size == (1, 1):
             try:
-                working_image = Image.open(self.build_image_path(rarity, size)).convert("RGBA")
-            except FileNotFoundError:
-                working_image = Image.open(self.build_image_path('common', size)).convert("RGBA")
+                return Image.alpha_composite(working_image, image)
+            except ValueError:
+                item_error_image = Image.open(
+                    assets_folder_path + '\\Additional files\\ItemErrorImage.png')
+                return Image.alpha_composite(working_image, item_error_image)
 
-            if size == (1, 1):
-                try:
-                    return Image.alpha_composite(working_image, image)
-                except ValueError:
-                    item_error_image = Image.open(assets_folder_path + '\\Additional files\\ItemErrorImage.png')
-                    return Image.alpha_composite(working_image, item_error_image)
+        elif size == (1, 2):
+            working_w, working_h = working_image.size
+            featured_image = featured_image.resize((working_h, working_h))
+            featured_im_w, featured_im_h = featured_image.size
+            cropping_size = int((featured_im_w - working_w) / 2)
+            featured_image = featured_image.crop(
+                (cropping_size, 0, featured_im_w - cropping_size, working_h))
 
-            elif size == (1, 2):
-                working_w, working_h = working_image.size
-                featured_image = featured_image.resize((working_h, working_h))
-                featured_im_w, featured_im_h = featured_image.size
-                cropping_size = int((featured_im_w - working_w)/2)
-                featured_image = featured_image.crop((cropping_size, 0, featured_im_w-cropping_size, working_h))
-
-                try:
-                    return Image.alpha_composite(working_image, featured_image)
-                except ValueError:
-                    item_error_image = Image.open(assets_folder_path + '\\Additional files\\ItemErrorImage.png')
-                    return Image.alpha_composite(working_image, item_error_image)
+            try:
+                return Image.alpha_composite(working_image, featured_image)
+            except ValueError:
+                item_error_image = Image.open(
+                    assets_folder_path + '\\Additional files\\ItemErrorImage.png')
+                return Image.alpha_composite(working_image, item_error_image)
 
     def build_image_path(self, rarity, size):
         return self.background_assets_path + '\\' + rarity + ' ' + str(size[0]) + '_' + str(size[1]) + ' background.png'
@@ -47,7 +50,7 @@ class GenericItem:
 
     def __init__(self, item_dict, assets_folder_path):
 
-        self.item_shop_info = FortniteApiCommands.ShopInfo(item_dict)
+        self.item_shop_info = ShopInfo(item_dict)
         self.final_image_1on1 = None
         self.final_image_1on2 = None
         self.actual_slot_count = self.get_default_slot_count()
@@ -66,10 +69,12 @@ class GenericItem:
             assets_folder_path + '\\Additional files\\ItemShop1on2ShadowBoxOneLine.png')
         self.item_shadow_box_two_lines_1on2 = Image.open(
             assets_folder_path + '\\Additional files\\ItemShop1on2ShadowBoxTwoLines.png')
-        self.item_outline_box_1on1 = Image.open(assets_folder_path + '\\Additional files\\ItemShopOutlineBox_BottomOnly.png')
+        self.item_outline_box_1on1 = Image.open(
+            assets_folder_path + '\\Additional files\\ItemShopOutlineBox_BottomOnly.png')
         self.item_outline_box_1on2 = Image.open(
             assets_folder_path + '\\Additional files\\ItemShop_1on2_OutlineBox_BottomOnly.png')
-        self.vbucks_image = Image.open(assets_folder_path + '\\Additional files\\icon_vbucks.png').resize((40, 40))
+        self.vbucks_image = Image.open(
+            assets_folder_path + '\\Additional files\\icon_vbucks.png').resize((40, 40))
 
     def get_font_width_from_variable(self, variable, font):
         width = font.getsize(variable)[0]  # 0 to get first index, and not list with w and h
@@ -134,9 +139,11 @@ class GenericItem:
         cur_image_w, cur_image_h = current_item_image.size
         if self.get_font_width_from_variable(self.item_shop_info.get_name(), self.item_name_font) + 20 < cur_image_w:
             if cur_image_h == 512:
-                current_item_image = Image.alpha_composite(current_item_image, self.item_shadow_box_one_line_1on1)
+                current_item_image = Image.alpha_composite(
+                    current_item_image, self.item_shadow_box_one_line_1on1)
             elif cur_image_h == 1126:
-                current_item_image = Image.alpha_composite(current_item_image, self.item_shadow_box_one_line_1on2)
+                current_item_image = Image.alpha_composite(
+                    current_item_image, self.item_shadow_box_one_line_1on2)
             current_item_draw_canvas = ImageDraw.Draw(current_item_image)
             item_name_starting_height = cur_image_h - 112
             self.draw_centered_text_lines(
@@ -148,27 +155,31 @@ class GenericItem:
                 cur_image_w)
         else:
             if cur_image_h == 512:
-                current_item_image = Image.alpha_composite(current_item_image, self.item_shadow_box_two_lines_1on1)
+                current_item_image = Image.alpha_composite(
+                    current_item_image, self.item_shadow_box_two_lines_1on1)
             elif cur_image_h == 1126:
-                current_item_image = Image.alpha_composite(current_item_image, self.item_shadow_box_two_lines_1on2)
+                current_item_image = Image.alpha_composite(
+                    current_item_image, self.item_shadow_box_two_lines_1on2)
             current_item_draw_canvas = ImageDraw.Draw(current_item_image)
             item_name_jumps = 45
             item_name_starting_height = cur_image_h - 112 - item_name_jumps
             self.draw_centered_text_lines(
                 current_item_draw_canvas,
-                self.word_list_to_line_list((self.string_to_word_list(self.item_shop_info.get_name())), 18),
-                    self.item_name_font,
-                    self.item_name_color,
-                    item_name_starting_height,
-                    cur_image_w,
-                    0,
-                    item_name_jumps)
+                self.word_list_to_line_list(
+                    (self.string_to_word_list(self.item_shop_info.get_name())), 18),
+                self.item_name_font,
+                self.item_name_color,
+                item_name_starting_height,
+                cur_image_w,
+                0,
+                item_name_jumps)
 
         # DRAW PRICE
         item_cost_starting_height = cur_image_h - 62
-        item_cost_width = self.get_font_width_from_variable(self.item_shop_info.get_cost(), self.item_cost_font)
+        item_cost_width = self.get_font_width_from_variable(
+            self.item_shop_info.get_cost(), self.item_cost_font)
         vbucks_image_paste_loction = (
-        int((cur_image_w - item_cost_width - self.space_between_vbuck_image_text) / 2), item_cost_starting_height)
+            int((cur_image_w - item_cost_width - self.space_between_vbuck_image_text) / 2), item_cost_starting_height)
         current_item_image.paste(
             self.vbucks_image,
             vbucks_image_paste_loction,
@@ -257,7 +268,7 @@ class ItemsPlacementTable:
         self.table = self.generate_table_list(rows, columns, default_value)
         self.rows = rows
         self.columns = columns
-        self.table_size = rows*columns
+        self.table_size = rows * columns
 
     def generate_table_list(self, rows, columns, default_value=None):
         list = []
@@ -276,7 +287,7 @@ class ItemsPlacementTable:
         return self.legal_table_entry_index(self.coordinates_to_index(row, column))
 
     def coordinates_to_index(self, row, column):
-        return (row*self.columns)+column
+        return (row * self.columns) + column
 
     def index_to_coordinates(self, index):
         row = index // self.columns
@@ -318,7 +329,7 @@ class ItemsPlacementTable:
         return placement_status
 
     def check_if_entry_image(self, row, column):
-        return self.table[row][column] != None and self.table[row][column] != True
+        return self.table[row][column] is not None and self.table[row][column] is not True
 
     def get_placed_items(self):
         placed_items_list = []
@@ -352,13 +363,13 @@ def get_print_text(text):
         return __name__ + ' | ' + text
 
 
-def get_final_item_shop_image(assets_folder_path,itemshop_api=None ,shuffle=False):
+def get_final_item_shop_image(assets_folder_path, itemshop_api=None, shuffle=False):
 
     console = ConsoleFunctions.ConsolePrintFunctions()
     console.print_replaceable_line(get_print_text('Downloading \"Store Info\" from API...'))
 
     if itemshop_api is None:
-        fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
+        fortnite_api = FortniteItemShopAPI()
     else:
         fortnite_api = itemshop_api
     items_info_list = fortnite_api.get_items_json_list()
@@ -379,20 +390,23 @@ def get_final_item_shop_image(assets_folder_path,itemshop_api=None ,shuffle=Fals
     for item in items_container.items_list:
         table.place_item(item)
 
-    item_shop_canvas = Image.open(assets_folder_path + '\\Additional files\\ItemShopStoryTemplate.png')
+    item_shop_canvas = Image.open(
+        assets_folder_path + '\\Additional files\\ItemShopStoryTemplate.png')
     pasting_sp = (500, 75)
     pasting_j = (300, 300)
     final_1on1_size = (250, 250)
     final_1on2_size = (250, 550)
 
-    paste_images_on_canvas(item_shop_canvas, table, pasting_sp, pasting_j, final_1on1_size, final_1on2_size)
+    paste_images_on_canvas(item_shop_canvas, table, pasting_sp,
+                           pasting_j, final_1on1_size, final_1on2_size)
     return item_shop_canvas
 
 
 if __name__ == "__main__":
 
     console = ConsoleFunctions.ConsolePrintFunctions()
-    console.print_one_line_title("Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
+    console.print_one_line_title(
+        "Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
     print()  # to go one line down.
 
     base_folder_path = os.getcwd()

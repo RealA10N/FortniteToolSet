@@ -1,4 +1,4 @@
-import FortniteApiCommands
+from FortniteApiCommands import ShopInfo, FortniteItemShopAPI
 import ConsoleFunctions
 import os
 from PIL import Image
@@ -74,7 +74,7 @@ def search_featured_only(shop_api_class):
     items_list = shop_api_class.get_items_json_list()
     featured_items = []
     for item in items_list:
-        item_info = FortniteApiCommands.ShopInfo(item)
+        item_info = ShopInfo(item)
         if item_info.get_if_image_featured():
             featured_items.append(item_info)
     return featured_items
@@ -90,7 +90,7 @@ if __name__ == "__main__":
 
     # getting info from api
     console.print_replaceable_line('Loading "Fortnite API" data...')
-    fortnite_api = FortniteApiCommands.FortniteItemShopAPI()
+    fortnite_api = FortniteItemShopAPI()
 
     # searching featured only items
     console.print_replaceable_line('Searching for "Featured" items only...')
