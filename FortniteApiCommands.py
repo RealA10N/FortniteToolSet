@@ -499,6 +499,14 @@ class DrawingShopInfo(DrawingInfo):
         self.assets = self.info_class.get_assets_class()
 
 
+class DrawingFnbrCoShopInfo(DrawingInfo):
+
+    def __init__(self, item_dict):
+        DrawingInfo.__init__(self)
+        self.info_class = FnbrCoShopInfo(item_dict)
+        self.assets = self.info_class.get_assets_class()
+
+
 class DrawingUpcomingInfo(DrawingInfo):
 
     def __init__(self, item_dict):
@@ -624,13 +632,13 @@ class FortniteAPI:
         self.api_headers = api_headers  # no headers with new api.
         self.api_json_data = None
 
-    def generate_json_data(self):
+    def __generate_json_data(self):
         request = requests.request("GET", self.api_url, headers=self.api_headers)
         self.api_json_data = request.json()
 
     def get_json_data(self):
         if self.api_json_data is None:
-            self.generate_json_data()
+            self.__generate_json_data()
         return self.api_json_data
 
 
@@ -742,7 +750,7 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
         return self.__featured_items
 
     def __generate_daily_items(self):
-        self.__featured_items = self.get_json_data()['data']['daily']
+        self.__daily_items = self.get_json_data()['data']['daily']
 
     def get_daily_items(self):
         if self.__daily_items is None:
@@ -752,7 +760,7 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
     def __generate_all_items(self):
         self.__all_items = self.get_featured_items() + self.get_daily_items()
 
-    def get_all_items(self):
+    def get_items_json_list(self):
         if self.__all_items is None:
             self.__generate_all_items()
         return self.__all_items
