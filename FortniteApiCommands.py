@@ -151,7 +151,7 @@ class ShopInfo(FortniteItemInfo):
             self.if_image_featured = False
 
     def get_if_image_featured(self):
-        if self.__check_if_image_featured is None:
+        if self.if_image_featured is None:
             self.__check_if_image_featured()
         return self.if_image_featured
 
