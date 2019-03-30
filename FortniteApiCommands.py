@@ -641,6 +641,43 @@ class FortniteNewsAPI(FortniteAPI):
         return self.__news_dict
 
 
+class FortniteFnbrCoShopAPI(FortniteAPI):
+
+    def __init__(self):
+        json_settings = ToolSetSettingsJson()
+        FortniteAPI.__init__(self,
+                             api_url="https://fnbr.co/api/shop",
+                             api_headers={'x-api-key': json_settings.get_fnbrco_api_key()})
+
+        self.__featured_items = None
+        self.__daily_items = None
+        self.__all_items = None
+
+    def __generate_featured_items(self):
+        self.__featured_items = self.get_json_data()['data']['featured']
+
+    def get_featured_items(self):
+        if self.__featured_items is None:
+            self.__generate_featured_items()
+        return self.__featured_items
+
+    def __generate_daily_items(self):
+        self.__featured_items = self.get_json_data()['data']['daily']
+
+    def get_daily_items(self):
+        if self.__daily_items is None:
+            self.__generate_daily_items()
+        return self.__daily_items
+
+    def __generate_all_items(self):
+        self.__all_items = self.get_featured_items() + self.get_daily_items()
+
+    def get_all_items(self):
+        if self.__all_items is None:
+            self.__generate_all_items()
+        return self.__all_items
+
+
 def draw_centered_text_lines(
         canvas,
         lines_list,
