@@ -101,11 +101,8 @@ class ShopInfo(FortniteItemInfo):
         return self.featured_image
 
     def __generate_featured_image(self):
-        try:
-            featured_image = Image.open(BytesIO(requests.get(
-                self.item_dict['item']['images']['featured']['transparent']).content))
-        except OSError:
-            featured_image = self.get_assets_class().get_error_image()
+        featured_image = Image.open(BytesIO(requests.get(
+            self.item_dict['item']['images']['featured']['transparent']).content))
         featured_image = featured_image.resize((1024, 1024)).convert("RGBA")
         self.featured_image_already_saved = True
         return featured_image
@@ -165,11 +162,8 @@ class UpcomingInfo(FortniteItemInfo):
         return self.featured_image
 
     def __generate_featured_transparent_image(self):
-        try:
-            featured_image = Image.open(BytesIO(requests.get(
-                self.item_dict['images']['featured']).content))
-        except OSError:
-            featured_image = self.get_assets_class().get_error_image()
+        featured_image = Image.open(BytesIO(requests.get(
+            self.item_dict['images']['featured']).content))
         featured_image = featured_image.resize((1024, 1024)).convert("RGBA")
         self.featured_image_already_saved = True
         return featured_image
