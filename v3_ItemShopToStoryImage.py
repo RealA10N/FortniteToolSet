@@ -1,7 +1,8 @@
 import os
 from PIL import Image
-from FortniteApiCommands import DrawingShopInfo, FortniteItemShopAPI, delete_dir_content
+from FortniteApiCommands import DrawingShopInfo, FortniteItemShopAPI, delete_dir_content, FortniteFnbrCoShopAPI, DrawingFnbrCoShopInfo
 from ConsoleFunctions import ConsolePrintFunctions
+from JsonFileManager import ToolSetSettingsJson
 
 
 class ItemsContainer:
@@ -94,6 +95,23 @@ def paste_images_on_canvas(canvas, table):
     return canvas
 
 
+def get_items_list_by_api():
+    settings = ToolSetSettingsJson()
+    if settings.if_using_fnbrco_api() is True:
+        fortnite_api = FortniteFnbrCoShopAPI()
+    elif settings.if_using_fortniteapicom_api() is True:
+        fortnite_api = FortniteItemShopAPI()
+    return fortnite_api.get_items_json_list()
+
+
+def get_item_class_by_api(item_dict):
+    settings = ToolSetSettingsJson()
+    if settings.if_using_fnbrco_api() is True:
+        return DrawingFnbrCoShopInfo(item_dict)
+    elif settings.if_using_fortniteapicom_api() is True:
+        return DrawingShopInfo(item_dict)
+
+
 if __name__ == "__main__":
 
     console = ConsolePrintFunctions()
@@ -107,13 +125,12 @@ if __name__ == "__main__":
     delete_dir_content(result_folder_path)
 
     console.print_replaceable_line('Downloading itemshop info from api...')
-    fortnite_api = FortniteItemShopAPI()
-    items_list = fortnite_api.get_items_json_list()
+    items_list = get_items_list_by_api()
     console.print_replaceable_line('Downloaded itemshop info from api.\n')
 
     items_container = ItemsContainer((3, 4))
     for item_dict in items_list:
-        item_class = DrawingShopInfo(item_dict)
+        item_class = get_item_class_by_api(item_dict)
         console.print_replaceable_line(item_class.get_description_string())
         items_container.append_item(item_class)
     console.print_replaceable_line('All items possessed successfully.\n\n')

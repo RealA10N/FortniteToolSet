@@ -31,3 +31,6 @@ class ToolSetSettingsJson:
 
     def if_using_fnbrco_api(self):
         return self.__if_using_x_api('fnbr.co')
+
+    def if_using_fortniteapicom_api(self):
+        return self.__if_using_x_api('fortniteapi.com')
