@@ -1,7 +1,7 @@
 import json
 
 
-class JsonDictReader:
+class ToolSetSettingsJson:
 
     def __init__(self):
         file_path = 'ToolSetSettings.json'
@@ -11,26 +11,23 @@ class JsonDictReader:
         with open(file_path) as file:
             return json.loads(file.read())
 
-    def get_json_date(self):
+    def get_json_data(self):
         return self.__json
 
-    def get_dict_value(self, key):
-        return self.__json[key]['value']
-
-    def get_dict_description(self, key):
-        return self.__json[key]['__description']
-
-
-class ToolSetSettingsJson(JsonDictReader):
-
     def get_addressee_email(self):
-        return self.get_dict_value('addressee_email')
+        return self.__json['addressee_email']['value']
 
     def get_sender_email(self):
-        return self.get_dict_value('sender_email')
+        return self.__json['sender_email']['value']
 
     def get_sender_password(self):
-        return self.get_dict_value('sender_password')
+        return self.__json['sender_password']['value']
 
     def get_fnbrco_api_key(self):
-        return self.get_dict_value('fnbr.co_api_key')
+        return self.get_json_data()['item_shop_api']['choose_api']['fnbr.co']['api_key']
+
+    def __if_using_x_api(self, api_name):
+        return bool(self.get_json_data()['item_shop_api']['choose_api'][api_name]['use_this_api'])
+
+    def if_using_fnbrco_api(self):
+        return self.__if_using_x_api('fnbr.co')

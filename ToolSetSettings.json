@@ -11,8 +11,18 @@
     "value": "mypassword123",
     "__description": "The password to the 'sender_email' account."
   },
-  "fnbr.co_api_key": {
-    "value": "xxxx-xxxx-xxxx-xxxx",
-    "__description": "Your api key for 'fnbr.co' api. required only for certain scripts."
+  "item_shop_api": {
+    "__description": "Please choose one of the following api's to use in all the scripts that import item shop info.",
+    "choose_api": {
+      "fortniteapi.com": {
+        "use_this_api": 1,
+        "__description": "This api is open for everyone, and does not require a key to use."
+      },
+      "fnbr.co": {
+        "use_this_api": 0,
+        "api_key": "xxxx-xxxx-xxxx-xxxx-xxxx",
+        "__description": "This api needs a key. Much more stable and quick then the free one. to get a key, visit http://fnbr.co/api/docs"
+      }
+    }
   }
 }
