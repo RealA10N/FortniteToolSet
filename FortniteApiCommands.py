@@ -49,8 +49,77 @@ class FortniteItemInfo:
         pass
 
 
-# input: the dictionary item form the api
-# parses back: item info
+class FnbrCoShopInfo(FortniteItemInfo):
+
+    def __init__(self, item_dict, if_featured=False):
+        FortniteItemInfo.__init__(self, item_dict)
+        self.__if_featured = if_featured
+
+    def get_itemid(self):
+        return self.item_dict['id']
+
+    def get_name(self):
+        return self.item_dict['name']
+
+    # get_description is special to this api only
+    def get_description(self):
+        return self.item_dict['description']
+
+    def get_cost(self):
+        return self.item_dict['price']
+
+    def get_type(self):
+        return self.item_dict['type']
+
+    def get_rarity(self):
+        return self.item_dict['rarity']
+
+    def get_if_featured(self):
+        return self.__if_featured
+
+    def __check_if_image_featured(self):
+        if self.get_if_featured() and self.get_type() == 'outfit':
+            try:
+                self.get_featured_image()
+                self.__if_image_featured = True
+            except OSError:
+                self.__if_image_featured = False
+        else:
+            self.__if_image_featured = False
+
+    def get_if_image_featured(self):
+        if self.__if_image_featured is None:
+            self.__check_if_image_featured()
+        return self.__if_image_featured
+
+    def get_transparent_image(self):
+        if not self.image_already_saved:
+            self.transparent_image = self.__generate_transparent_image()
+        return self.transparent_image
+
+    def __generate_transparent_image(self):
+        try:
+            transparent_image = Image.open(BytesIO(requests.get(
+                self.item_dict['images']['icon']).content))
+        except OSError:
+            transparent_image = self.get_assets_class().get_error_image()
+        transparent_image = transparent_image.resize((512, 512)).convert("RGBA")
+        self.image_already_saved = True
+        return transparent_image
+
+    def get_featured_image(self):
+        if not self.featured_image_already_saved:
+            self.featured_image = self.__generate_featured_image()
+        return self.featured_image
+
+    def __generate_featured_image(self):
+        featured_image = Image.open(BytesIO(requests.get(
+            self.item_dict['images']['featured']).content))
+        featured_image = featured_image.resize((1024, 1024)).convert("RGBA")
+        self.featured_image_already_saved = True
+        return featured_image
+
+
 class ShopInfo(FortniteItemInfo):
 
     def get_itemid(self):
