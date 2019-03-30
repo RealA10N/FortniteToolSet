@@ -13,7 +13,7 @@ class FortniteItemInfo:
         self.image_already_saved = False
         self.featured_image = None
         self.featured_image_already_saved = False
-        self.__if_image_featured = None
+        self.if_image_featured = None
 
         self.__assets = Assets()  # imports assets from "Assets" class
         self.__assets.load_item_assets()
@@ -81,16 +81,16 @@ class FnbrCoShopInfo(FortniteItemInfo):
         if self.get_if_featured() and self.get_type() == 'outfit':
             try:
                 self.get_featured_image()
-                self.__if_image_featured = True
+                self.if_image_featured = True
             except OSError:
-                self.__if_image_featured = False
+                self.if_image_featured = False
         else:
-            self.__if_image_featured = False
+            self.if_image_featured = False
 
     def get_if_image_featured(self):
-        if self.__if_image_featured is None:
+        if self.if_image_featured is None:
             self.__check_if_image_featured()
-        return self.__if_image_featured
+        return self.if_image_featured
 
     def get_transparent_image(self):
         if not self.image_already_saved:
@@ -144,16 +144,16 @@ class ShopInfo(FortniteItemInfo):
         if self.get_if_featured() and self.get_type() == 'outfit':
             try:
                 self.get_featured_image()
-                self.__if_image_featured = True
+                self.if_image_featured = True
             except OSError:
-                self.__if_image_featured = False
+                self.if_image_featured = False
         else:
-            self.__if_image_featured = False
+            self.if_image_featured = False
 
     def get_if_image_featured(self):
         if self.__check_if_image_featured is None:
             self.__check_if_image_featured()
-        return self.__if_image_featured
+        return self.if_image_featured
 
     def get_transparent_image(self):
         if not self.image_already_saved:
@@ -210,16 +210,16 @@ class UpcomingInfo(FortniteItemInfo):
         if self.get_if_featured() and self.get_type() == 'outfit':
             try:
                 self.get_featured_image()
-                self.__if_image_featured = True
+                self.if_image_featured = True
             except OSError:
-                self.__if_image_featured = False
+                self.if_image_featured = False
         else:
-            self.__if_image_featured = False
+            self.if_image_featured = False
 
     def get_if_image_featured(self):
-        if self.__if_image_featured is None:
+        if self.if_image_featured is None:
             self.__check_if_image_featured()
-        return self.__if_image_featured
+        return self.if_image_featured
 
     def get_transparent_image(self):
         if not self.image_already_saved:
