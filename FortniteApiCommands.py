@@ -13,6 +13,7 @@ class FortniteItemInfo:
         self.image_already_saved = False
         self.featured_image = None
         self.featured_image_already_saved = False
+        self.__if_image_featured = None
 
         self.__assets = Assets()  # imports assets from "Assets" class
         self.__assets.load_item_assets()
@@ -70,15 +71,20 @@ class ShopInfo(FortniteItemInfo):
     def get_if_featured(self):
         return bool(self.item_dict['featured'])
 
-    def get_if_image_featured(self):
+    def __check_if_image_featured(self):
         if self.get_if_featured() and self.get_type() == 'outfit':
             try:
                 self.get_featured_image()
-                return True
+                self.__if_image_featured = True
             except OSError:
-                return False
+                self.__if_image_featured = False
         else:
-            return False
+            self.__if_image_featured = False
+
+    def get_if_image_featured(self):
+        if self.__check_if_image_featured is None:
+            self.__check_if_image_featured()
+        return self.__if_image_featured
 
     def get_transparent_image(self):
         if not self.image_already_saved:
@@ -131,15 +137,20 @@ class UpcomingInfo(FortniteItemInfo):
         else:
             return True
 
-    def get_if_image_featured(self):
+    def __check_if_image_featured(self):
         if self.get_if_featured() and self.get_type() == 'outfit':
             try:
                 self.get_featured_image()
-                return True
+                self.__if_image_featured = True
             except OSError:
-                return False
+                self.__if_image_featured = False
         else:
-            return False
+            self.__if_image_featured = False
+
+    def get_if_image_featured(self):
+        if self.__if_image_featured is None:
+            self.__check_if_image_featured()
+        return self.__if_image_featured
 
     def get_transparent_image(self):
         if not self.image_already_saved:
