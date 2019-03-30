@@ -651,10 +651,6 @@ class FortniteItemShopAPI(FortniteAPI):
         self.__items_json_list = None
         self.__api_update_id = None
 
-    def get_item_shop_json(self):
-        self.generate_json_data()
-        return self.api_json_data
-
     def __generate_date(self):
         self.__api_date_string = self.get_item_shop_json()["date"]
         self.__api_date_tuple = (
@@ -663,27 +659,17 @@ class FortniteItemShopAPI(FortniteAPI):
             int(self.__api_date_string[6:8]))
 
     def get_date(self):
-        if self.__api_date_string is None:
-            self.__generate_date()
-        return self.__api_date_tuple
-
-    def __generate_update_id(self):
-        self.__api_update_id = int(self.get_item_shop_json()["lastupdate"])
+        api_date_string = self.get_item_shop_json()["date"]
+        return(
+            int(api_date_string[0:2]),
+            int(api_date_string[3:5]),
+            int(api_date_string[6:8]))
 
     def get_update_id(self):
-        if self.__api_update_id is None:
-            self.__generate_update_id()
-        return self.__api_update_id
-
-    def __generate_items_json_list(self):
-        if self.api_json_data is None:
-            self.generate_json_data()
-        self.__items_json_list = self.api_json_data["items"]
+        return int(self.get_json_data()["lastupdate"])
 
     def get_items_json_list(self):
-        if self.__items_json_list is None:
-            self.__generate_items_json_list()
-        return self.__items_json_list
+        return self.get_json_data()['items']
 
 
 class FortniteUpcomingAPI(FortniteAPI):

@@ -95,13 +95,12 @@ def paste_images_on_canvas(canvas, table):
     return canvas
 
 
-def get_items_list_by_api():
+def get_api_class_by_settings_file():
     settings = ToolSetSettingsJson()
     if settings.if_using_fnbrco_api() is True:
-        fortnite_api = FortniteFnbrCoShopAPI()
+        return FortniteFnbrCoShopAPI()
     elif settings.if_using_fortniteapicom_api() is True:
-        fortnite_api = FortniteItemShopAPI()
-    return fortnite_api.get_items_json_list()
+        return FortniteItemShopAPI()
 
 
 def get_item_class_by_api(item_dict):
@@ -125,7 +124,8 @@ if __name__ == "__main__":
     delete_dir_content(result_folder_path)
 
     console.print_replaceable_line('Downloading itemshop info from api...')
-    items_list = get_items_list_by_api()
+    api = get_api_class_by_settings_file()
+    items_list = api.get_items_json_list()
     console.print_replaceable_line('Downloaded itemshop info from api.\n')
 
     items_container = ItemsContainer((3, 4))
