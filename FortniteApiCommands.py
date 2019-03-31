@@ -679,6 +679,22 @@ class FortniteItemShopAPI(FortniteAPI):
     def get_items_json_list(self):
         return self.get_json_data()['items']
 
+    def __generate_class_list(self, input_class):
+        items_list = list
+        for item in self.get_items_json_list:
+            items_list.append(input_class(item))
+        return items_list
+
+    def get_all_items_info_class_list(self):
+        if self.info_class_items_list is None:
+            self.info_class_items_list = self.__generate_class_list(FortniteItemInfo)
+        return self.info_class_items_list
+
+    def get_all_items_drawing_class_list(self):
+        if self.drawing_class_items_list is None:
+            self.drawing_class_items_list = self.__generate_class_list(DrawingInfo)
+        return self.drawing_class_items_list
+
 
 class FortniteUpcomingAPI(FortniteAPI):
 
