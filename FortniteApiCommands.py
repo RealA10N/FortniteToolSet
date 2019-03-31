@@ -501,9 +501,9 @@ class DrawingShopInfo(DrawingInfo):
 
 class DrawingFnbrCoShopInfo(DrawingInfo):
 
-    def __init__(self, item_dict):
+    def __init__(self, item_dict, if_featured=False):
         DrawingInfo.__init__(self)
-        self.info_class = FnbrCoShopInfo(item_dict)
+        self.info_class = FnbrCoShopInfo(item_dict, if_featured=if_featured)
         self.assets = self.info_class.get_assets_class()
 
 
@@ -631,8 +631,8 @@ class FortniteAPI:
         self.api_url = api_url
         self.api_headers = api_headers  # no headers with new api.
         self.api_json_data = None
-        self.__info_class_items_list = None
-        self.__drawing_class_items_list = None
+        self.info_class_items_list = None
+        self.drawing_class_items_list = None
 
     def __generate_json_data(self):
         request = requests.request("GET", self.api_url, headers=self.api_headers)
@@ -680,8 +680,8 @@ class FortniteItemShopAPI(FortniteAPI):
         return self.get_json_data()['items']
 
     def __generate_class_list(self, input_class):
-        items_list = list
-        for item in self.get_items_json_list:
+        items_list = []
+        for item in self.get_items_json_list():
             items_list.append(input_class(item))
         return items_list
 
@@ -692,7 +692,7 @@ class FortniteItemShopAPI(FortniteAPI):
 
     def get_all_items_drawing_class_list(self):
         if self.drawing_class_items_list is None:
-            self.drawing_class_items_list = self.__generate_class_list(DrawingInfo)
+            self.drawing_class_items_list = self.__generate_class_list(DrawingShopInfo)
         return self.drawing_class_items_list
 
 
@@ -705,12 +705,11 @@ class FortniteUpcomingAPI(FortniteAPI):
                              api_headers={'x-api-key': json_settings.get_fnbrco_api_key()})
 
     def get_upcoming_items_json(self):
-        self.generate_json_data()
-        return self.api_json_data['data']
+        return self.get_json_data()['data']
 
     def __generate_class_list(self, input_class):
-        items_list = list
-        for item in self.get_upcoming_items_json:
+        items_list = []
+        for item in self.get_upcoming_items_json():
             items_list.append(input_class(item))
         return items_list
 
@@ -767,7 +766,6 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
         self.__daily_items = None
         self.__all_items = None
 
-
     def __generate_featured_items(self):
         self.__featured_items = self.get_json_data()['data']['featured']
 
@@ -794,11 +792,13 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
         return self.__all_items
 
     def __generate_class_list(self, input_class):
-        items_list = list
+        items_list = []
         for item in self.get_featured_items():
-            items_list.append(input_class(item))
+            item_class = input_class(item, if_featured=True)
+            items_list.append(item_class)
         for item in self.get_daily_items():
-            items_list.append(input_class(item))
+            item_class = input_class(item, if_featured=False)
+            items_list.append(item_class)
         return items_list
 
     def get_all_items_info_class_list(self):
