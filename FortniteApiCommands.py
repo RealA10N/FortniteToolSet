@@ -757,9 +757,9 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
     def __generate_class_list(self, input_class):
         items_list = list
         for item in self.get_featured_items():
-            items_list.append(input_class)
+            items_list.append(input_class(item))
         for item in self.get_daily_items():
-            items_list.append(input_class)
+            items_list.append(input_class(item))
         return items_list
 
     def get_all_items_info_class_list(self):
