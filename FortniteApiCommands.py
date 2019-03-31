@@ -631,6 +631,8 @@ class FortniteAPI:
         self.api_url = api_url
         self.api_headers = api_headers  # no headers with new api.
         self.api_json_data = None
+        self.__info_class_items_list = None
+        self.__drawing_class_items_list = None
 
     def __generate_json_data(self):
         request = requests.request("GET", self.api_url, headers=self.api_headers)
@@ -648,8 +650,8 @@ class FortniteItemShopAPI(FortniteAPI):
         FortniteAPI.__init__(self,
                              api_url="https://fortnite-public-api.theapinetwork.com/prod09/store/get",
                              api_headers={})
-        self.__items_json_list = None
-        self.__api_update_id = None
+        self.items_json_list = None
+        self.api_update_id = None
 
     def __generate_date(self):
         self.__api_date_string = self.get_item_shop_json()["date"]
@@ -726,8 +728,7 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
         self.__featured_items = None
         self.__daily_items = None
         self.__all_items = None
-        self.__info_class_items_list = None
-        self.__drawing_class_items_list = None
+
 
     def __generate_featured_items(self):
         self.__featured_items = self.get_json_data()['data']['featured']
@@ -763,14 +764,14 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
         return items_list
 
     def get_all_items_info_class_list(self):
-        if self.__info_class_items_list is None:
-            self.__info_class_items_list = self.__generate_class_list(FnbrCoShopInfo)
-        return self.__info_class_items_list
+        if self.info_class_items_list is None:
+            self.info_class_items_list = self.__generate_class_list(FnbrCoShopInfo)
+        return self.info_class_items_list
 
     def get_all_items_drawing_class_list(self):
-        if self.__drawing_class_items_list is None:
-            self.__drawing_class_items_list = self.__generate_class_list(DrawingFnbrCoShopInfo)
-        return self.__info_class_items_list
+        if self.drawing_class_items_list is None:
+            self.drawing_class_items_list = self.__generate_class_list(DrawingFnbrCoShopInfo)
+        return self.drawing_class_items_list
 
 
 def draw_centered_text_lines(
