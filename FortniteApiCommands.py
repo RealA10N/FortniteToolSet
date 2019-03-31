@@ -767,7 +767,7 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
             self.__info_class_items_list = self.__generate_class_list(FnbrCoShopInfo)
         return self.__info_class_items_list
 
-    def __generate_all_items_drawing_class_list(self):
+    def get_all_items_drawing_class_list(self):
         if self.__drawing_class_items_list is None:
             self.__drawing_class_items_list = self.__generate_class_list(DrawingFnbrCoShopInfo)
         return self.__info_class_items_list
