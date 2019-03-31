@@ -726,6 +726,8 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
         self.__featured_items = None
         self.__daily_items = None
         self.__all_items = None
+        self.__info_class_items_list = None
+        self.__drawing_class_items_list = None
 
     def __generate_featured_items(self):
         self.__featured_items = self.get_json_data()['data']['featured']
@@ -746,10 +748,29 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
     def __generate_all_items(self):
         self.__all_items = self.get_featured_items() + self.get_daily_items()
 
+    # the check for if featured will be lost when using this function.
     def get_items_json_list(self):
         if self.__all_items is None:
             self.__generate_all_items()
         return self.__all_items
+
+    def __generate_class_list(self, input_class):
+        items_list = list
+        for item in self.get_featured_items():
+            items_list.append(input_class)
+        for item in self.get_daily_items():
+            items_list.append(input_class)
+        return items_list
+
+    def get_all_items_info_class_list(self):
+        if self.__info_class_items_list is None:
+            self.__info_class_items_list = self.__generate_class_list(FnbrCoShopInfo)
+        return self.__info_class_items_list
+
+    def __generate_all_items_drawing_class_list(self):
+        if self.__drawing_class_items_list is None:
+            self.__drawing_class_items_list = self.__generate_class_list(DrawingFnbrCoShopInfo)
+        return self.__info_class_items_list
 
 
 def draw_centered_text_lines(
