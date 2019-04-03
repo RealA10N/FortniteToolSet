@@ -97,10 +97,13 @@ def paste_images_on_canvas(canvas, table):
 
 def get_api_class_by_settings_file():
     settings = ToolSetSettingsJson()
-    if settings.if_using_fnbrco_api() is True:
+    if settings.get_default_api_name() == 'fnbr.co':
         return FortniteFnbrCoShopAPI()
-    elif settings.if_using_fortniteapicom_api() is True:
+    elif settings.get_default_api_name() == 'fortniteapi.com':
         return FortniteItemShopAPI()
+    else:
+        raise ValueError(
+            'Please enter a vaild api name in the "default_api_name" faild. For more info please read the "README.md" file.')
 
 
 if __name__ == "__main__":

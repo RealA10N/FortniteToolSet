@@ -26,11 +26,8 @@ class ToolSetSettingsJson:
     def get_fnbrco_api_key(self):
         return self.get_json_data()['item_shop_api']['choose_api']['fnbr.co']['api_key']
 
-    def __if_using_x_api(self, api_name):
-        return bool(self.get_json_data()['item_shop_api']['choose_api'][api_name]['use_this_api'])
+    def get_default_api_name(self):
+        return self.get_json_data()['item_shop_api']['default_api_name']
 
-    def if_using_fnbrco_api(self):
-        return self.__if_using_x_api('fnbr.co')
-
-    def if_using_fortniteapicom_api(self):
-        return self.__if_using_x_api('fortniteapi.com')
+    def get_if_using_fnbrco_api(self):
+        return self.get_default_api_name() == 'fnbr.co'
