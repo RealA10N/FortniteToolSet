@@ -4,29 +4,24 @@ Accesses different fortnite api's and generates info and images from them.
 used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
 ## "News" script
-- First version: [_FortniteNewsToStoryImageGenerator.py_](FortniteNewsToStoryImageGenerator.py)
-- Second version **(Recommended):** [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
-- _Assets folder:_ [_/NewsGeneratorAssets_](/NewsGeneratorAssets)
+- First version: [FortniteNewsToStoryImageGenerator.py](FortniteNewsToStoryImageGenerator.py)
+- Second version **(Recommended):** [v2_FortniteNewsToStoryImageGenerator.py](v2_NewsToStoryImage.py)
+- _Assets folder:_ [/NewsGeneratorAssets](/NewsGeneratorAssets)
 
 #### What does it do?
 1. The script will download the current Fortnite news info from an api.
 2. The script will let the user select one news item from the 3 of the api.
-3. The script will import the needed assets from the [_assets folder_](/NewsGeneratorAssets).
+3. The script will import the needed assets from the [assets folder](/NewsGeneratorAssets).
 4. The script will create a image from the news info.
 
-#### Example
-- The script will download all the info from the api:  
-![Fortnite in game news](https://i.imgur.com/rA5KOOw.png)
-- It will then go to the [_assets folder_](/NewsGeneratorAssets) and import all the needed assets:  
-![News assets](https://i.imgur.com/MPprH8P.png)
-- Finally, the script will put all the images together and save the result:  
-![News script result](https://i.imgur.com/p3EZqw7.png)
+#### Visual Example
+![News Example Image](<https://i.imgur.com/jUAlydC.png>)  
 
 ## "ItemShop" script
-- First version: [_Fortnite Item Shop To Story Image.py_](Fortnite Item Shop To Story Image.py)
-- Second version: [_v2_Fortnite Item Shop To Story Image.py_](v2_ItemShopToStoryImage.py)
-- Third version **(recommended)**: [_v3_FortniteItemShopToStoryImage.py_](v3_ItemShopToStoryImage.py)
-- _Assets folder:_ [_/ItemsAssets_](/ItemsAssets)
+- First version: [Fortnite Item Shop To Story Image.py](Fortnite Item Shop To Story Image.py)
+- Second version: [v2_Fortnite Item Shop To Story Image.py](v2ItemShopToStoryImage.py)
+- Third version **(recommended)**: [v3_FortniteItemShopToStoryImage.py](v3_ItemShopToStoryImage.py)
+- _Assets folder:_ [/ItemsAssets](/ItemsAssets)
 
 #### What does it do?
 1. The script will download the current Fortnite item shop info from an api.
@@ -34,17 +29,12 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 3. The script will create icons for every item, and place them in order on a background image.
 4. If needed, more then one image will be created and saved (version 3+ only).
 
-#### Example
-- The script will download all the info from the api:  
-![Fortnite Item Shop](https://i.imgur.com/Yt0YR4R.png)
-- It will then go to the [_assets folder_](/ItemsAssets) and import all the needed images:  
-![Item shop assets image](https://i.imgur.com/f80DOoa.png)
-- Finally, the script will put all the items on the background image:  
-![Item shop assets image](https://i.imgur.com/nDCEHNE.png)
+#### Visual example
+![ItemShop visual example](<https://i.imgur.com/2FsR71e.png>)  
 
 ## "Featured" script
-- The script: [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
-- _Assets folder:_ [_/FeaturedSkinToStoryAssets_](/FeaturedSkinToStoryAssets)
+- The script: [FortniteFeaturedSkinToStory.py](FortniteFeaturedSkinToStory.py)
+- _Assets folder:_ [/FeaturedSkinToStoryAssets](/FeaturedSkinToStoryAssets)
 
 #### What does it do?
 1. The script will download the current Fortnite item shop info from an api.
@@ -52,27 +42,29 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 3. After it found the featured skins, it will let the user choose only one skin.
 4. The script will generate an image with matching background and save it.
 
-#### Example
-- The script will download and get this image from the api:  
-![Skin image](https://i.imgur.com/vwa2uqi.png)
-- It will then go to the [_assets folder_](/FeaturedSkinToStoryAssets) and get the matching assets:  
-![Assets image](https://i.imgur.com/bU0WgNa.png)
-- The script will put the skin image on the background image, with the overlay image on top:  
-![Final result](https://i.imgur.com/X9HN6RX.png)
+#### Visual example
+![Featured visual example](<https://i.imgur.com/jUAlydC.png>)    
 
 ## "Routine" script
-- The script: [_AllScriptsRoutine.py_](AllScriptsRoutine.py)
+- The script: [AllScriptsRoutine.py](AllScriptsRoutine.py)
 
 #### What does it do?
-This script will import the [_ItemShop_](#itemshop-script), [_News_](#news-script) and [_Featured_](#featured-script) scripts, and will run them all together.
+1. This script will import the [ItemShop](#itemshop-script), [News](#news-script) and [Featured](#featured-script) scripts, and will run them all together.
+
+2. All the images generated from the imported scripts will be saved in a new folder named "RoutineFinalImages"
+
+3. The script will send all the files in the "RoutineFinalImages" folder to the email given in the [ToolSetSettings.json](ToolSetSettings.json) file ([_read more here_](#"ToolSetSettings.json"-file)).
+
+#### Visual example
+![Routine visual example](<https://i.imgur.com/zeucYmj.png>)    
 
 ## "Email" Script
-- The script: [_SendEmail.py_](SendEmail.py)
+- The script: [SendEmail.py](SendEmail.py)
 
 #### What does it do?
 This script is for import only. by using the `SendEmail()` class, you will be able to send emails easily!
 
-#### class functions
+#### Class functions
 - `.login(your_gmail, your_password)`  
 Will login you to gmail servers.
 - `.add_recipient_address('recipient@mail.com')`  
@@ -91,8 +83,9 @@ Will clear all files from attachments list. you can still add new ones!
 Will push all the info to the server, and send the email!
 
 #### Example
+
 Running:  
-```
+```python
 from SendEmail import SendEmail
 
 mail = SendEmail()
@@ -104,27 +97,9 @@ mail.login('your_mail@gmail.com', 'PasswordToMail')
 mail.send_mail()
 mail.server_quit()
 ```
+
 Result should be something like this:  
-![Email script result](https://i.imgur.com/fSbBoWG.png)
+![Email script result](https://i.imgur.com/fSbBoWG.png)  
 
-
-## The Future
-**This is what i'm planning on developing and upgrading next in this project!**
-- [x] Create a better looking and more detailed "readme" file! :blush:
-- [x] Improve the "ItemShop" script, and create a third version of it. (In progress)
-  - [x] Create an algorithm that will choose a way to display the items in the final image. (Done in update 3.0)
-  - [x] Add a support to more then one itemshop image. (Added in [_v3_ItemShopToStoryImage.py_](v3_ItemShopToStoryImage.py))
-  - [ ] Create a feature that determines if an item is making the first appearance in the item shop, and display it differently.
-- [x] Create a "Routine" script, that will run "News", "ItemShop" and "Featured" scripts automatically.
-  - [x] Make all the scripts compatible with importing them.
-    - [x] [_v2_ItemShopToStoryImage.py_](v2_ItemShopToStoryImage.py)
-    - [x] [_v2_FortniteNewsToStoryImageGenerator.py_](v2_NewsToStoryImage.py)
-    - [x] [_FortniteFeaturedSkinToStory.py_](FortniteFeaturedSkinToStory.py)
-  - [x] Write a script that will import all the scripts.
-  - [x] Send all the generated files to my email automatically!
-  - [ ] Update the 'README' file with the new version of the script.
-- [ ] Upload the files to instagram automatically!
-- [x] Add "Burbank" font to the repo.
-- [ ] Automate all the scripts, to work automatically and detect updates when needed.
-- [ ] Add a "BeforeYouStart.md" file to repo. it will explain how to install all the needed libraries, and more!
-- [ ] Create a new script named "LeakedFilesToInstagramPost", that will get all leaked and not released files from "fnbr.co" api, and will create an image to post on instagram.
+## "ToolSetSettings.json" file
+* The file: [ToolSetSettings.json](ToolSetSettings.json)
