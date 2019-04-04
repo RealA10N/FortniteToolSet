@@ -15,7 +15,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 4. The script will create a image from the news info.
 
 #### Visual Example
-![News Example Image](<https://i.imgur.com/jUAlydC.png>)  
+![News Example Image](<https://i.imgur.com/ZrRHcCo.png>)    
 
 ## "ItemShop" script
 - First version: [Fortnite Item Shop To Story Image.py](Fortnite Item Shop To Story Image.py)
@@ -30,7 +30,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 4. If needed, more then one image will be created and saved (version 3+ only).
 
 #### Visual example
-![ItemShop visual example](<https://i.imgur.com/2FsR71e.png>)  
+![ItemShop visual example](<https://i.imgur.com/anNZ5J9.png>)    
 
 ## "Featured" script
 - The script: [FortniteFeaturedSkinToStory.py](FortniteFeaturedSkinToStory.py)
@@ -43,7 +43,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 4. The script will generate an image with matching background and save it.
 
 #### Visual example
-![Featured visual example](<https://i.imgur.com/jUAlydC.png>)    
+![Featured visual example](<https://i.imgur.com/YcHSiMW.png>)      
 
 ## "Routine" script
 - The script: [AllScriptsRoutine.py](AllScriptsRoutine.py)
@@ -56,7 +56,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 3. The script will send all the files in the "RoutineFinalImages" folder to the email given in the [ToolSetSettings.json](ToolSetSettings.json) file ([_read more here_](#"ToolSetSettings.json"-file)).
 
 #### Visual example
-![Routine visual example](<https://i.imgur.com/zeucYmj.png>)    
+![Routine visual example](<https://i.imgur.com/Ko0aQXS.png>)      
 
 ## "Email" Script
 - The script: [SendEmail.py](SendEmail.py)
