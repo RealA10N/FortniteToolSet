@@ -106,7 +106,18 @@ def get_api_class_by_settings_file():
             'Please enter a vaild api name in the "default_api_name" faild. For more info please read the "README.md" file.')
 
 
+def get_args():
+    from argparse import ArgumentParser
+    parser = ArgumentParser(
+        description='Generate an image (one or more) of the current Fortnite item shop. Created by RealA10N (;')
+    parser.add_argument('-sp', '--saving_path', type=str,
+                        help='Changes the default saving path of the generated item shop images')
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+
+    args = get_args()
 
     console = ConsolePrintFunctions()
     console.print_one_line_title(
@@ -115,8 +126,12 @@ if __name__ == "__main__":
 
     base_folder_path = os.getcwd()
     assets_folder_path = os.path.join(base_folder_path, 'ItemsAssets')
-    result_folder_path = os.path.join(base_folder_path, 'ItemShopFinalImages')
-    delete_dir_content(result_folder_path)
+
+    if args.saving_path is None:
+        result_folder_path = os.path.join(base_folder_path, 'ItemShopFinalImages')
+        delete_dir_content(result_folder_path)
+    else:
+        result_folder_path = args.saving_path
 
     console.print_replaceable_line('Downloading itemshop info from api...')
     api = get_api_class_by_settings_file()
