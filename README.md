@@ -53,7 +53,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
 2. All the images generated from the imported scripts will be saved in a new folder named "RoutineFinalImages"
 
-3. The script will send all the files in the "RoutineFinalImages" folder to the email given in the [ToolSetSettings.json](ToolSetSettings.json) file ([_read more here_](#"ToolSetSettings.json"-file)).
+3. The script will send all the files in the "RoutineFinalImages" folder to the email given in the [ToolSetSettings.json](ToolSetSettings.json) file ([_read more here_](#toolsetsettingsjson-file)).
 
 #### Visual example
 ![Routine visual example](<https://i.imgur.com/Ko0aQXS.png>)      
