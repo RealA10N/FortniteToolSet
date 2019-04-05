@@ -1,6 +1,7 @@
-from ConsoleFunctions import *
-from FortniteApiCommands import *
+from ConsoleFunctions import ConsolePrintFunctions
+from FortniteApiCommands import FortniteNewsAPI
 import os
+from PIL import Image, ImageDraw, ImageFont
 
 
 class NewsFunctions:
@@ -129,10 +130,7 @@ def get_print_text(text):
         return __name__ + ' | ' + text
 
 
-def craft_news_image(news, assets_folder):
-
-    # creates a new console. there are better solutions, still need to be looked at!
-    console = ConsolePrintFunctions()
+def craft_news_image(news, assets_folder, console=ConsolePrintFunctions()):
 
     # setting up canvas
     news_canvas = Image.open(assets_folder + "\\FortniteNewsStoryTemplate.png")
@@ -183,7 +181,7 @@ if __name__ == "__main__":
         give_proper_file_name(wanted_news.get_title()) + ".png"
     final_image_location = final_image_folder + "\\" + final_image_name
 
-    craft_news_image(wanted_news, assets_folder_path).save(final_image_location)
+    craft_news_image(wanted_news, assets_folder_path, console).save(final_image_location)
     os.startfile(final_image_location)
 
     console.print_replaceable_line(get_print_text("Final Image saved! Press ENTER to exit."))
