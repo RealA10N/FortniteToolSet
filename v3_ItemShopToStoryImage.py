@@ -123,11 +123,10 @@ if __name__ == "__main__":
     console.print_replaceable_line('Downloaded itemshop info from api.\n')
 
     items_container = ItemsContainer((3, 4))
-    items_list = api.get_items_json_list()
     for item_class in api.get_all_items_drawing_class_list():
         console.print_replaceable_line(item_class.get_description_string())
         items_container.append_item(item_class)
-    console.print_replaceable_line('All items possessed successfully.\n\n')
+    console.print_replaceable_line('All items possessed successfully.          \n\n')
 
     canvas_path = os.path.join(assets_folder_path, 'Additional files', 'ItemShopStoryTemplate.png')
 

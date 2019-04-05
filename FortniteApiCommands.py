@@ -488,7 +488,7 @@ class DrawingInfo():
         return self.__generate_info_image(self.__get_1on1_background_image())
 
     def get_description_string(self):
-        return ("Processing Item: " + self.info_class.get_name() + ' | ' + self.info_class.get_rarity() + ' ' + self.info_class.get_type() + '.')
+        return ("Processing Item: " + self.info_class.get_name() + ' | ' + self.info_class.get_rarity() + ' ' + self.info_class.get_type() + '.          ')
 
 
 class DrawingShopInfo(DrawingInfo):
