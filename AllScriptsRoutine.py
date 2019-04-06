@@ -1,11 +1,7 @@
 import os
-from ConsoleFunctions import *
+from ConsoleFunctions import ConsolePrintFunctions
 from SendEmail import SendEmail
-from FortniteApiCommands import *
 from JsonFileManager import ToolSetSettingsJson
-
-# importing scripts
-from FortniteFeaturedSkinToStory import GenerateFeaturedImage, search_featured_only
 
 
 def delete_dir_content(dir_path):
@@ -44,20 +40,8 @@ os.system("%s -q -a -sp %s" % (news_path, final_images_dir))
 
 # FortniteFeaturedSkinToStory script
 console.script_open("FortniteFeaturedSkinToStory")
-featured_assets_path = base_folder_path + r'\FeaturedSkinToStoryAssets'
-featured_items = search_featured_only(itemshop_api)
-
-# generate the images. NEEDS TO BE IMPROVED!
-for item in featured_items:
-    generate_image = GenerateFeaturedImage(featured_assets_path)
-    generate_image.set_image(item.get_featured_image())
-    generate_image.set_rarity(item.get_rarity())
-    saving_name = generate_item_save_name(item)
-    saving_path = final_images_dir + '\\' + saving_name + '.png'
-    generate_image.get_requested_image().save(saving_path)
-    print('FortniteFeaturedSkinToStory | Saved featured image of "' +
-          generate_item_save_name(item) + '"!')
-
+featured_path = os.path.join(base_folder_path, 'FortniteFeaturedSkinToStory.py')
+os.system("%s -q -a -sp %s" % (featured_path, final_images_dir))
 
 # send email
 console.script_open('SendEmail')
