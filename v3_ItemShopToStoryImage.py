@@ -110,8 +110,11 @@ def get_args():
     from argparse import ArgumentParser
     parser = ArgumentParser(
         description='Generate an image (one or more) of the current Fortnite item shop. Created by RealA10N (;')
-    parser.add_argument('-sp', '--saving_path', type=str,
-                        help='Changes the default saving path of the generated item shop images')
+    parser.add_argument('-sp', '--saving_path', type=str, metavar='',
+                        help='Changes the default saving folder path of the generated item shop images')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-q', '--quiet', action='store_true',
+                       help="Don't open the result images this run")
     return parser.parse_args()
 
 
@@ -153,8 +156,13 @@ if __name__ == "__main__":
         file_name = 'LastItemShop(' + str(photo_index) + ').png'
         image_saving_path = os.path.join(result_folder_path, file_name)
         item_shop_canvas.save(image_saving_path)
-        os.startfile(image_saving_path)
-        print("File '" + file_name + "' is now opened and saved in the 'ItemShopFinalImages' folder.")
+        if not args.quiet:
+            os.startfile(image_saving_path)
+            print("File '%s' is now opened and saved in the '%s' folder." %
+                  (file_name, os.path.basename(result_folder_path)))
+        else:
+            print("File '%s' is now saved in the '%s' folder." %
+                  (file_name, os.path.basename(result_folder_path)))
         photo_index += 1
 
     input('\nPress any key to exit. ')
