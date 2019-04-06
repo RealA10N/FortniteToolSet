@@ -24,7 +24,7 @@ class ToolSetSettingsJson:
         return self.__json['sender_password']['value']
 
     def get_fnbrco_api_key(self):
-        return self.get_json_data()['item_shop_api']['choose_api']['fnbr.co']['api_key']
+        return self.get_json_data()['item_shop_api']['all_apis_settings']['fnbr.co']['api_key']
 
     def get_default_api_name(self):
         return self.get_json_data()['item_shop_api']['default_api_name']
