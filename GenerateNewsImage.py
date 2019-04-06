@@ -166,13 +166,13 @@ def get_args():
     parser = ArgumentParser(
         description='Generate an image (one or more) of the current Fortnite battle royale news feed. Created by RealA10N (;')
     parser.add_argument('-sp', '--saving_path', type=str, metavar='',
-                        help='Changes the default saving path of the generated item shop images')
+                        help='Changes the default saving path of the generated news images')
     parser.add_argument('-i', '--news_index', type=int, metavar='',
                         help='The index of the final generated news image')
     parser.add_argument('-a', '--all', action='store_true',
                         help='Generate all the avalible news images')
     parser.add_argument('-q', '--quiet', action='store_true',
-                        help="Don't open the result images this run")
+                        help="Run quietly, without fancy prints and opening the result image(s)")
     return parser.parse_args()
 
 

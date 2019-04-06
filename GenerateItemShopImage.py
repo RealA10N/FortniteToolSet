@@ -113,7 +113,7 @@ def get_args():
     parser.add_argument('-sp', '--saving_path', type=str, metavar='',
                         help='Changes the default saving folder path of the generated item shop images')
     parser.add_argument('-q', '--quiet', action='store_true',
-                        help="Don't open the result images this run")
+                        help="Run quietly, without fancy prints and opening the result image(s)")
     return parser.parse_args()
 
 
