@@ -13,6 +13,25 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 3. The script will import the needed assets from the [assets folder](/NewsGeneratorAssets).
 4. The script will create a image from the news info.
 
+
+#### Command line arguments
+
+##### `-h` , `--help`
+* Shows all the arguments, with a description about each one.
+
+##### `-sp [path/to/folder]`, `--saving_path [path/to/folder]`
+* Changes the default saving path of the generated news images, to the given folder path.
+
+##### `-i [integer]`, `--news_index [integer]`
+* Chooses the index of the final generated news image.
+
+##### `-a`, `--all`
+* Generate and save all the available news image.
+
+##### `-q`, `--quiet`
+* Run quietly, without fancy prints or opening the result image(s).
+
+
 #### Visual Example
 ![News Example Image](<https://i.imgur.com/ZrRHcCo.png>)    
 
@@ -26,6 +45,19 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 3. The script will create icons for every item, and place them in order on a background image.
 4. If needed, more then one image will be created and saved (version 3+ only).
 
+
+#### Command line arguments
+
+##### `-h` , `--help`
+* Shows all the arguments, with a description about each one.
+
+##### `-sp [path/to/folder]`, `--saving_path [path/to/folder]`
+* Changes the default saving path of the generated item shop images, to the given folder path.
+
+##### `-q`, `--quiet`
+* Run quietly, without fancy prints or opening the result image(s).
+
+
 #### Visual example
 ![ItemShop visual example](<https://i.imgur.com/anNZ5J9.png>)    
 
@@ -38,6 +70,28 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 2. From all the items in the shop, it will search for featured skins only.
 3. After it found the featured skins, it will let the user choose only one skin.
 4. The script will generate an image with matching background and save it.
+
+
+#### Command line arguments
+
+##### `-h` , `--help`
+* Shows all the arguments, with a description about each one.
+
+##### `-sp [path/to/folder]`, `--saving_path [path/to/folder]`
+* Changes the default saving path of the generated featured images, to the given folder path.
+
+##### `-i [integer]`, `--selected_skin_index [integer]`
+* Chooses the index of the final generated featured image.
+
+##### `-o [integer]`, `--offset [integer]`
+* Chooses the offset pixels number of the featured image.
+
+##### `-a`, `--all`
+* Generate and save all the available featured images.
+
+##### `-q`, `--quiet`
+* Run quietly, without fancy prints or opening the result image(s).
+
 
 #### Visual example
 ![Featured visual example](<https://i.imgur.com/YcHSiMW.png>)      
