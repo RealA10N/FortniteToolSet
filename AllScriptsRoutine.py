@@ -5,8 +5,6 @@ from FortniteApiCommands import *
 from JsonFileManager import ToolSetSettingsJson
 
 # importing scripts
-from v3_ItemShopToStoryImage import ItemsContainer, paste_images_on_canvas
-from v2_NewsToStoryImage import craft_news_image, give_proper_file_name
 from FortniteFeaturedSkinToStory import GenerateFeaturedImage, search_featured_only
 
 
@@ -36,43 +34,13 @@ delete_dir_content(final_images_dir)
 
 # v3_ItemShopToStoryImage script
 console.script_open("v3_ItemShopToStoryImage")
-itemshop_assets_path = os.path.join(base_folder_path, 'ItemsAssets')
-
-console.print_replaceable_line('Downloading itemshop info from api...')
-itemshop_api = FortniteItemShopAPI()
-items_list = itemshop_api.get_items_json_list()
-console.print_replaceable_line('Downloaded itemshop info from api.\n')
-
-items_container = ItemsContainer((3, 4))
-for item_dict in items_list:
-    item_class = DrawingShopInfo(item_dict)
-    console.print_replaceable_line(item_class.get_description_string())
-    items_container.append_item(item_class)
-console.print_replaceable_line('All items possessed successfully.\n')
-
-canvas_path = os.path.join(itemshop_assets_path, 'Additional files', 'ItemShopStoryTemplate.png')
-
-photo_index = 1
-for table in items_container.get_tables_list():
-    item_shop_canvas = Image.open(canvas_path)
-    paste_images_on_canvas(item_shop_canvas, table)
-    file_name = 'LastItemShop(' + str(photo_index) + ').png'
-    image_saving_path = os.path.join(final_images_dir, file_name)
-    item_shop_canvas.save(image_saving_path)
-    console.regular_print("File '" + file_name +
-                          "' is now saved in the 'ItemShopFinalImages' folder.")
-    photo_index += 1
-
+itemshop_path = os.path.join(base_folder_path, 'v3_ItemShopToStoryImage.py')
+os.system("%s -q -sp %s" % (itemshop_path, final_images_dir))
 
 # v2_NewsIoStoryImage script
 console.script_open("v2_NewsIoStoryImage")
-news_assets_path = base_folder_path + r'\NewsGeneratorAssets'
-news_database = FortniteNewsAPI()
-for news in news_database.get_news_list():
-    final_image_name = "News Image - " + give_proper_file_name(news.get_title()) + ".png"
-    final_image_path = final_images_dir + '\\' + final_image_name
-    craft_news_image(news, news_assets_path).save(final_image_path)
-
+news_path = os.path.join(base_folder_path, 'v2_NewsToStoryImage.py')
+os.system("%s -q -a -sp %s" % (news_path, final_images_dir))
 
 # FortniteFeaturedSkinToStory script
 console.script_open("FortniteFeaturedSkinToStory")
