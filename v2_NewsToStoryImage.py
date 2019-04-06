@@ -178,14 +178,17 @@ def get_args():
 
 if __name__ == "__main__":
 
+    args = get_args()
+
     console = ConsolePrintFunctions()
-    console.print_one_line_title(
-        "Fortnite News Generator. // Created by @RealA10N", "single heavy square")
-    print('\n' + get_print_text('Downloading \"News Info\" from API...'))
+    if not args.quiet:
+        console.print_one_line_title(
+            "Fortnite News Generator. // Created by @RealA10N", "single heavy square")
+        print()  # to go down one line
+    print(get_print_text('Downloading \"News Info\" from API...'))
 
     assets_folder_path = os.getcwd() + '\\NewsGeneratorAssets'
 
-    args = get_args()
     if args.saving_path is None:
         final_image_folder = os.path.join(os.getcwd(), 'NewsFinalImages')
     else:
@@ -219,6 +222,5 @@ if __name__ == "__main__":
     craft_news_image(wanted_news, assets_folder_path, console).save(final_image_location)
     if not args.quiet:
         os.startfile(final_image_location)
-
-    console.print_replaceable_line(get_print_text("Final Image saved! Press ENTER to exit."))
-    input()
+        console.print_replaceable_line(get_print_text("Final Image saved! Press ENTER to exit."))
+        input()
