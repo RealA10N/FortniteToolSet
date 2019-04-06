@@ -88,6 +88,8 @@ def get_args():
     from argparse import ArgumentParser
     parser = ArgumentParser(
         description='Generate an image (one or more) of the selected skin from the item shop. Created by RealA10N (;')
+    parser.add_argument('-o', '--offset', type=int, metavar='',
+                        help='The offset pixels numbers of the featured image (default is 0)')
     parser.add_argument('-q', '--quiet', action='store_true',
                         help="Run quietly, without fancy prints and opening the result image(s)")
     return parser.parse_args()
@@ -129,8 +131,11 @@ if __name__ == "__main__":
     generate_image.set_setting_by_api_item(selected_item)
 
     # ask the user to select an offset number and transfer the info
-    print("\nWant to offset the featured image? enter the number of pixels:")
-    generate_image.set_image_offset(input())
+    if args.offset is None:
+        print("\nWant to offset the featured image? enter the number of pixels:")
+        generate_image.set_image_offset(input())
+    else:
+        generate_image.set_image_offset(args.offset)
 
     # generate, save and open final image
     saving_name = "LastFeaturedSkinToStory.png"
