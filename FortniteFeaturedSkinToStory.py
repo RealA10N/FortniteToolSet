@@ -94,9 +94,60 @@ def get_args():
                         help='The index of the final generated featured image')
     parser.add_argument('-o', '--offset', type=int, metavar='',
                         help='The offset pixels numbers of the featured image (default is 0)')
+    parser.add_argument('-a', '--all', action='store_true',
+                        help='Generate all the avalible featured images')
     parser.add_argument('-q', '--quiet', action='store_true',
                         help="Run quietly, without fancy prints and opening the result image(s)")
     return parser.parse_args()
+
+
+def save_image(featured_class, item_class):
+    saving_name = "%s Featured Image.png" % item_class.get_name()
+    saving_path = os.path.join(final_saving_folder, saving_name)
+    featured_class.get_requested_image().save(saving_path)
+    print("'%s' skin featured image generated and saved successfully!" %
+          item_class.get_name())
+    if not args.quiet:
+        os.startfile(saving_path)
+
+
+def generate_all_images(featured_list, assets_p, final_image_p):
+    print()  # go down one line
+    for item in featured_list:
+        featured_class = GenerateFeaturedImage(assets_p)
+        featured_class.set_setting_by_api_item(item)
+        save_image(featured_class, item)
+
+
+def regular_main():
+
+    # print all skins list, and let the user select one of them
+    if args.selected_skin_index is None:
+        titles_list = []
+        for item in featured_items:
+            titles_list.append(generate_print_title(item))
+        print()  # to go down one line
+        selected_index = console.select_by_index(
+            titles_list, 'Please select the image that you want to make by index:')
+        selected_item = featured_items[int(selected_index)]
+    else:
+        selected_item = featured_items[args.selected_skin_index]
+
+    # create a "GenerateFeaturedImage" class
+    generate_image = GenerateFeaturedImage(background_assets_path)
+    # give all the needed info to the "GenerateFeaturedImage" class
+    generate_image.set_setting_by_api_item(selected_item)
+
+    # ask the user to select an offset number and transfer the info
+    if args.offset is None:
+        print("\nWant to offset the featured image? enter the number of pixels:")
+        generate_image.set_image_offset(input())
+    else:
+        generate_image.set_image_offset(args.offset)
+
+    # generate, save and open final image
+    print()  # go down one line
+    save_image(generate_image, selected_item)
 
 
 if __name__ == "__main__":
@@ -127,36 +178,10 @@ if __name__ == "__main__":
     featured_items = search_featured_only(fortnite_api)
     console.print_replaceable_line('All data loaded successfully!')
 
-    # print all skins list, and let the user select one of them
-    if args.selected_skin_index is None:
-        titles_list = []
-        for item in featured_items:
-            titles_list.append(generate_print_title(item))
-        print()  # to go down one line
-        selected_index = console.select_by_index(
-            titles_list, 'Please select the image that you want to make by index:')
-        selected_item = featured_items[int(selected_index)]
+    if args.all:
+        generate_all_images(featured_items, background_assets_path, final_saving_folder)
     else:
-        selected_item = featured_items[args.selected_skin_index]
+        regular_main()
 
-    # create a "GenerateFeaturedImage" class
-    generate_image = GenerateFeaturedImage(background_assets_path)
-
-    # give all the needed info to the "GenerateFeaturedImage" class
-    generate_image.set_setting_by_api_item(selected_item)
-
-    # ask the user to select an offset number and transfer the info
-    if args.offset is None:
-        print("\nWant to offset the featured image? enter the number of pixels:")
-        generate_image.set_image_offset(input())
-    else:
-        generate_image.set_image_offset(args.offset)
-
-    # generate, save and open final image
-    saving_name = "%s Featured Image.png" % selected_item.get_name()
-    saving_path = os.path.join(final_saving_folder, saving_name)
-    generate_image.get_requested_image().save(saving_path)
-    print("\n'%s' skin featured image generated and saved successfully!" % selected_item.get_name())
     if not args.quiet:
-        os.startfile(saving_path)
         input("Press 'ENTER' to exit.")
