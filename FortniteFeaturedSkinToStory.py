@@ -84,13 +84,25 @@ def search_featured_only(shop_api_class):
     return featured_items
 
 
+def get_args():
+    from argparse import ArgumentParser
+    parser = ArgumentParser(
+        description='Generate an image (one or more) of the selected skin from the item shop. Created by RealA10N (;')
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help="Run quietly, without fancy prints and opening the result image(s)")
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+
+    args = get_args()
 
     # print credits
     console = ConsoleFunctions.ConsolePrintFunctions()
-    console.print_one_line_title(
-        "Fortnite Featured Image Generator. // Created by @RealA10N", "single heavy square")
-    print()  # to go one line down.
+    if not args.quiet:
+        console.print_one_line_title(
+            "Fortnite Featured Image Generator. // Created by @RealA10N", "single heavy square")
+        print()  # to go one line down.
 
     # getting info from api
     console.print_replaceable_line('Loading "Fortnite API" data...')
@@ -123,6 +135,7 @@ if __name__ == "__main__":
     # generate, save and open final image
     saving_name = "LastFeaturedSkinToStory.png"
     generate_image.get_requested_image().save(saving_name)
-    os.startfile(saving_name)
-
-    input("\nImage generated and saved successfully! Press 'ENTER' to exit.")
+    print('\nImage generated and saved successfully!')
+    if not args.quiet:
+        os.startfile(saving_name)
+        input("Press 'ENTER' to exit.")
