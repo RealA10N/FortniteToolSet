@@ -7,14 +7,14 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 - The script: [GenerateNewsImage.py](GenerateNewsImage.py)
 - _Assets folder:_ [/NewsGeneratorAssets](/NewsGeneratorAssets)
 
-#### What does it do?
+### What does it do?
 1. The script will download the current Fortnite news info from an api.
 2. The script will let the user select one news item from the 3 of the api.
 3. The script will import the needed assets from the [assets folder](/NewsGeneratorAssets).
 4. The script will create a image from the news info.
 
 
-#### Command line arguments
+### Command line arguments
 
 ##### `-h` , `--help`
 * Shows all the arguments, with a description about each one.
@@ -32,21 +32,21 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 * Run quietly, without fancy prints or opening the result image(s).
 
 
-#### Visual Example
+### Visual Example
 ![News Example Image](<https://i.imgur.com/ZrRHcCo.png>)    
 
 ## "ItemShop" script
 - The script: [GenerateItemShopImage.py](GenerateItemShopImage.py)
 - _Assets folder:_ [/ItemsAssets](/ItemsAssets)
 
-#### What does it do?
+### What does it do?
 1. The script will download the current Fortnite item shop info from an api.
 2. It will run an algorithm to check how many featured and non-featured items there are in the shop (version 3+ only).
 3. The script will create icons for every item, and place them in order on a background image.
 4. If needed, more then one image will be created and saved (version 3+ only).
 
 
-#### Command line arguments
+### Command line arguments
 
 ##### `-h` , `--help`
 * Shows all the arguments, with a description about each one.
@@ -58,21 +58,21 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 * Run quietly, without fancy prints or opening the result image(s).
 
 
-#### Visual example
+### Visual example
 ![ItemShop visual example](<https://i.imgur.com/anNZ5J9.png>)    
 
 ## "Featured" script
 - The script: [GenerateFeaturedImage.py](GenerateFeaturedImage.py)
 - _Assets folder:_ [/FeaturedSkinToStoryAssets](/FeaturedSkinToStoryAssets)
 
-#### What does it do?
+### What does it do?
 1. The script will download the current Fortnite item shop info from an api.
 2. From all the items in the shop, it will search for featured skins only.
 3. After it found the featured skins, it will let the user choose only one skin.
 4. The script will generate an image with matching background and save it.
 
 
-#### Command line arguments
+### Command line arguments
 
 ##### `-h` , `--help`
 * Shows all the arguments, with a description about each one.
@@ -93,29 +93,29 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 * Run quietly, without fancy prints or opening the result image(s).
 
 
-#### Visual example
+### Visual example
 ![Featured visual example](<https://i.imgur.com/YcHSiMW.png>)      
 
 ## "Routine" script
 - The script: [AllScriptsRoutine.py](AllScriptsRoutine.py)
 
-#### What does it do?
+### What does it do?
 1. This script will import the [ItemShop](#itemshop-script), [News](#news-script) and [Featured](#featured-script) scripts, and will run them all together.
 
 2. All the images generated from the imported scripts will be saved in a new folder named "RoutineFinalImages"
 
 3. The script will send all the files in the "RoutineFinalImages" folder to the email given in the [ToolSetSettings.json](ToolSetSettings.json) file ([_read more here_](#toolsetsettingsjson-file)).
 
-#### Visual example
+### Visual example
 ![Routine visual example](<https://i.imgur.com/Ko0aQXS.png>)      
 
 ## "Email" Script
 - The script: [SendEmail.py](SendEmail.py)
 
-#### What does it do?
+### What does it do?
 This script is for import only. by using the `SendEmail()` class, you will be able to send emails easily!
 
-#### Class functions
+### Class functions
 - `.login(your_gmail, your_password)`  
 Will login you to gmail servers.
 - `.add_recipient_address('recipient@mail.com')`  
@@ -133,7 +133,7 @@ Will clear all files from attachments list. you can still add new ones!
 - `.send_mail()`  
 Will push all the info to the server, and send the email!
 
-#### Example
+### Example
 
 Running:  
 ```python
