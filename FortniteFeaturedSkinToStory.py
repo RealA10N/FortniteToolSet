@@ -88,6 +88,8 @@ def get_args():
     from argparse import ArgumentParser
     parser = ArgumentParser(
         description='Generate an image (one or more) of the selected skin from the item shop. Created by RealA10N (;')
+    parser.add_argument('-sp', '--saving_path', type=str, metavar='',
+                        help='Changes the default saving folder path of the generated featured images')
     parser.add_argument('-o', '--offset', type=int, metavar='',
                         help='The offset pixels numbers of the featured image (default is 0)')
     parser.add_argument('-q', '--quiet', action='store_true',
@@ -110,6 +112,14 @@ if __name__ == "__main__":
     console.print_replaceable_line('Loading "Fortnite API" data...')
     fortnite_api = FortniteItemShopAPI()
 
+    background_assets_path = os.path.join(os.getcwd(), 'FeaturedSkinToStoryAssets')
+    if args.saving_path is None:
+        final_saving_folder = os.path.join(os.getcwd(), 'FeaturedFinalImages')
+        if not os.path.exists(final_saving_folder):
+            os.makedirs(final_saving_folder)
+    else:
+        final_saving_folder = args.saving_path
+
     # searching featured only items
     console.print_replaceable_line('Searching for "Featured" items only...')
     featured_items = search_featured_only(fortnite_api)
@@ -124,7 +134,6 @@ if __name__ == "__main__":
     selected_item = featured_items[int(selected_index)]
 
     # create a "GenerateFeaturedImage" class
-    background_assets_path = os.getcwd() + '\\FeaturedSkinToStoryAssets'
     generate_image = GenerateFeaturedImage(background_assets_path)
 
     # give all the needed info to the "GenerateFeaturedImage" class
@@ -138,9 +147,10 @@ if __name__ == "__main__":
         generate_image.set_image_offset(args.offset)
 
     # generate, save and open final image
-    saving_name = "LastFeaturedSkinToStory.png"
-    generate_image.get_requested_image().save(saving_name)
+    saving_name = "%s Featured Image.png" % selected_item.get_name()
+    saving_path = os.path.join(final_saving_folder, saving_name)
+    generate_image.get_requested_image().save(saving_path)
     print('\nImage generated and saved successfully!')
     if not args.quiet:
-        os.startfile(saving_name)
+        os.startfile(saving_path)
         input("Press 'ENTER' to exit.")
