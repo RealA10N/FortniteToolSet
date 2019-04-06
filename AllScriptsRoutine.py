@@ -25,22 +25,22 @@ console.print_one_line_title(os.path.basename(
     __file__) + " // Created by @RealA10N", "single heavy square")
 
 base_folder_path = os.getcwd()
-final_images_dir = base_folder_path + '\\RoutineFinalImages'
+final_images_dir = os.path.join(base_folder_path, 'RoutineFinalImages')
 delete_dir_content(final_images_dir)
 
 # v3_ItemShopToStoryImage script
-console.script_open("v3_ItemShopToStoryImage")
-itemshop_path = os.path.join(base_folder_path, 'v3_ItemShopToStoryImage.py')
+console.script_open("GenerateItemShopImage")
+itemshop_path = os.path.join(base_folder_path, 'GenerateItemShopImage.py')
 os.system("%s -q -sp %s" % (itemshop_path, final_images_dir))
 
 # v2_NewsIoStoryImage script
-console.script_open("v2_NewsIoStoryImage")
-news_path = os.path.join(base_folder_path, 'v2_NewsToStoryImage.py')
+console.script_open("GenerateNewsImage")
+news_path = os.path.join(base_folder_path, 'GenerateNewsImage.py')
 os.system("%s -q -a -sp %s" % (news_path, final_images_dir))
 
 # FortniteFeaturedSkinToStory script
-console.script_open("FortniteFeaturedSkinToStory")
-featured_path = os.path.join(base_folder_path, 'FortniteFeaturedSkinToStory.py')
+console.script_open("GenerateFeaturedImage")
+featured_path = os.path.join(base_folder_path, 'GenerateFeaturedImage.py')
 os.system("%s -q -a -sp %s" % (featured_path, final_images_dir))
 
 # send email
