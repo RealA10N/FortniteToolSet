@@ -28,6 +28,10 @@ class GenerateFeaturedImage:
         else:
             return False
 
+    def set_setting_by_api_item(self, item):
+        self.set_image(item.get_featured_image())
+        self.set_rarity(item.get_rarity())
+
     def set_rarity(self, rarity):
         self.rarity = rarity
 
@@ -110,8 +114,7 @@ if __name__ == "__main__":
     generate_image = GenerateFeaturedImage(background_assets_path)
 
     # give all the needed info to the "GenerateFeaturedImage" class
-    generate_image.set_image(selected_item.get_featured_image())
-    generate_image.set_rarity(selected_item.get_rarity())
+    generate_image.set_setting_by_api_item(selected_item)
 
     # ask the user to select an offset number and transfer the info
     print("\nWant to offset the featured image? enter the number of pixels:")
