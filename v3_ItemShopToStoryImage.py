@@ -122,9 +122,10 @@ if __name__ == "__main__":
     args = get_args()
 
     console = ConsolePrintFunctions()
-    console.print_one_line_title(
-        "Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
-    print()  # to go down one line
+    if not args.quiet:
+        console.print_one_line_title(
+            "Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
+        print()  # to go down one line
 
     base_folder_path = os.getcwd()
     assets_folder_path = os.path.join(base_folder_path, 'ItemsAssets')
@@ -164,4 +165,5 @@ if __name__ == "__main__":
                   (file_name, os.path.basename(result_folder_path)))
         photo_index += 1
 
-    input('\nPress any key to exit. ')
+    if not args.quiet:
+        input('\nPress any key to exit. ')
