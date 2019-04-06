@@ -112,9 +112,8 @@ def get_args():
         description='Generate an image (one or more) of the current Fortnite item shop. Created by RealA10N (;')
     parser.add_argument('-sp', '--saving_path', type=str, metavar='',
                         help='Changes the default saving folder path of the generated item shop images')
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('-q', '--quiet', action='store_true',
-                       help="Don't open the result images this run")
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help="Don't open the result images this run")
     return parser.parse_args()
 
 
