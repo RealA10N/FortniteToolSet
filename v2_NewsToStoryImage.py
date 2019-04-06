@@ -152,6 +152,30 @@ def give_proper_file_name(file_name):
     return file_name
 
 
+def generate_all_news(saving_p, assets_p, api=FortniteNewsAPI()):
+    for news in api.get_news_list():
+        final_image_name = "News Image - " + give_proper_file_name(news.get_title()) + ".png"
+        final_image_path = os.path.join(saving_p, final_image_name)
+        craft_news_image(news, assets_p).save(final_image_path)
+        if not args.quiet:
+            os.startfile(final_image_path)
+
+
+def get_args():
+    from argparse import ArgumentParser
+    parser = ArgumentParser(
+        description='Generate an image (one or more) of the current Fortnite battle royale news feed. Created by RealA10N (;')
+    parser.add_argument('-sp', '--saving_path', type=str, metavar='',
+                        help='Changes the default saving path of the generated item shop images')
+    parser.add_argument('-i', '--news_index', type=int, metavar='',
+                        help='The index of the final generated news image')
+    parser.add_argument('-a', '--all', action='store_true',
+                        help='Generate all the avalible news images')
+    parser.add_argument('-q', '--quiet', action='store_true',
+                        help="Don't open the result images this run")
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
 
     console = ConsolePrintFunctions()
@@ -160,29 +184,41 @@ if __name__ == "__main__":
     print('\n' + get_print_text('Downloading \"News Info\" from API...'))
 
     assets_folder_path = os.getcwd() + '\\NewsGeneratorAssets'
-    final_image_folder = os.getcwd() + '\\NewsFinalImages'
+
+    args = get_args()
+    if args.saving_path is None:
+        final_image_folder = os.path.join(os.getcwd(), 'NewsFinalImages')
+    else:
+        final_image_folder = args.saving_path
 
     # makes "NewsFinalImages" folder if it is not found.
     if not os.path.exists(final_image_folder):
         os.makedirs(final_image_folder)
 
     news_api = FortniteNewsAPI()
+    if args.all:
+        generate_all_news(final_image_folder, assets_folder_path, news_api)
+        quit()
 
     select_index_news_list = []
     for news in news_api.get_news_list():
         select_index_news_list.append(get_news_print_title(news))
 
-    news_index = console.select_by_index(select_index_news_list,
-                                         "Please select the image that you want to make by index:")
-    print()  # to go down one line
-    wanted_news = news_api.get_news_list()[int(news_index)]
+    if args.news_index is None:
+        news_index = console.select_by_index(select_index_news_list,
+                                             "Please select the image that you want to make by index:")
+        print()  # to go down one line
+        wanted_news = news_api.get_news_list()[int(news_index)]
+    else:
+        wanted_news = news_api.get_news_list()[args.news_index]
 
     final_image_name = "Generated News Image - " + \
         give_proper_file_name(wanted_news.get_title()) + ".png"
     final_image_location = final_image_folder + "\\" + final_image_name
 
     craft_news_image(wanted_news, assets_folder_path, console).save(final_image_location)
-    os.startfile(final_image_location)
+    if not args.quiet:
+        os.startfile(final_image_location)
 
     console.print_replaceable_line(get_print_text("Final Image saved! Press ENTER to exit."))
     input()
