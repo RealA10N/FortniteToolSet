@@ -4,8 +4,7 @@ Accesses different fortnite api's and generates info and images from them.
 used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 
 ## "News" script
-- First version: [FortniteNewsToStoryImageGenerator.py](FortniteNewsToStoryImageGenerator.py)
-- Second version **(Recommended):** [v2_FortniteNewsToStoryImageGenerator.py](v2_NewsToStoryImage.py)
+- The script: [GenerateNewsImage.py](GenerateNewsImage.py)
 - _Assets folder:_ [/NewsGeneratorAssets](/NewsGeneratorAssets)
 
 #### What does it do?
@@ -18,9 +17,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 ![News Example Image](<https://i.imgur.com/ZrRHcCo.png>)    
 
 ## "ItemShop" script
-- First version: [Fortnite Item Shop To Story Image.py](Fortnite Item Shop To Story Image.py)
-- Second version: [v2_Fortnite Item Shop To Story Image.py](v2ItemShopToStoryImage.py)
-- Third version **(recommended)**: [v3_FortniteItemShopToStoryImage.py](v3_ItemShopToStoryImage.py)
+- The script: [GenerateItemShopImage.py](GenerateItemShopImage.py)
 - _Assets folder:_ [/ItemsAssets](/ItemsAssets)
 
 #### What does it do?
@@ -33,7 +30,7 @@ used mostly in my [instagram page](https://www.instagram.com/reala10n/).
 ![ItemShop visual example](<https://i.imgur.com/anNZ5J9.png>)    
 
 ## "Featured" script
-- The script: [FortniteFeaturedSkinToStory.py](FortniteFeaturedSkinToStory.py)
+- The script: [GenerateFeaturedImage.py](GenerateFeaturedImage.py)
 - _Assets folder:_ [/FeaturedSkinToStoryAssets](/FeaturedSkinToStoryAssets)
 
 #### What does it do?
