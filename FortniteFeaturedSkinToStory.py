@@ -128,8 +128,6 @@ if __name__ == "__main__":
     console.print_replaceable_line('All data loaded successfully!')
 
     # print all skins list, and let the user select one of them
-    for item in featured_items:
-        titles_list.append(generate_print_title(item))
     if args.selected_skin_index is None:
         titles_list = []
         for item in featured_items:
