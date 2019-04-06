@@ -90,6 +90,8 @@ def get_args():
         description='Generate an image (one or more) of the selected skin from the item shop. Created by RealA10N (;')
     parser.add_argument('-sp', '--saving_path', type=str, metavar='',
                         help='Changes the default saving folder path of the generated featured images')
+    parser.add_argument('-i', '--selected_skin_index', type=int, metavar='',
+                        help='The index of the final generated featured image')
     parser.add_argument('-o', '--offset', type=int, metavar='',
                         help='The offset pixels numbers of the featured image (default is 0)')
     parser.add_argument('-q', '--quiet', action='store_true',
@@ -123,15 +125,21 @@ if __name__ == "__main__":
     # searching featured only items
     console.print_replaceable_line('Searching for "Featured" items only...')
     featured_items = search_featured_only(fortnite_api)
-    console.print_replaceable_line('All data loaded successfully!\n\n')
+    console.print_replaceable_line('All data loaded successfully!')
 
     # print all skins list, and let the user select one of them
-    titles_list = []
     for item in featured_items:
         titles_list.append(generate_print_title(item))
-    selected_index = console.select_by_index(
-        titles_list, 'Please select the image that you want to make by index:')
-    selected_item = featured_items[int(selected_index)]
+    if args.selected_skin_index is None:
+        titles_list = []
+        for item in featured_items:
+            titles_list.append(generate_print_title(item))
+        print()  # to go down one line
+        selected_index = console.select_by_index(
+            titles_list, 'Please select the image that you want to make by index:')
+        selected_item = featured_items[int(selected_index)]
+    else:
+        selected_item = featured_items[args.selected_skin_index]
 
     # create a "GenerateFeaturedImage" class
     generate_image = GenerateFeaturedImage(background_assets_path)
@@ -150,7 +158,7 @@ if __name__ == "__main__":
     saving_name = "%s Featured Image.png" % selected_item.get_name()
     saving_path = os.path.join(final_saving_folder, saving_name)
     generate_image.get_requested_image().save(saving_path)
-    print('\nImage generated and saved successfully!')
+    print("\n'%s' skin featured image generated and saved successfully!" % selected_item.get_name())
     if not args.quiet:
         os.startfile(saving_path)
         input("Press 'ENTER' to exit.")
