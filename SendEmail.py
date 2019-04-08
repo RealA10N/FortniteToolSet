@@ -7,6 +7,10 @@ from email import encoders
 from JsonFileManager import ToolSetSettingsJson
 
 
+class MaxSizeError(Exception):
+    pass
+
+
 class SendEmail:
 
     def __init__(self):
@@ -14,6 +18,8 @@ class SendEmail:
         self.__user_password = None
         self.__recipients_email = []
         self.__attachments = []
+        self.__attachments_size = 0  # all files size in bytes
+        self.__max_attachments_size = 25000000  # 25MB
         self.__if_login = False
 
         self.__msg = MIMEMultipart()
@@ -25,8 +31,16 @@ class SendEmail:
     def add_body(self, body):
         self.__msg.attach(MIMEText(body, 'plain'))
 
+    def get_error_messege(self, file_size):
+        return 'The maximum size of file attachments is %sMB, while your attached files size is %sMB' % (convert_bytes_to_mb(self.__max_attachments_size), int(10 * convert_bytes_to_mb(self.__attachments_size + file_size)) / 10)
+
     def add_file(self, file_path):
-        self.__attachments.append(file_path)
+        file_size = os.path.getsize(file_path)
+        if file_size + self.__attachments_size > self.__max_attachments_size:
+            raise MaxSizeError(self.get_error_messege(file_size))
+        else:
+            self.__attachments.append(file_path)
+            self.__attachments_size += file_size
 
     def clear_files(self):
         self.__attachments = []
@@ -97,6 +111,10 @@ def ask_user_for_files_gui(title='Choose files'):
     root.withdraw()  # get rid of tkinter default window
     files = filedialog.askopenfilenames(parent=root, title=title)
     return root.tk.splitlist(files)
+
+
+def convert_bytes_to_mb(bytes):
+    return bytes / 1000000
 
 
 if __name__ == "__main__":
