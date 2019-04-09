@@ -837,25 +837,11 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
             self.__generate_all_items()
         return self.__all_items
 
-    def __generate_class_list(self, input_class):
-        items_list = []
-        for item in self.get_featured_items():
-            item_class = input_class(item, if_featured=True)
-            items_list.append(item_class)
-        for item in self.get_daily_items():
-            item_class = input_class(item, if_featured=False)
-            items_list.append(item_class)
-        return items_list
-
     def get_all_items_info_class_list(self):
-        if self.info_class_items_list is None:
-            self.info_class_items_list = self.__generate_class_list(FnbrCoShopInfo)
-        return self.info_class_items_list
+        return self.get_info_featured_items() + self.get_info_daily_items()
 
     def get_all_items_drawing_class_list(self):
-        if self.drawing_class_items_list is None:
-            self.drawing_class_items_list = self.__generate_class_list(DrawingFnbrCoShopInfo)
-        return self.drawing_class_items_list
+        return self.get_drawing_featured_items() + self.get_drawing_daily_items()
 
 
 def draw_centered_text_lines(
