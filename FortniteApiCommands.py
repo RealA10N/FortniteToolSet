@@ -658,6 +658,7 @@ class FortniteItemShopAPI(FortniteAPI):
                              api_headers={})
         self.items_json_list = None
         self.api_update_id = None
+        self.__featured_items = None
 
     def __generate_date(self):
         self.__api_date_string = self.get_item_shop_json()["date"]
@@ -694,6 +695,18 @@ class FortniteItemShopAPI(FortniteAPI):
         if self.drawing_class_items_list is None:
             self.drawing_class_items_list = self.__generate_class_list(DrawingShopInfo)
         return self.drawing_class_items_list
+
+    def __generate_featured_items(self):
+        featured = []
+        for item in self.get_all_items_info_class_list():
+            if item.get_if_image_featured():
+                featured.append(item)
+        self.__featured_items = featured
+
+    def get_featured_items(self):
+        if self.__featured_items is None:
+            self.__generate_featured_items()
+        return self.__featured_items
 
 
 class FortniteUpcomingAPI(FortniteAPI):
