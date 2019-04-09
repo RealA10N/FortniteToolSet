@@ -1,4 +1,4 @@
-from FortniteApiCommands import ShopInfo, FortniteItemShopAPI
+from JsonFileManager import ToolSetSettingsJson
 import ConsoleFunctions
 import os
 from PIL import Image
@@ -75,13 +75,11 @@ def generate_print_title(item):
 
 
 def search_featured_only(shop_api_class):
-    items_list = shop_api_class.get_items_json_list()
-    featured_items = []
-    for item in items_list:
-        item_info = ShopInfo(item)
-        if item_info.get_if_image_featured():
-            featured_items.append(item_info)
-    return featured_items
+    featured_skins = []
+    for item in shop_api_class.get_drawing_featured_items():
+        if item.info_class.get_if_image_featured():
+            featured_skins.append(item)
+    return featured_skins
 
 
 def get_args():
@@ -115,8 +113,8 @@ def generate_all_images(featured_list, assets_p, final_image_p):
     print()  # go down one line
     for item in featured_list:
         featured_class = GenerateFeaturedImage(assets_p)
-        featured_class.set_setting_by_api_item(item)
-        save_image(featured_class, item)
+        featured_class.set_setting_by_api_item(item.info_class)
+        save_image(featured_class, item.info_class)
 
 
 def regular_main():
@@ -125,7 +123,7 @@ def regular_main():
     if args.selected_skin_index is None:
         titles_list = []
         for item in featured_items:
-            titles_list.append(generate_print_title(item))
+            titles_list.append(generate_print_title(item.info_class))
         print()  # to go down one line
         selected_index = console.select_by_index(
             titles_list, 'Please select the image that you want to make by index:')
@@ -136,7 +134,7 @@ def regular_main():
     # create a "GenerateFeaturedImage" class
     generate_image = GenerateFeaturedImage(background_assets_path)
     # give all the needed info to the "GenerateFeaturedImage" class
-    generate_image.set_setting_by_api_item(selected_item)
+    generate_image.set_setting_by_api_item(selected_item.info_class)
 
     # ask the user to select an offset number and transfer the info
     if args.offset is None:
@@ -147,7 +145,7 @@ def regular_main():
 
     # generate, save and open final image
     print()  # go down one line
-    save_image(generate_image, selected_item)
+    save_image(generate_image, selected_item.info_class)
 
 
 if __name__ == "__main__":
@@ -163,7 +161,8 @@ if __name__ == "__main__":
 
     # getting info from api
     console.print_replaceable_line('Loading "Fortnite API" data...')
-    fortnite_api = FortniteItemShopAPI()
+    settings = ToolSetSettingsJson()
+    fortnite_api = settings.get_api_class()
 
     background_assets_path = os.path.join(os.getcwd(), 'FeaturedSkinToStoryAssets')
     if args.saving_path is None:
@@ -176,7 +175,7 @@ if __name__ == "__main__":
     # searching featured only items
     console.print_replaceable_line('Searching for "Featured" items only...')
     featured_items = search_featured_only(fortnite_api)
-    console.print_replaceable_line('All data loaded successfully!')
+    console.print_replaceable_line('All data loaded successfully!         ')
 
     if args.all:
         generate_all_images(featured_items, background_assets_path, final_saving_folder)
