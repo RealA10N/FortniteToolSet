@@ -791,20 +791,23 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
             self.__generate_featured_items()
         return self.__featured_items
 
-    def __generate_info_featured_items(self, input_class):
+    def __generate_info_items(self, input_class, if_featured):
         featured_info_items = []
         for item_dict in self.get_featured_items():
-            featured_info_items.append(input_class(item_dict, if_featured=True))
+            featured_info_items.append(input_class(item_dict, if_featured=if_featured))
         return featured_info_items
 
     def get_info_featured_items(self):
         if self.__featured_items_info is None:
-            self.__featured_items_info = self.__generate_info_featured_items(FnbrCoShopInfo)
+            self.__featured_items_info = self.__generate_info_items(
+                FnbrCoShopInfo, if_featured=True)
         return self.__featured_items_info
 
     def get_drawing_featured_items(self):
         if self.__featured_items_drawing is None:
-            self.__featured_items_drawing = self.__generate_info_featured_items(DrawingFnbrCoShopInfo)
+            self.__featured_items_drawing = self.__generate_info_items(
+                DrawingFnbrCoShopInfo, if_featured=True)
+        return self.__featured_items_drawing
 
     def __generate_daily_items(self):
         self.__daily_items = self.get_json_data()['data']['daily']
@@ -814,20 +817,15 @@ class FortniteFnbrCoShopAPI(FortniteAPI):
             self.__generate_daily_items()
         return self.__daily_items
 
-    def __generate_info_daily_items(self, input_class):
-        daily_info_items = []
-        for item_dict in self.get_daily_items():
-            daily_info_items.append(input_class(item_dict, if_featured=False))
-        return daily_info_items
-
     def get_info_daily_items(self):
         if self.__daily_items_info is None:
-            self.__daily_items_info = self.__generate_info_daily_items(FnbrCoShopInfo)
+            self.__daily_items_info = self.__generate_info_items(FnbrCoShopInfo, if_featured=False)
         return self.__daily_items_info
 
     def get_drawing_daily_items(self):
         if self.__daily_items_drawing is None:
-            self.__daily_items_drawing = self.__generate_info_daily_items(FnbrCoShopInfo)
+            self.__daily_items_drawing = self.__generate_info_items(
+                DrawingFnbrCoShopInfo, if_featured=False)
         return self.__daily_items_drawing
 
     def __generate_all_items(self):
