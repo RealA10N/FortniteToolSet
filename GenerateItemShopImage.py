@@ -1,6 +1,6 @@
 import os
 from PIL import Image
-from FortniteApiCommands import FortniteItemShopAPI, delete_dir_content, FortniteFnbrCoShopAPI
+from FortniteApiCommands import delete_dir_content
 from ConsoleFunctions import ConsolePrintFunctions
 from JsonFileManager import ToolSetSettingsJson
 
@@ -95,17 +95,6 @@ def paste_images_on_canvas(canvas, table):
     return canvas
 
 
-def get_api_class_by_settings_file():
-    settings = ToolSetSettingsJson()
-    if settings.get_default_api_name() == 'fnbr.co':
-        return FortniteFnbrCoShopAPI()
-    elif settings.get_default_api_name() == 'fortniteapi.com':
-        return FortniteItemShopAPI()
-    else:
-        raise ValueError(
-            'Please enter a vaild api name in the "default_api_name" faild. For more info please read the "README.md" file.')
-
-
 def get_args():
     from argparse import ArgumentParser
     parser = ArgumentParser(
@@ -137,7 +126,8 @@ if __name__ == "__main__":
         result_folder_path = args.saving_path
 
     console.print_replaceable_line('Downloading itemshop info from api...')
-    api = get_api_class_by_settings_file()
+    settings = ToolSetSettingsJson()
+    api = settings.get_api_class()
     console.print_replaceable_line('Downloaded itemshop info from api.\n')
 
     items_container = ItemsContainer((3, 4))

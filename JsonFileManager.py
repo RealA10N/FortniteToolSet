@@ -31,3 +31,14 @@ class ToolSetSettingsJson:
 
     def get_if_using_fnbrco_api(self):
         return self.get_default_api_name() == 'fnbr.co'
+
+    def get_api_class(self):
+        if self.get_default_api_name() == 'fnbr.co':
+            from FortniteApiCommands import FortniteFnbrCoShopAPI
+            return FortniteFnbrCoShopAPI()
+        elif self.get_default_api_name() == 'fortniteapi.com':
+            from FortniteApiCommands import FortniteItemShopAPI
+            return FortniteItemShopAPI()
+        else:
+            raise ValueError(
+                'Please enter a vaild api name in the "default_api_name" faild. For more info please read the "README.md" file.')
