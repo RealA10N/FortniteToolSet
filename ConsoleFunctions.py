@@ -1,4 +1,5 @@
 import sys
+from time import clock
 
 
 class ConsolePrintFunctions:
@@ -75,3 +76,9 @@ class ConsolePrintFunctions:
 
     def regular_input(self, text):
         return input(self.__add_open_text(text))
+
+    def start_script_clock(self):
+        clock()
+
+    def end_script_clock(self):
+        input('Script run finished in %s seconds. Press enter to exit.' % int(clock()))
