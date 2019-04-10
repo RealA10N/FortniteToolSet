@@ -154,6 +154,7 @@ if __name__ == "__main__":
 
     # print credits
     console = ConsoleFunctions.ConsolePrintFunctions()
+    console.start_script_clock()
     if not args.quiet:
         console.print_one_line_title(
             "Fortnite Featured Image Generator. // Created by @RealA10N", "single heavy square")
@@ -183,4 +184,4 @@ if __name__ == "__main__":
         regular_main()
 
     if not args.quiet:
-        input("Press 'ENTER' to exit.")
+        console.end_script_clock()

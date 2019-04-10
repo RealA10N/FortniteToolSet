@@ -181,6 +181,7 @@ if __name__ == "__main__":
     args = get_args()
 
     console = ConsolePrintFunctions()
+    console.start_script_clock()
     if not args.quiet:
         console.print_one_line_title(
             "Fortnite News Generator. // Created by @RealA10N", "single heavy square")
@@ -222,5 +223,5 @@ if __name__ == "__main__":
     craft_news_image(wanted_news, assets_folder_path, console).save(final_image_location)
     if not args.quiet:
         os.startfile(final_image_location)
-        console.print_replaceable_line(get_print_text("Final Image saved! Press ENTER to exit."))
-        input()
+        console.print_replaceable_line(get_print_text("Final Image saved!        \n"))
+        console.end_script_clock()

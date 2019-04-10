@@ -111,6 +111,7 @@ if __name__ == "__main__":
     args = get_args()
 
     console = ConsolePrintFunctions()
+    console.start_script_clock()
     if not args.quiet:
         console.print_one_line_title(
             "Fortnite Item Shop Generator. // Created by @RealA10N", "single heavy square")
@@ -156,4 +157,5 @@ if __name__ == "__main__":
         photo_index += 1
 
     if not args.quiet:
-        input('\nPress any key to exit. ')
+        print()
+        console.end_script_clock()
