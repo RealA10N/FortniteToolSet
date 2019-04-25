@@ -4,6 +4,10 @@ import os
 from PIL import Image
 
 
+class RarityImageNotFound(Exception):
+    pass  # raise class only
+
+
 class GenerateFeaturedImage:
 
     def __init__(self, assets_folder):
@@ -17,16 +21,10 @@ class GenerateFeaturedImage:
         self.background_image = None
 
     def __build_image_path(self, rarity):
-        return self.assets_folder + '\\FeaturedSkinToStory ' + rarity + '.png'
+        return os.path.join(self.assets_folder, 'FeaturedSkinToStory ' + rarity + '.png')
 
     def set_image(self, image):
         self.image = image
-
-    def __check_valid_rarity(self, rarity):
-        if rarity in ["legendary", "epic", "rare", "uncommon", "common"]:
-            return True
-        else:
-            return False
 
     def set_setting_by_api_item(self, item):
         self.set_image(item.get_featured_image())
@@ -44,12 +42,12 @@ class GenerateFeaturedImage:
 
     def get_requested_image(self):
 
-        # check if rarity is valid
-        if not self.__check_valid_rarity(self.rarity):
-            raise Exception('rarity is not valid')
-
         # open background (rarity) image
-        self.background_image = Image.open(self.__build_image_path(self.rarity)).convert("RGBA")
+        try:
+            self.background_image = Image.open(self.__build_image_path(self.rarity)).convert("RGBA")
+        except FileNotFoundError:  # if rarity not found
+            raise RarityImageNotFound(
+                'Image for the rarity "%s" not found in the assets folder.' % self.rarity)
 
         # get image sizes
         wip_image_w, wip_image_h = self.background_image.size
