@@ -8,7 +8,7 @@ from JsonFileManager import ToolSetSettingsJson
 
 
 class MaxSizeError(Exception):
-    pass
+    pass  # Error class. used by 'raise' command in the script
 
 
 class SendEmail:
