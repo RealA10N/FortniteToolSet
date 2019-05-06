@@ -70,9 +70,18 @@ root = ProgramGUI()
 root.mainloop()
 
 
+class AboutPage(DefaultPage):
 
+    def __init__(self, parent, controller):
+        DefaultPage.__init__(self, parent, controller)
 
+        Title = tk.Label(self, text='About', font=LargeFont)
+        Title.pack(padx=10, pady=10)
 
+        SmallerTitle = tk.Label(self, text='yay!', font=SmallFont)
+        SmallerTitle.pack(padx=10, pady=10)
 
+    def ShowMe(self):
+        self.controller.title(self.controller.GetTitle('About'))
 
 
