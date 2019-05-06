@@ -31,17 +31,17 @@ delete_dir_content(final_images_dir)
 # v3_ItemShopToStoryImage script
 console.script_open("GenerateItemShopImage")
 itemshop_path = os.path.join(base_folder_path, 'GenerateItemShopImage.py')
-os.system("%s -q -sp %s" % (itemshop_path, final_images_dir))
+os.system('"%s" -q -sp %s' % (itemshop_path, final_images_dir))
 
 # v2_NewsIoStoryImage script
 console.script_open("GenerateNewsImage")
 news_path = os.path.join(base_folder_path, 'GenerateNewsImage.py')
-os.system("%s -q -a -sp %s" % (news_path, final_images_dir))
+os.system('"%s" -q -a -sp %s' % (news_path, final_images_dir))
 
 # FortniteFeaturedSkinToStory script
 console.script_open("GenerateFeaturedImage")
 featured_path = os.path.join(base_folder_path, 'GenerateFeaturedImage.py')
-os.system("%s -q -a -sp %s" % (featured_path, final_images_dir))
+os.system('"%s" -q -a -sp %s' % (featured_path, final_images_dir))
 
 # send email
 console.script_open('SendEmail')
