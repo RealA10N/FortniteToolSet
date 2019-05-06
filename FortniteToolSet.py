@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox as tkmsgbx
 
 
 # Fonts
@@ -58,7 +58,7 @@ class ProgramGUI(tk.Tk):
         self.config(menu=menubar)
 
     def Quit(self):
-        quit = tk.messagebox.askyesno(
+        quit = tkmsgbx.askyesno(
             title=self.GetTitle('Warning!'),
             message="You are about to exit. Are you sure?")
         if quit:
