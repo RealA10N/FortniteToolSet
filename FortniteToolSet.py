@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 
 # Fonts
@@ -49,8 +50,21 @@ class ProgramGUI(tk.Tk):
         menubar.add_cascade(label="Program", menu=program_menu)
         program_menu.add_command(label="Home", command=lambda: self.ShowPage(HomePage))
         program_menu.add_command(label="About", command=lambda: self.ShowPage(AboutPage))
+
+        program_menu.add_separator()
+
+        program_menu.add_command(label="Exit", command=lambda: self.Quit())
+
         self.config(menu=menubar)
 
+    def Quit(self):
+        quit = tk.messagebox.askyesno(
+            title=self.GetTitle('Warning!'),
+            message="You are about to exit. Are you sure?")
+        if quit:
+            self.deiconify()
+            self.destroy()
+            self.quit()
 
 
 class DefaultPage(tk.Frame):
