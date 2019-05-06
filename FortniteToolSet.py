@@ -39,13 +39,19 @@ class ProgramGUI(tk.Tk):
         self.title('%s | FortniteToolSet' % page_name)
 
 
-# default frame init for all pages in the program.
 class DefaultPage(tk.Frame):
 
+    # default init for all pages in the program
     def __init__(self, parent, controller):
-        tk.Frame.__init__(self, parent)
+        self.parent = parent
+        self.controller = controller
+        tk.Frame.__init__(self, self.parent)
         self.configure(bg='#212121')
+        self.grid(row=0, column=0, sticky="nsew")
 
+    # will run every time the page loads
+    def ShowMe(self):
+        pass
 
 class FrontPage(DefaultPage):
 
