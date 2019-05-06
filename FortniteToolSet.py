@@ -12,6 +12,10 @@ class ProgramGUI(tk.Tk):
     def __init__(self, *args, **kwargs):
 
         tk.Tk.__init__(self, *args, **kwargs)
+
+        # place window on top & in the middle of the screen
+        self.eval('tk::PlaceWindow %s center' % self.winfo_toplevel())
+
         self.title('FortniteSetUpTool')  # default title
 
         container = tk.Frame(self)
