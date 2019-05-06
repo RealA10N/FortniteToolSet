@@ -17,6 +17,7 @@ class ProgramGUI(tk.Tk):
         self.eval('tk::PlaceWindow %s center' % self.winfo_toplevel())
 
         self.title('FortniteSetUpTool')  # default title
+        self.LoadMenuBar()
 
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -24,19 +25,32 @@ class ProgramGUI(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        frame = FrontPage(container, self)
-        self.frames[FrontPage] = frame
+        self.LoadAllPages(parent=container, controller=self)
+        self.ShowPage(HomePage)
 
-        frame.grid(row=0, column=0, sticky="nsew")
-        self.ShowPage(FrontPage)
+    def LoadAllPages(self, parent, controller):
+        pages = (HomePage, AboutPage)  # all the pages list
+        for frame_obj in pages:
+            frame = frame_obj(parent, controller)
+            self.frames[frame_obj] = frame
 
     def ShowPage(self, page):
-
         frame = self.frames[page]
+        frame.ShowMe()
         frame.tkraise()
 
-    def SetTitle(self, page_name):
-        self.title('%s | FortniteToolSet' % page_name)
+    def GetTitle(self, page_name):
+        return '%s | FortniteToolSet' % page_name
+
+    def LoadMenuBar(self):
+        menubar = tk.Menu(self)
+        program_menu = tk.Menu(menubar, tearoff=0)
+
+        menubar.add_cascade(label="Program", menu=program_menu)
+        program_menu.add_command(label="Home", command=lambda: self.ShowPage(HomePage))
+        program_menu.add_command(label="About", command=lambda: self.ShowPage(AboutPage))
+        self.config(menu=menubar)
+
 
 
 class DefaultPage(tk.Frame):
@@ -53,11 +67,11 @@ class DefaultPage(tk.Frame):
     def ShowMe(self):
         pass
 
-class FrontPage(DefaultPage):
+
+class HomePage(DefaultPage):
 
     def __init__(self, parent, controller):
         DefaultPage.__init__(self, parent, controller)
-        controller.SetTitle('Welcome')
 
         Title = tk.Label(self, text='FortniteToolSet', font=LargeFont)
         Title.pack(padx=10, pady=10)
@@ -65,9 +79,8 @@ class FrontPage(DefaultPage):
         SmallerTitle = tk.Label(self, text='Created By RealA10N', font=SmallFont)
         SmallerTitle.pack(padx=10, pady=10)
 
-
-root = ProgramGUI()
-root.mainloop()
+    def ShowMe(self):
+        self.controller.title(self.controller.GetTitle('Home'))
 
 
 class AboutPage(DefaultPage):
@@ -85,3 +98,5 @@ class AboutPage(DefaultPage):
         self.controller.title(self.controller.GetTitle('About'))
 
 
+root = ProgramGUI()
+root.mainloop()
