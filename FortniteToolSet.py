@@ -1,14 +1,21 @@
 import tkinter as tk
 from tkinter import messagebox as tkmsgbx
-# Assets
-BackgroundColor = '#212121'
+
+# # # # # # # #
+# A S S E T S #
+# # # # # # # #
+
 AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
-
-
-# Fonts
+BackgroundColor = '#212121'
+DefaultPadX = 10
+DefaultPadY = 10
 LargeFont = ('Alef', 20)
 SmallFont = ('Alef', 12)
-MenuFont = ('Alef', 8)
+
+
+# # # # # # # # # # # # #
+# G E N E R A L   G U I #
+# # # # # # # # # # # # #
 
 
 class ProgramGUI(tk.Tk):
@@ -70,14 +77,17 @@ class ProgramGUI(tk.Tk):
             self.quit()
 
 
+# # # # # # # # # # #
+# G U I   P A G E S #
+# # # # # # # # # # #
+
 class DefaultPage(tk.Frame):
 
     # default init for all pages in the program
     def __init__(self, parent, controller):
         self.parent = parent
         self.controller = controller
-        tk.Frame.__init__(self, self.parent)
-        self.configure(bg=BackgroundColor)
+        tk.Frame.__init__(self, self.parent, bg=BackgroundColor)
         self.grid(row=0, column=0, sticky="nsew")
 
     # will run every time the page loads
@@ -91,10 +101,10 @@ class HomePage(DefaultPage):
         DefaultPage.__init__(self, parent, controller)
 
         Title = tk.Label(self, text='FortniteToolSet', font=LargeFont)
-        Title.pack(padx=10, pady=10)
+        Title.pack(padx=DefaultPadX, pady=DefaultPadY)
 
         SmallerTitle = tk.Label(self, text='Created By RealA10N', font=SmallFont)
-        SmallerTitle.pack(padx=10, pady=10)
+        SmallerTitle.pack(padx=DefaultPadX, pady=DefaultPadY)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('Home'))
@@ -106,10 +116,10 @@ class AboutPage(DefaultPage):
         DefaultPage.__init__(self, parent, controller)
 
         Title = tk.Label(self, text='About', font=LargeFont)
-        Title.pack(padx=10, pady=10)
+        Title.pack(padx=DefaultPadX, pady=DefaultPadY)
 
         SmallerTitle = tk.Label(self, text='yay!', font=SmallFont)
-        SmallerTitle.pack(padx=10, pady=10)
+        SmallerTitle.pack(padx=DefaultPadX, pady=DefaultPadY)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('About'))
