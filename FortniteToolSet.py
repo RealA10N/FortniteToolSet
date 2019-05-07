@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox as tkmsgbx
+# Assets
+BackgroundColor = '#212121'
+AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
 
 
 # Fonts
@@ -74,7 +77,7 @@ class DefaultPage(tk.Frame):
         self.parent = parent
         self.controller = controller
         tk.Frame.__init__(self, self.parent)
-        self.configure(bg='#212121')
+        self.configure(bg=BackgroundColor)
         self.grid(row=0, column=0, sticky="nsew")
 
     # will run every time the page loads
