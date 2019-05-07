@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox as tkmsgbx
+import os
+from PIL import Image, ImageTk
 
 # # # # # # # #
 # A S S E T S #
@@ -100,6 +102,11 @@ class HomePage(DefaultPage):
     def __init__(self, parent, controller):
         DefaultPage.__init__(self, parent, controller)
 
+        # banner image
+        imgBanner = Image.open(os.path.join(AssetsFolder, 'Banner.png')).resize((500, 250))
+        Banner = ImageCanvas(self, imgBanner)
+        Banner.pack(padx=DefaultPadX, pady=DefaultPadY)
+
         Title = tk.Label(self, text='FortniteToolSet', font=LargeFont)
         Title.pack(padx=DefaultPadX, pady=DefaultPadY)
 
@@ -123,6 +130,26 @@ class AboutPage(DefaultPage):
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('About'))
+
+
+# # # # # # # # # # # # # #
+# G U I   E L E M E N T S #
+# # # # # # # # # # # # # #
+
+# crates a transperent canvas and pastes image on it
+class ImageCanvas(tk.Canvas):
+
+    def __init__(self, master, pilImg, *args, **kwargs):
+
+        self.pilImg = pilImg
+        self.tkImg = ImageTk.PhotoImage(self.pilImg)
+        width, height = pilImg.size
+
+        tk.Canvas.__init__(self, master, bg=BackgroundColor, highlightthickness=0,
+                           height=height, width=width, *args, **kwargs)
+        # canvas = tk.Canvas(master, bg=BackgroundColor, highlightthickness=0)
+
+        self.create_image(0, 0, image=self.tkImg, anchor='nw')
 
 
 root = ProgramGUI()
