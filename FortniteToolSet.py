@@ -118,11 +118,8 @@ class HomePage(DefaultPage):
         Banner = ImageCanvas(self, imgBanner)
         Banner.pack(padx=DefaultPadX, pady=DefaultPadY)
 
-        Title = tk.Label(self, text='FortniteToolSet', font=LargeFont)
-        Title.pack(padx=DefaultPadX, pady=DefaultPadY)
-
-        SmallerTitle = tk.Label(self, text='Created By RealA10N', font=SmallFont)
-        SmallerTitle.pack(padx=DefaultPadX, pady=DefaultPadY)
+        WelcomeTitle = BigLabel(self, text='Welcome Back!')
+        WelcomeTitle.pack(padx=DefaultPadX, pady=DefaultPadY)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('Home'))
@@ -157,6 +154,17 @@ class ImageCanvas(tk.Canvas):
                            height=height, width=width, *args, **kwargs)
 
         self.create_image(0, 0, image=self.tkImg, anchor='nw')
+
+
+class BigLabel(tk.Label):
+
+    def __init__(self, master, *args, **kwargs):
+
+        BigLabelFont = (DefaultFont, BigFontSize)
+        BigLabelColor = DefaultTextColor
+
+        tk.Label.__init__(self, master, bg=BackgroundColor, font=BigLabelFont,
+                          fg=BigLabelColor, *args, **kwargs)
 
 
 root = ProgramGUI()
