@@ -167,5 +167,29 @@ class BigLabel(tk.Label):
                           fg=BigLabelColor, *args, **kwargs)
 
 
+class RegularLabel(tk.Label):
+
+    def __init__(self, master, *args, **kwargs):
+
+        RegularLabelFont = (DefaultFont, RegularFontSize)
+        RegularLabelColor = DefaultTextColor
+
+        tk.Label.__init__(self, master, bg=BackgroundColor, font=RegularLabelFont,
+                          fg=RegularLabelColor, *args, **kwargs)
+
+
+class RegularEntry(tk.Entry):
+
+    def __init__(self, master, *args, **kwargs):
+
+        tk.Entry.__init__(self, master, bg=TrailingColor,
+                          font=(DefaultFont, RegularFontSize),  # font
+                          relief=tk.FLAT,  # style of the entry
+                          bd=2,  # size of border
+                          fg=WhiteColor,  # color of font
+                          selectbackground=DrakTextColor,  # background color when text selected
+                          *args, **kwargs)
+
+
 root = ProgramGUI()
 root.mainloop()
