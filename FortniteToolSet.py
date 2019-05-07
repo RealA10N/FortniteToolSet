@@ -38,7 +38,7 @@ class ProgramGUI(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         # place window on top & in the middle of the screen
-        self.eval('tk::PlaceWindow %s center' % self.winfo_toplevel())
+        self.eval('tk::PlaceWindow %s' % self.winfo_toplevel())
 
         self.title('FortniteSetUpTool')  # default title
         self.LoadMenuBar()
@@ -53,7 +53,7 @@ class ProgramGUI(tk.Tk):
         self.ShowPage(HomePage)
 
     def LoadAllPages(self, parent, controller):
-        pages = (HomePage, AboutPage)  # all the pages list
+        pages = (HomePage, AboutPage, SettingsPage)  # all the pages list
         for frame_obj in pages:
             frame = frame_obj(parent, controller)
             self.frames[frame_obj] = frame
@@ -73,6 +73,7 @@ class ProgramGUI(tk.Tk):
         menubar.add_cascade(label="Program", menu=program_menu)
         program_menu.add_command(label="Home", command=lambda: self.ShowPage(HomePage))
         program_menu.add_command(label="About", command=lambda: self.ShowPage(AboutPage))
+        program_menu.add_command(label="Settings", command=lambda: self.ShowPage(SettingsPage))
 
         program_menu.add_separator()
 
@@ -135,6 +136,18 @@ class AboutPage(DefaultPage):
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('About'))
+
+
+class SettingsPage(DefaultPage):
+
+    def __init__(self, parent, controller):
+        DefaultPage.__init__(self, parent, controller)
+
+        TestEntry = RegularEntry(self)
+        TestEntry.grid(row=0, column=0)
+
+    def ShowMe(self):
+        self.controller.title(self.controller.GetTitle('Settings'))
 
 
 # # # # # # # # # # # # # #
