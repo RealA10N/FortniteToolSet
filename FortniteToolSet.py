@@ -8,12 +8,23 @@ from PIL import Image, ImageTk
 # # # # # # # #
 
 AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
-BackgroundColor = '#212121'
+DefaultFont = 'Alef'
+
+# colors
+BackgroundColor = '#222831'   # the color of the window
+TrailingColor = '#393e46'     # buttons, text fields etc.
+WhiteColor = '#eeeeee'        # gives the whites presonal style (;
+DefaultTextColor = '#145374'  # most of the text
+DrakTextColor = '#00334e'     # For smaller and less importent text
+LightTextColor = '#5588a3'    # For text that pops up
+DiffrentColor = '#fd5f00'     # Complatly diffrent color, for special buttons and functions
+
+BigFontSize = 20
+RegularFontSize = 12
+SmallFontSize = 8
+
 DefaultPadX = 10
 DefaultPadY = 10
-LargeFont = ('Alef', 20)
-SmallFont = ('Alef', 12)
-
 
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
@@ -122,11 +133,8 @@ class AboutPage(DefaultPage):
     def __init__(self, parent, controller):
         DefaultPage.__init__(self, parent, controller)
 
-        Title = tk.Label(self, text='About', font=LargeFont)
+        Title = tk.Label(self, text='About - coming soon!')
         Title.pack(padx=DefaultPadX, pady=DefaultPadY)
-
-        SmallerTitle = tk.Label(self, text='yay!', font=SmallFont)
-        SmallerTitle.pack(padx=DefaultPadX, pady=DefaultPadY)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('About'))
@@ -147,7 +155,6 @@ class ImageCanvas(tk.Canvas):
 
         tk.Canvas.__init__(self, master, bg=BackgroundColor, highlightthickness=0,
                            height=height, width=width, *args, **kwargs)
-        # canvas = tk.Canvas(master, bg=BackgroundColor, highlightthickness=0)
 
         self.create_image(0, 0, image=self.tkImg, anchor='nw')
 
