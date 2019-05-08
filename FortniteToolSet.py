@@ -16,8 +16,7 @@ BigFontSize = 20
 RegularFontSize = 12
 SmallFontSize = 8
 
-DefaultPadX = 10
-DefaultPadY = 10
+DefaultPad = 10
 
 # # # # # # # # # # # # # # # # #
 # C O L O R   F U N C T I O N S #
@@ -143,10 +142,10 @@ class HomePage(DefaultPage):
         # banner image
         imgBanner = Image.open(os.path.join(AssetsFolder, 'Banner.png')).resize((500, 250))
         Banner = ImageCanvas(self, imgBanner)
-        Banner.pack(padx=DefaultPadX, pady=DefaultPadY)
+        Banner.pack(padx=DefaultPad, pady=DefaultPad)
 
         WelcomeTitle = BigLabel(self, text='Welcome Back!')
-        WelcomeTitle.pack(padx=DefaultPadX, pady=DefaultPadY)
+        WelcomeTitle.pack(padx=DefaultPad, pady=DefaultPad)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('Home'))
@@ -158,7 +157,7 @@ class AboutPage(DefaultPage):
         DefaultPage.__init__(self, parent, controller)
 
         Title = tk.Label(self, text='About - coming soon!')
-        Title.pack(padx=DefaultPadX, pady=DefaultPadY)
+        Title.pack(padx=DefaultPad, pady=DefaultPad)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('About'))
