@@ -43,12 +43,13 @@ class MyColor(Color):
 # # # # # # # # # # # # # #
 
 BackgroundColor = MyColor('#222831')   # the color of the window
+BackgroudOppositeColor = MyColor('#FFFFFF')  # For items on background
 TrailingColor = MyColor('#393e46')     # buttons, text fields etc.
-DefaultTextColor = MyColor('#145374')  # most of the text
+DefaultTextColor = MyColor('#51afe1')  # most of the text
 DrakTextColor = DefaultTextColor.NewChangeColorLightning(
-    0.7)    # For smaller and less importent text
-LightTextColor = DefaultTextColor.NewChangeColorLightning(1.5)  # For text that pops up
-DiffrentColor = MyColor('#fd5f00')  # Complatly diffrent color, for special buttons and functions
+    0.7)   # For smaller and less importent text
+LightTextColor = DefaultTextColor.NewChangeColorLightning(1.3)  # For text that pops up
+DiffrentColor = MyColor('#fd5f00')  # For special buttons and functions
 
 
 # # # # # # # # # # # # #
@@ -201,7 +202,7 @@ class BigLabel(tk.Label):
         BigLabelFont = (DefaultFont, BigFontSize)
 
         tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=BigLabelFont,
-                          fg=DefaultTextColor.get_hex_l(), *args, **kwargs)
+                          fg=DiffrentColor.get_hex_l(), *args, **kwargs)
 
 
 class RegularLabel(tk.Label):
@@ -222,7 +223,7 @@ class RegularEntry(tk.Entry):
                           font=(DefaultFont, RegularFontSize),  # font
                           relief=tk.FLAT,  # style of the entry
                           bd=2,  # size of border
-                          fg='white',  # color of font
+                          fg=BackgroudOppositeColor.get_hex_l(),  # color of font
                           selectbackground=DrakTextColor.get_hex_l(),  # background color when text selected
                           *args, **kwargs)
 
@@ -240,8 +241,8 @@ class RegularButton(tk.Button):
 
                            # font
                            font=(DefaultFont, RegularFontSize),
-                           fg='white',  # regular color
-                           activeforeground='white',  # while pressed color
+                           fg=BackgroudOppositeColor.get_hex_l(),  # regular color
+                           activeforeground=BackgroudOppositeColor.get_hex_l(),  # while pressed color
                            justify=tk.CENTER,  # center all the text lines
                            *args, **kwargs)
 
@@ -257,10 +258,10 @@ class SpecialButton(tk.Button):
                            activebackground=DrakTextColor.get_hex_l(),  # while pressed color
                            bd=0,  # size of border
 
-                           # font color
+                           # font
                            font=(DefaultFont, RegularFontSize),
-                           fg='white',  # regular color
-                           activeforeground='white',  # while pressed color
+                           fg=BackgroudOppositeColor.get_hex_l(),  # regular color
+                           activeforeground=BackgroudOppositeColor.get_hex_l(),  # while pressed color
                            justify=tk.CENTER,  # center all the text lines
                            *args, **kwargs)
 
