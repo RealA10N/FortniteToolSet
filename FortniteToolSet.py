@@ -10,7 +10,6 @@ from PIL import Image, ImageTk
 AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
 DefaultFont = 'Alef'
 
-DefaultTextColor = '#145374'  # most of the text
 DrakTextColor = '#00334e'     # For smaller and less importent text
 LightTextColor = '#5588a3'    # For text that pops up
 DiffrentColor = '#fd5f00'     # Complatly diffrent color, for special buttons and functions
@@ -86,6 +85,9 @@ class MyColor():
 
 BackgroundColor = MyColor(Hex='222831')  # the color of the window
 TrailingColor = MyColor(Hex='393e46')    # buttons, text fields etc.
+DefaultTextColor = MyColor(Hex='145374')  # most of the text
+
+
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
 # # # # # # # # # # # # #
@@ -234,10 +236,9 @@ class BigLabel(tk.Label):
     def __init__(self, master, *args, **kwargs):
 
         BigLabelFont = (DefaultFont, BigFontSize)
-        BigLabelColor = DefaultTextColor
 
         tk.Label.__init__(self, master, bg=BackgroundColor.GetHashtagHex(), font=BigLabelFont,
-                          fg=BigLabelColor, *args, **kwargs)
+                          fg=DefaultTextColor.GetHashtagHex(), *args, **kwargs)
 
 
 class RegularLabel(tk.Label):
@@ -245,10 +246,9 @@ class RegularLabel(tk.Label):
     def __init__(self, master, *args, **kwargs):
 
         RegularLabelFont = (DefaultFont, RegularFontSize)
-        RegularLabelColor = DefaultTextColor
 
         tk.Label.__init__(self, master, bg=BackgroundColor.GetHashtagHex(), font=RegularLabelFont,
-                          fg=RegularLabelColor, *args, **kwargs)
+                          fg=DefaultTextColor.GetHashtagHex(), *args, **kwargs)
 
 
 class RegularEntry(tk.Entry):
