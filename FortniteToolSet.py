@@ -10,8 +10,6 @@ from PIL import Image, ImageTk
 AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
 DefaultFont = 'Alef'
 
-# colors
-BackgroundColor = '#222831'   # the color of the window
 TrailingColor = '#393e46'     # buttons, text fields etc.
 WhiteColor = '#eeeeee'        # gives the whites presonal style (;
 DefaultTextColor = '#145374'  # most of the text
@@ -29,6 +27,7 @@ DefaultPadY = 10
 # # # # # # # # # # # # # # # # #
 # C O L O R   F U N C T I O N S #
 # # # # # # # # # # # # # # # # #
+
 
 class MyColor():
 
@@ -83,6 +82,8 @@ class MyColor():
         return MyColor(RGB=(newR, newG, newB))
 
 
+# colors
+BackgroundColor = MyColor(Hex='222831')  # the color of the window
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
 # # # # # # # # # # # # #
@@ -158,7 +159,7 @@ class DefaultPage(tk.Frame):
     def __init__(self, parent, controller):
         self.parent = parent
         self.controller = controller
-        tk.Frame.__init__(self, self.parent, bg=BackgroundColor)
+        tk.Frame.__init__(self, self.parent, bg=BackgroundColor.GetHashtagHex())
         self.grid(row=0, column=0, sticky="nsew")
 
     # will run every time the page loads
@@ -220,7 +221,7 @@ class ImageCanvas(tk.Canvas):
         self.tkImg = ImageTk.PhotoImage(self.pilImg)
         width, height = pilImg.size
 
-        tk.Canvas.__init__(self, master, bg=BackgroundColor, highlightthickness=0,
+        tk.Canvas.__init__(self, master, bg=BackgroundColor.GetHashtagHex(), highlightthickness=0,
                            height=height, width=width, *args, **kwargs)
 
         self.create_image(0, 0, image=self.tkImg, anchor='nw')
@@ -233,7 +234,7 @@ class BigLabel(tk.Label):
         BigLabelFont = (DefaultFont, BigFontSize)
         BigLabelColor = DefaultTextColor
 
-        tk.Label.__init__(self, master, bg=BackgroundColor, font=BigLabelFont,
+        tk.Label.__init__(self, master, bg=BackgroundColor.GetHashtagHex(), font=BigLabelFont,
                           fg=BigLabelColor, *args, **kwargs)
 
 
@@ -244,7 +245,7 @@ class RegularLabel(tk.Label):
         RegularLabelFont = (DefaultFont, RegularFontSize)
         RegularLabelColor = DefaultTextColor
 
-        tk.Label.__init__(self, master, bg=BackgroundColor, font=RegularLabelFont,
+        tk.Label.__init__(self, master, bg=BackgroundColor.GetHashtagHex(), font=RegularLabelFont,
                           fg=RegularLabelColor, *args, **kwargs)
 
 
@@ -256,7 +257,7 @@ class RegularEntry(tk.Entry):
                           font=(DefaultFont, RegularFontSize),  # font
                           relief=tk.FLAT,  # style of the entry
                           bd=2,  # size of border
-                          fg=WhiteColor,  # color of font
+                          fg='white',  # color of font
                           selectbackground=DrakTextColor,  # background color when text selected
                           *args, **kwargs)
 
