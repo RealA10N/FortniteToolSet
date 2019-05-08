@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import messagebox as tkmsgbx
 import os
 from PIL import Image, ImageTk
+from colour import Color
+
 
 # # # # # # # #
 # A S S E T S #
@@ -9,10 +11,6 @@ from PIL import Image, ImageTk
 
 AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
 DefaultFont = 'Alef'
-
-DrakTextColor = '#00334e'     # For smaller and less importent text
-LightTextColor = '#5588a3'    # For text that pops up
-DiffrentColor = '#fd5f00'     # Complatly diffrent color, for special buttons and functions
 
 BigFontSize = 20
 RegularFontSize = 12
@@ -26,66 +24,32 @@ DefaultPadY = 10
 # # # # # # # # # # # # # # # # #
 
 
-class MyColor():
+class MyColor(Color):
 
-    def __init__(self, RGB=None, Hex=None):
-        if RGB is None:
-            if Hex is None:
-                raise(Exception, 'Please init a color using hex or rgb')
-            else:
-                self._hex = Hex
-                self._rgb = self._HexColorToRGB(Hex)
-        else:
-            if Hex is None:
-                self._rgb = RGB
-                self._hex = self._RGBToHexColor(RGB)
-            else:
-                raise(Exception, 'Please init only one color using rgb OR hex')
+    def __init__(self, *args, **kwargs):
 
-    def GetHex(self):
-        return self._hex
+        Color.__init__(self, *args, **kwargs)
 
-    def GetHashtagHex(self):
-        return '#' + self.GetHex()
+    def NewChangeColorLightning(self, amount):
 
-    def GetRGB(self):
-        return self._rgb
+        newr = min(self.red * amount, 1)
+        newg = min(self.green * amount, 1)
+        newb = min(self.blue * amount, 1)
 
-    def _HexColorToRGB(self, hex):
-        hexR = hex[0:2]
-        hexG = hex[2:4]
-        hexB = hex[4:6]
-        return (int(hexR, 16), int(hexG, 16), int(hexB, 16))
-
-    def _RGBToHexColor(self, rgb):
-        return hex(rgb[0])[2:] + hex(rgb[1])[2:] + hex(rgb[2])[2:]
-
-    def MixColor(self, color):
-        mixedR = (self.GetRGB[0] + color.GetRGB[0]) / 2
-        mixedG = (self.GetRGB[1] + color.GetRGB[1]) / 2
-        mixedB = (self.GetRGB[2] + color.GetRGB[2]) / 2
-        return MyColor(RGB=(mixedR, mixedG, mixedB))
-
-    def DarkenColor(self, amount):
-        newR = max(self.GetRGB[0] - amount, 0)
-        newG = max(self.GetRGB[1] - amount, 0)
-        newB = max(self.GetRGB[2] - amount, 0)
-        return MyColor(RGB=(newR, newG, newB))
-
-    def LightenColor(self, amount):
-        newR = min(self.GetRGB[0] + amount, 255)
-        newG = min(self.GetRGB[1] + amount, 255)
-        newB = min(self.GetRGB[2] + amount, 255)
-        return MyColor(RGB=(newR, newG, newB))
+        return MyColor(rgb=(newr, newg, newb))
 
 
 # # # # # # # # # # # # # #
 # C O L O R   A S S E T S #
 # # # # # # # # # # # # # #
 
-BackgroundColor = MyColor(Hex='222831')  # the color of the window
-TrailingColor = MyColor(Hex='393e46')    # buttons, text fields etc.
-DefaultTextColor = MyColor(Hex='145374')  # most of the text
+BackgroundColor = MyColor('#222831')   # the color of the window
+TrailingColor = MyColor('#393e46')     # buttons, text fields etc.
+DefaultTextColor = MyColor('#145374')  # most of the text
+DrakTextColor = DefaultTextColor.NewChangeColorLightning(
+    0.7)    # For smaller and less importent text
+LightTextColor = DefaultTextColor.NewChangeColorLightning(1.5)  # For text that pops up
+DiffrentColor = MyColor('#fd5f00')  # Complatly diffrent color, for special buttons and functions
 
 
 # # # # # # # # # # # # #
@@ -163,7 +127,7 @@ class DefaultPage(tk.Frame):
     def __init__(self, parent, controller):
         self.parent = parent
         self.controller = controller
-        tk.Frame.__init__(self, self.parent, bg=BackgroundColor.GetHashtagHex())
+        tk.Frame.__init__(self, self.parent, bg=BackgroundColor.get_hex_l())
         self.grid(row=0, column=0, sticky="nsew")
 
     # will run every time the page loads
@@ -225,7 +189,7 @@ class ImageCanvas(tk.Canvas):
         self.tkImg = ImageTk.PhotoImage(self.pilImg)
         width, height = pilImg.size
 
-        tk.Canvas.__init__(self, master, bg=BackgroundColor.GetHashtagHex(), highlightthickness=0,
+        tk.Canvas.__init__(self, master, bg=BackgroundColor.get_hex_l(), highlightthickness=0,
                            height=height, width=width, *args, **kwargs)
 
         self.create_image(0, 0, image=self.tkImg, anchor='nw')
@@ -237,8 +201,8 @@ class BigLabel(tk.Label):
 
         BigLabelFont = (DefaultFont, BigFontSize)
 
-        tk.Label.__init__(self, master, bg=BackgroundColor.GetHashtagHex(), font=BigLabelFont,
-                          fg=DefaultTextColor.GetHashtagHex(), *args, **kwargs)
+        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=BigLabelFont,
+                          fg=DefaultTextColor.get_hex_l(), *args, **kwargs)
 
 
 class RegularLabel(tk.Label):
@@ -247,20 +211,20 @@ class RegularLabel(tk.Label):
 
         RegularLabelFont = (DefaultFont, RegularFontSize)
 
-        tk.Label.__init__(self, master, bg=BackgroundColor.GetHashtagHex(), font=RegularLabelFont,
-                          fg=DefaultTextColor.GetHashtagHex(), *args, **kwargs)
+        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=RegularLabelFont,
+                          fg=DefaultTextColor.get_hex_l(), *args, **kwargs)
 
 
 class RegularEntry(tk.Entry):
 
     def __init__(self, master, *args, **kwargs):
 
-        tk.Entry.__init__(self, master, bg=TrailingColor.GetHashtagHex(),
+        tk.Entry.__init__(self, master, bg=TrailingColor.get_hex_l(),
                           font=(DefaultFont, RegularFontSize),  # font
                           relief=tk.FLAT,  # style of the entry
                           bd=2,  # size of border
                           fg='white',  # color of font
-                          selectbackground=DrakTextColor,  # background color when text selected
+                          selectbackground=DrakTextColor.get_hex_l(),  # background color when text selected
                           *args, **kwargs)
 
 
@@ -271,8 +235,8 @@ class RegularButton(tk.Button):
         tk.Button.__init__(self, master,
 
                            # button
-                           bg=LightTextColor,  # regular color
-                           activebackground=DrakTextColor,  # while pressed color
+                           bg=LightTextColor.get_hex_l(),  # regular color
+                           activebackground=DrakTextColor.get_hex_l(),  # while pressed color
                            bd=0,  # size of border
 
                            # font
@@ -290,8 +254,8 @@ class SpecialButton(tk.Button):
         tk.Button.__init__(self, master,
 
                            # button
-                           bg=DiffrentColor,  # regular color
-                           activebackground=DrakTextColor,  # while pressed color
+                           bg=DiffrentColor.get_hex_l(),  # regular color
+                           activebackground=DrakTextColor.get_hex_l(),  # while pressed color
                            bd=0,  # size of border
 
                            # font color
