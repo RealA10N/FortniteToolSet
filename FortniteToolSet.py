@@ -258,5 +258,43 @@ class RegularEntry(tk.Entry):
                           *args, **kwargs)
 
 
+class RegularButton(tk.Button):
+
+    def __init__(self, master, *args, **kwargs):
+
+        tk.Button.__init__(self, master,
+
+                           # button
+                           bg=LightTextColor,  # regular color
+                           activebackground=DrakTextColor,  # while pressed color
+                           bd=0,  # size of border
+
+                           # font
+                           font=(DefaultFont, RegularFontSize),
+                           fg='white',  # regular color
+                           activeforeground='white',  # while pressed color
+                           justify=tk.CENTER,  # center all the text lines
+                           *args, **kwargs)
+
+
+class SpecialButton(tk.Button):
+
+    def __init__(self, master, *args, **kwargs):
+
+        tk.Button.__init__(self, master,
+
+                           # button
+                           bg=DiffrentColor,  # regular color
+                           activebackground=DrakTextColor,  # while pressed color
+                           bd=0,  # size of border
+
+                           # font color
+                           font=(DefaultFont, RegularFontSize),
+                           fg='white',  # regular color
+                           activeforeground='white',  # while pressed color
+                           justify=tk.CENTER,  # center all the text lines
+                           *args, **kwargs)
+
+
 root = ProgramGUI()
 root.mainloop()
