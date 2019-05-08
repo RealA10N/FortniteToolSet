@@ -279,5 +279,23 @@ class SpecialButton(tk.Button):
                            *args, **kwargs)
 
 
+class RegularRadiobutton(tk.Radiobutton):
+
+    def __init__(self, master, *args, **kwargs):
+
+        tk.Radiobutton.__init__(self, master,
+                                # button
+                                bg=BackgroundColor.get_hex_l(),  # background color
+                                activebackground=BackgroundColor.get_hex_l(),  # while pressed color
+                                borderwidth=0,  # size of border
+                                selectcolor='#123456',
+
+                                # font
+                                font=(DefaultFont, RegularFontSize),
+                                fg=BackgroudOppositeColor.get_hex_l(),  # text Color
+                                activeforeground=BackgroudOppositeColor.get_hex_l(),  # while pressed color
+                                *args, **kwargs)
+
+
 root = ProgramGUI()
 root.mainloop()
