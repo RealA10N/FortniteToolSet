@@ -10,7 +10,6 @@ from PIL import Image, ImageTk
 AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
 DefaultFont = 'Alef'
 
-TrailingColor = '#393e46'     # buttons, text fields etc.
 DefaultTextColor = '#145374'  # most of the text
 DrakTextColor = '#00334e'     # For smaller and less importent text
 LightTextColor = '#5588a3'    # For text that pops up
@@ -81,8 +80,12 @@ class MyColor():
         return MyColor(RGB=(newR, newG, newB))
 
 
-# colors
+# # # # # # # # # # # # # #
+# C O L O R   A S S E T S #
+# # # # # # # # # # # # # #
+
 BackgroundColor = MyColor(Hex='222831')  # the color of the window
+TrailingColor = MyColor(Hex='393e46')    # buttons, text fields etc.
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
 # # # # # # # # # # # # #
@@ -252,7 +255,7 @@ class RegularEntry(tk.Entry):
 
     def __init__(self, master, *args, **kwargs):
 
-        tk.Entry.__init__(self, master, bg=TrailingColor,
+        tk.Entry.__init__(self, master, bg=TrailingColor.GetHashtagHex(),
                           font=(DefaultFont, RegularFontSize),  # font
                           relief=tk.FLAT,  # style of the entry
                           bd=2,  # size of border
