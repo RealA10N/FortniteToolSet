@@ -218,6 +218,16 @@ class RegularLabel(tk.Label):
                           fg=DefaultTextColor.get_hex_l(), *args, **kwargs)
 
 
+class SmallLabel(tk.Label):
+
+    def __init__(self, master, *args, **kwargs):
+
+        Font = (DefaultFont, SmallFontSize)
+
+        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=Font,
+                          fg=DrakTextColor.get_hex_l(), *args, **kwargs)
+
+
 class RegularEntry(tk.Entry):
 
     def __init__(self, master, *args, **kwargs):
