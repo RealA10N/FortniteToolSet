@@ -11,7 +11,6 @@ AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
 DefaultFont = 'Alef'
 
 TrailingColor = '#393e46'     # buttons, text fields etc.
-WhiteColor = '#eeeeee'        # gives the whites presonal style (;
 DefaultTextColor = '#145374'  # most of the text
 DrakTextColor = '#00334e'     # For smaller and less importent text
 LightTextColor = '#5588a3'    # For text that pops up
