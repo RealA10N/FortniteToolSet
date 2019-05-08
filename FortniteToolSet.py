@@ -49,6 +49,9 @@ class MyColor():
     def GetHex(self):
         return self._hex
 
+    def GetHashtagHex(self):
+        return '#' + self.GetHex()
+
     def GetRGB(self):
         return self._rgb
 
