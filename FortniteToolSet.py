@@ -47,10 +47,10 @@ class MyColor():
                 raise(Exception, 'Please init only one color using rgb OR hex')
 
     def GetHex(self):
-        return self.hex
+        return self._hex
 
     def GetRGB(self):
-        return self.rgb
+        return self._rgb
 
     def _HexColorToRGB(self, hex):
         hexR = hex[0:2]
