@@ -202,9 +202,9 @@ class BigLabel(tk.Label):
 
     def __init__(self, master, *args, **kwargs):
 
-        BigLabelFont = (DefaultFont, BigFontSize)
+        Font = (DefaultFont, BigFontSize)
 
-        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=BigLabelFont,
+        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=Font,
                           fg=DiffrentColor.get_hex_l(), *args, **kwargs)
 
 
@@ -212,9 +212,9 @@ class RegularLabel(tk.Label):
 
     def __init__(self, master, *args, **kwargs):
 
-        RegularLabelFont = (DefaultFont, RegularFontSize)
+        Font = (DefaultFont, RegularFontSize)
 
-        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=RegularLabelFont,
+        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=Font,
                           fg=DefaultTextColor.get_hex_l(), *args, **kwargs)
 
 
