@@ -30,37 +30,54 @@ DefaultPadY = 10
 # C O L O R   F U N C T I O N S #
 # # # # # # # # # # # # # # # # #
 
+class MyColor():
 
-def HexColorToRGB(hex):
-    hexR = hex[0:2]
-    hexG = hex[2:4]
-    hexB = hex[4:6]
-    return (int(hexR, 16), int(hexG, 16), int(hexB, 16))
+    def __init__(self, RGB=None, Hex=None):
+        if RGB is None:
+            if Hex is None:
+                raise(Exception, 'Please init a color using hex or rgb')
+            else:
+                self._hex = Hex
+                self._rgb = self._HexColorToRGB(Hex)
+        else:
+            if Hex is None:
+                self._rgb = RGB
+                self._hex = self._RGBToHexColor(RGB)
+            else:
+                raise(Exception, 'Please init only one color using rgb OR hex')
 
+    def GetHex(self):
+        return self.hex
 
-def RGBToHexColor(rgb):
-    return hex(rgb[0])[2:] + hex(rgb[1])[2:] + hex(rgb[2])[2:]
+    def GetRGB(self):
+        return self.rgb
 
+    def _HexColorToRGB(self, hex):
+        hexR = hex[0:2]
+        hexG = hex[2:4]
+        hexB = hex[4:6]
+        return (int(hexR, 16), int(hexG, 16), int(hexB, 16))
 
-def MixRGBColors(rgb1, rgb2):
-    mixedR = (rgb1[0] + rgb2[0]) / 2
-    mixedG = (rgb1[1] + rgb2[1]) / 2
-    mixedB = (rgb1[2] + rgb2[2]) / 2
-    return (mixedR, mixedG, mixedB)
+    def _RGBToHexColor(self, rgb):
+        return hex(rgb[0])[2:] + hex(rgb[1])[2:] + hex(rgb[2])[2:]
 
+    def MixColor(self, color):
+        mixedR = (self.GetRGB[0] + color.GetRGB[0]) / 2
+        mixedG = (self.GetRGB[1] + color.GetRGB[1]) / 2
+        mixedB = (self.GetRGB[2] + color.GetRGB[2]) / 2
+        return MyColor(RGB=(mixedR, mixedG, mixedB))
 
-def DarkenRGBColor(rgb, amount):
-    newR = max(rgb[0] - amount, 0)
-    newG = max(rgb[1] - amount, 0)
-    newB = max(rgb[2] - amount, 0)
-    return (newR, newG, newB)
+    def DarkenRGBColor(self, amount):
+        newR = max(self.GetRGB[0] - amount, 0)
+        newG = max(self.GetRGB[1] - amount, 0)
+        newB = max(self.GetRGB[2] - amount, 0)
+        return MyColor(RGB=(newR, newG, newB))
 
-
-def LightenRGBColor(rgb, amount):
-    newR = min(rgb[0] + amount, 255)
-    newG = min(rgb[1] + amount, 255)
-    newB = min(rgb[2] + amount, 255)
-    return (newR, newG, newB)
+    def LightenRGBColor(self, amount):
+        newR = min(self.GetRGB[0] + amount, 255)
+        newG = min(self.GetRGB[1] + amount, 255)
+        newB = min(self.GetRGB[2] + amount, 255)
+        return MyColor(RGB=(newR, newG, newB))
 
 
 # # # # # # # # # # # # #
