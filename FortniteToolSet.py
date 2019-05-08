@@ -26,6 +26,43 @@ SmallFontSize = 8
 DefaultPadX = 10
 DefaultPadY = 10
 
+# # # # # # # # # # # # # # # # #
+# C O L O R   F U N C T I O N S #
+# # # # # # # # # # # # # # # # #
+
+
+def HexColorToRGB(hex):
+    hexR = hex[0:2]
+    hexG = hex[2:4]
+    hexB = hex[4:6]
+    return (int(hexR, 16), int(hexG, 16), int(hexB, 16))
+
+
+def RGBToHexColor(rgb):
+    return hex(rgb[0])[2:] + hex(rgb[1])[2:] + hex(rgb[2])[2:]
+
+
+def MixRGBColors(rgb1, rgb2):
+    mixedR = (rgb1[0] + rgb2[0]) / 2
+    mixedG = (rgb1[1] + rgb2[1]) / 2
+    mixedB = (rgb1[2] + rgb2[2]) / 2
+    return (mixedR, mixedG, mixedB)
+
+
+def DarkenRGBColor(rgb, amount):
+    newR = max(rgb[0] - amount, 0)
+    newG = max(rgb[1] - amount, 0)
+    newB = max(rgb[2] - amount, 0)
+    return (newR, newG, newB)
+
+
+def LightenRGBColor(rgb, amount):
+    newR = min(rgb[0] + amount, 255)
+    newG = min(rgb[1] + amount, 255)
+    newB = min(rgb[2] + amount, 255)
+    return (newR, newG, newB)
+
+
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
 # # # # # # # # # # # # #
