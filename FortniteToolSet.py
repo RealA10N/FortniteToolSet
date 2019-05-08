@@ -66,13 +66,13 @@ class MyColor():
         mixedB = (self.GetRGB[2] + color.GetRGB[2]) / 2
         return MyColor(RGB=(mixedR, mixedG, mixedB))
 
-    def DarkenRGBColor(self, amount):
+    def DarkenColor(self, amount):
         newR = max(self.GetRGB[0] - amount, 0)
         newG = max(self.GetRGB[1] - amount, 0)
         newB = max(self.GetRGB[2] - amount, 0)
         return MyColor(RGB=(newR, newG, newB))
 
-    def LightenRGBColor(self, amount):
+    def LightenColor(self, amount):
         newR = min(self.GetRGB[0] + amount, 255)
         newG = min(self.GetRGB[1] + amount, 255)
         newB = min(self.GetRGB[2] + amount, 255)
