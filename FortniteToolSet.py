@@ -66,6 +66,9 @@ class ProgramGUI(tk.Tk):
         # place window on top & in the middle of the screen
         self.eval('tk::PlaceWindow %s' % self.winfo_toplevel())
 
+        # not be able to resize
+        self.resizable(False, False)
+
         self.title('FortniteSetUpTool')  # default title
         self.LoadMenuBar()
 
@@ -98,8 +101,8 @@ class ProgramGUI(tk.Tk):
 
         menubar.add_cascade(label="Program", menu=program_menu)
         program_menu.add_command(label="Home", command=lambda: self.ShowPage(HomePage))
-        program_menu.add_command(label="About", command=lambda: self.ShowPage(AboutPage))
         program_menu.add_command(label="Settings", command=lambda: self.ShowPage(SettingsPage))
+        program_menu.add_command(label="About", command=lambda: self.ShowPage(AboutPage))
 
         program_menu.add_separator()
 
