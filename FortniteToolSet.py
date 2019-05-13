@@ -47,8 +47,8 @@ BackgroudOppositeColor = MyColor('#FFFFFF')  # For items on background
 TrailingColor = MyColor('#393e46')     # buttons, text fields etc.
 DefaultTextColor = MyColor('#51afe1')  # most of the text
 DrakTextColor = DefaultTextColor.NewChangeColorLightning(
-    0.7)   # For smaller and less importent text
-LightTextColor = DefaultTextColor.NewChangeColorLightning(1.3)  # For text that pops up
+    0.6)   # For smaller and less importent text
+LightTextColor = DefaultTextColor.NewChangeColorLightning(1.4)  # For text that pops up
 DiffrentColor = MyColor('#fd5f00')  # For special buttons and functions
 
 
@@ -288,7 +288,7 @@ class RegularRadiobutton(tk.Radiobutton):
                                 bg=BackgroundColor.get_hex_l(),  # background color
                                 activebackground=BackgroundColor.get_hex_l(),  # while pressed color
                                 borderwidth=0,  # size of border
-                                selectcolor='#123456',
+                                selectcolor=DrakTextColor,
 
                                 # font
                                 font=(DefaultFont, RegularFontSize),
