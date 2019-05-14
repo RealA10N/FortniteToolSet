@@ -72,7 +72,7 @@ class ProgramGUI(tk.Tk):
         self.title('FortniteSetUpTool')  # default title
         self.LoadMenuBar()
 
-        container = tk.Frame(self)
+        container = RegularFrame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
@@ -124,13 +124,20 @@ class ProgramGUI(tk.Tk):
 # G U I   P A G E S #
 # # # # # # # # # # #
 
-class DefaultPage(tk.Frame):
+
+class RegularFrame(tk.Frame):
+
+    def __init__(self, master, *args, **kwargs):
+        tk.Frame.__init__(self, master, bg=BackgroundColor.get_hex_l(), *args, **kwargs)
+
+
+class DefaultPage(RegularFrame):
 
     # default init for all pages in the program
     def __init__(self, parent, controller):
         self.parent = parent
         self.controller = controller
-        tk.Frame.__init__(self, self.parent, bg=BackgroundColor.get_hex_l())
+        RegularFrame.__init__(self, self.parent)
         self.grid(row=0, column=0, sticky="nsew")
 
     # will run every time the page loads
