@@ -327,5 +327,6 @@ class OneSettingRow(RegularFrame):
         element.grid(row=0, column=1, sticky='nw')
 
 
-root = ProgramGUI()
-root.mainloop()
+if __name__ == '__main__':
+    root = ProgramGUI()
+    root.mainloop()
