@@ -304,5 +304,28 @@ class RegularRadiobutton(tk.Radiobutton):
                                 *args, **kwargs)
 
 
+class NameDescFrame(RegularFrame):
+
+    def __init__(self, master, settingname, settingdesc, *args, **kwargs):
+
+        RegularFrame.__init__(self, master, *args, **kwargs)
+
+        # text
+        RegularLabel(self, text=settingname).grid(row=0, column=0, sticky='n')
+        SmallLabel(self, text=settingdesc, wraplength=150).grid(
+            row=1, column=0, padx=DefaultPad, sticky='n')
+
+
+class OneSettingRow(RegularFrame):
+
+    def __init__(self, master, settingname, settingdesc, *args, **kwargs):
+
+        RegularFrame.__init__(self, master, *args, **kwargs)
+        NameDescFrame(self, settingname, settingdesc).grid(row=0, column=0, sticky='ne')
+
+    def pack_element(self, element):
+        element.grid(row=0, column=1, sticky='nw')
+
+
 root = ProgramGUI()
 root.mainloop()
