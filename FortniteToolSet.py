@@ -150,6 +150,20 @@ class RegularFrame(tk.Frame):
             self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), *args, **kwargs)
 
 
+class DarkFrame(tk.Frame):
+
+    def __init__(self, master, *args, **kwargs):
+        tk.Frame.__init__(
+            self, master, bg=ColorPalette.DarkColor.get_hex_l(), *args, **kwargs)
+
+
+class LightFrame(tk.Frame):
+
+    def __init__(self, master, *args, **kwargs):
+        tk.Frame.__init__(
+            self, master, bg=ColorPalette.LightColor.get_hex_l(), *args, **kwargs)
+
+
 class DefaultPage(RegularFrame):
 
     # default init for all pages in the program
