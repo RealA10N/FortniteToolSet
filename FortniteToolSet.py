@@ -278,6 +278,26 @@ class RegularLightLabel(tk.Label):
                           fg=ColorPalette.DarkColor.get_hex_l(), *args, **kwargs)
 
 
+class SpecialLightLabel(tk.Label):
+
+    def __init__(self, master, *args, **kwargs):
+
+        Font = (DefaultFont, RegularFontSize)
+
+        tk.Label.__init__(self, master, bg=ColorPalette.LightColor.get_hex_l(), font=Font,
+                          fg=ColorPalette.DiffrentColor.get_hex_l(), *args, **kwargs)
+
+
+class SpecialDarkLabel(tk.Label):
+
+    def __init__(self, master, *args, **kwargs):
+
+        Font = (DefaultFont, RegularFontSize)
+
+        tk.Label.__init__(self, master, bg=ColorPalette.DarkColor.get_hex_l(), font=Font,
+                          fg=ColorPalette.DiffrentColor.get_hex_l(), *args, **kwargs)
+
+
 class SmallLabel(tk.Label):
 
     def __init__(self, master, *args, **kwargs):
