@@ -340,6 +340,25 @@ class RegularButton(tk.Button):
                            *args, **kwargs)
 
 
+class SmallButton(tk.Button):
+
+    def __init__(self, master, *args, **kwargs):
+
+        tk.Button.__init__(self, master,
+
+                           # button
+                           bg=ColorPalette.TrailingColor.get_hex_l(),  # regular color
+                           activebackground=ColorPalette.DarkColor.get_hex_l(),  # while pressed color
+                           bd=0,  # size of border
+
+                           # font
+                           font=(DefaultFont, SmallFontSize),
+                           fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # regular color
+                           activeforeground=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # while pressed color
+                           justify=tk.CENTER,  # center all the text lines
+                           *args, **kwargs)
+
+
 class SpecialButton(tk.Button):
 
     def __init__(self, master, *args, **kwargs):
