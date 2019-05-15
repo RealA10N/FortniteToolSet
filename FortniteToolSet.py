@@ -38,9 +38,22 @@ class MyColor(Color):
         return MyColor(rgb=(newr, newg, newb))
 
 
-# # # # # # # # # # # # # #
-# C O L O R   A S S E T S #
-# # # # # # # # # # # # # #
+class MyColorPalette():
+
+    def __init__(self, BackgroundColor,
+                 BackgroudOppositeColor, TrailingColor,
+                 DefaultColor, DiffrentColor):
+
+        self.BackgroundColor = MyColor(BackgroundColor)  # the color of the window
+        self.BackgroudOppositeColor = MyColor(BackgroudOppositeColor)  # For items on background
+        self.TrailingColor = MyColor(TrailingColor)  # buttons, text fields etc.
+        self.DefaultColor = MyColor(DefaultColor)  # most of the text
+        self.DiffrentColor = MyColor(DiffrentColor)  # For special buttons and functions
+
+        self.DarkColor = self.DefaultColor.NewChangeColorLightning(
+            0.6)   # For smaller and less importent text
+        self.LightColor = self.DefaultColor.NewChangeColorLightning(1.4)  # For text that pops up
+
 
 BackgroundColor = MyColor('#222831')   # the color of the window
 BackgroudOppositeColor = MyColor('#FFFFFF')  # For items on background
@@ -50,6 +63,19 @@ DrakTextColor = DefaultTextColor.NewChangeColorLightning(
     0.6)   # For smaller and less importent text
 LightTextColor = DefaultTextColor.NewChangeColorLightning(1.4)  # For text that pops up
 DiffrentColor = MyColor('#fd5f00')  # For special buttons and functions
+class DefaultColorPalette(MyColorPalette):
+
+    def __init__(self):
+
+        MyColorPalette.__init__(self,
+                                BackgroundColor='#222831',
+                                BackgroudOppositeColor='#FFFFFF',
+                                TrailingColor='#393e46',
+                                DefaultColor='#51afe1',
+                                DiffrentColor='#fd5f00')
+
+
+ColorPalette = DefaultColorPalette()
 
 
 # # # # # # # # # # # # #
