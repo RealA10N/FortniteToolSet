@@ -55,14 +55,6 @@ class MyColorPalette():
         self.LightColor = self.DefaultColor.NewChangeColorLightning(1.4)  # For text that pops up
 
 
-BackgroundColor = MyColor('#222831')   # the color of the window
-BackgroudOppositeColor = MyColor('#FFFFFF')  # For items on background
-TrailingColor = MyColor('#393e46')     # buttons, text fields etc.
-DefaultTextColor = MyColor('#51afe1')  # most of the text
-DrakTextColor = DefaultTextColor.NewChangeColorLightning(
-    0.6)   # For smaller and less importent text
-LightTextColor = DefaultTextColor.NewChangeColorLightning(1.4)  # For text that pops up
-DiffrentColor = MyColor('#fd5f00')  # For special buttons and functions
 class DefaultColorPalette(MyColorPalette):
 
     def __init__(self):
@@ -154,7 +146,8 @@ class ProgramGUI(tk.Tk):
 class RegularFrame(tk.Frame):
 
     def __init__(self, master, *args, **kwargs):
-        tk.Frame.__init__(self, master, bg=BackgroundColor.get_hex_l(), *args, **kwargs)
+        tk.Frame.__init__(
+            self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), *args, **kwargs)
 
 
 class DefaultPage(RegularFrame):
@@ -225,7 +218,7 @@ class ImageCanvas(tk.Canvas):
         self.tkImg = ImageTk.PhotoImage(self.pilImg)
         width, height = pilImg.size
 
-        tk.Canvas.__init__(self, master, bg=BackgroundColor.get_hex_l(), highlightthickness=0,
+        tk.Canvas.__init__(self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), highlightthickness=0,
                            height=height, width=width, *args, **kwargs)
 
         self.create_image(0, 0, image=self.tkImg, anchor='nw')
@@ -237,8 +230,8 @@ class BigLabel(tk.Label):
 
         Font = (DefaultFont, BigFontSize)
 
-        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=Font,
-                          fg=DiffrentColor.get_hex_l(), *args, **kwargs)
+        tk.Label.__init__(self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), font=Font,
+                          fg=ColorPalette.DiffrentColor.get_hex_l(), *args, **kwargs)
 
 
 class RegularLabel(tk.Label):
@@ -247,8 +240,8 @@ class RegularLabel(tk.Label):
 
         Font = (DefaultFont, RegularFontSize)
 
-        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=Font,
-                          fg=DefaultTextColor.get_hex_l(), *args, **kwargs)
+        tk.Label.__init__(self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), font=Font,
+                          fg=ColorPalette.DefaultColor.get_hex_l(), *args, **kwargs)
 
 
 class SmallLabel(tk.Label):
@@ -257,20 +250,20 @@ class SmallLabel(tk.Label):
 
         Font = (DefaultFont, SmallFontSize)
 
-        tk.Label.__init__(self, master, bg=BackgroundColor.get_hex_l(), font=Font,
-                          fg=DrakTextColor.get_hex_l(), *args, **kwargs)
+        tk.Label.__init__(self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), font=Font,
+                          fg=ColorPalette.DarkColor.get_hex_l(), *args, **kwargs)
 
 
 class RegularEntry(tk.Entry):
 
     def __init__(self, master, *args, **kwargs):
 
-        tk.Entry.__init__(self, master, bg=TrailingColor.get_hex_l(),
+        tk.Entry.__init__(self, master, bg=ColorPalette.TrailingColor.get_hex_l(),
                           font=(DefaultFont, RegularFontSize),  # font
                           relief=tk.FLAT,  # style of the entry
                           bd=2,  # size of border
-                          fg=BackgroudOppositeColor.get_hex_l(),  # color of font
-                          selectbackground=DrakTextColor.get_hex_l(),  # background color when text selected
+                          fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # color of font
+                          selectbackground=ColorPalette.DarkColor.get_hex_l(),  # background color when text selected
                           *args, **kwargs)
 
 
@@ -281,14 +274,14 @@ class RegularButton(tk.Button):
         tk.Button.__init__(self, master,
 
                            # button
-                           bg=LightTextColor.get_hex_l(),  # regular color
-                           activebackground=DrakTextColor.get_hex_l(),  # while pressed color
+                           bg=ColorPalette.TrailingColor.get_hex_l(),  # regular color
+                           activebackground=ColorPalette.DarkColor.get_hex_l(),  # while pressed color
                            bd=0,  # size of border
 
                            # font
                            font=(DefaultFont, RegularFontSize),
-                           fg=BackgroudOppositeColor.get_hex_l(),  # regular color
-                           activeforeground=BackgroudOppositeColor.get_hex_l(),  # while pressed color
+                           fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # regular color
+                           activeforeground=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # while pressed color
                            justify=tk.CENTER,  # center all the text lines
                            *args, **kwargs)
 
@@ -300,14 +293,14 @@ class SpecialButton(tk.Button):
         tk.Button.__init__(self, master,
 
                            # button
-                           bg=DiffrentColor.get_hex_l(),  # regular color
-                           activebackground=DrakTextColor.get_hex_l(),  # while pressed color
+                           bg=ColorPalette.DiffrentColor.get_hex_l(),  # regular color
+                           activebackground=ColorPalette.DarkColor.get_hex_l(),  # while pressed color
                            bd=0,  # size of border
 
                            # font
                            font=(DefaultFont, RegularFontSize),
-                           fg=BackgroudOppositeColor.get_hex_l(),  # regular color
-                           activeforeground=BackgroudOppositeColor.get_hex_l(),  # while pressed color
+                           fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # regular color
+                           activeforeground=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # while pressed color
                            justify=tk.CENTER,  # center all the text lines
                            *args, **kwargs)
 
@@ -318,15 +311,15 @@ class RegularRadiobutton(tk.Radiobutton):
 
         tk.Radiobutton.__init__(self, master,
                                 # button
-                                bg=BackgroundColor.get_hex_l(),  # background color
-                                activebackground=BackgroundColor.get_hex_l(),  # while pressed color
+                                bg=ColorPalette.BackgroundColor.get_hex_l(),  # background color
+                                activebackground=ColorPalette.BackgroundColor.get_hex_l(),  # while pressed color
                                 borderwidth=0,  # size of border
-                                selectcolor=DrakTextColor,
+                                selectcolor=ColorPalette.DarkColor.get_hex_l(),
 
                                 # font
                                 font=(DefaultFont, RegularFontSize),
-                                fg=BackgroudOppositeColor.get_hex_l(),  # text Color
-                                activeforeground=BackgroudOppositeColor.get_hex_l(),  # while pressed color
+                                fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # text Color
+                                activeforeground=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # while pressed color
                                 *args, **kwargs)
 
 
