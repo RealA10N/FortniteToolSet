@@ -172,6 +172,7 @@ class DefaultPage(RegularFrame):
         self.controller = controller
         RegularFrame.__init__(self, self.parent)
         self.grid(row=0, column=0, sticky="nsew")
+        self.grid_columnconfigure(0, weight=1)
 
     # will run every time the page loads
     def ShowMe(self):
