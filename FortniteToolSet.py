@@ -216,8 +216,17 @@ class SettingsPage(DefaultPage):
     def __init__(self, parent, controller):
         DefaultPage.__init__(self, parent, controller)
 
-        TestEntry = RegularEntry(self)
-        TestEntry.grid(row=0, column=0)
+        Title = BigLabel(self, text='Settigns')
+        Title.grid(padx=DefaultPad, pady=DefaultPad, row=0, columnspan=2, sticky='n')
+
+        saveframe = RegularFrame(self)
+        saveframe.grid(columnspan=2, padx=DefaultPad, pady=DefaultPad, sticky='n')
+
+        Savebutton = SpecialButton(saveframe, text='Save changes')
+        Savebutton.grid(row=0, column=0, sticky='e')
+
+        Resetbutton = RegularButton(saveframe, text='Reset changes')
+        Resetbutton.grid(padx=DefaultPad, pady=DefaultPad, row=0, column=1, sticky='w')
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('Settings'))
