@@ -188,6 +188,13 @@ class HomePage(DefaultPage):
         WelcomeTitle = BigLabel(self, text='Welcome Back!')
         WelcomeTitle.pack(padx=DefaultPad, pady=DefaultPad)
 
+        AllScriptsButton = RegularButton(
+            self, text='All Scripts Routine', command=lambda: self.allscriptsroutine())
+        AllScriptsButton.pack(padx=DefaultPad, pady=DefaultPad)
+
+    def allscriptsroutine(self):
+        os.system(os.path.join(os.getcwd(), 'AllScriptsRoutine.py'))
+
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('Home'))
 
