@@ -81,12 +81,6 @@ class ProgramGUI(tk.Tk):
 
         tk.Tk.__init__(self, *args, **kwargs)
 
-        # place window on top & in the middle of the screen
-        self.eval('tk::PlaceWindow %s' % self.winfo_toplevel())
-
-        # not be able to resize
-        self.resizable(False, False)
-
         self.title('FortniteSetUpTool')  # default title
         self.LoadMenuBar()
 
