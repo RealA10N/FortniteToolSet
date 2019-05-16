@@ -84,6 +84,8 @@ class ProgramGUI(tk.Tk):
         self.title('FortniteSetUpTool')  # default title
         self.LoadMenuBar()
 
+        StatusBar(self).self_pack()
+
         container = RegularFrame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
@@ -391,9 +393,50 @@ class RegularRadiobutton(tk.Radiobutton):
                                 *args, **kwargs)
 
 
+class StatusBar(DarkFrame):
 
+    def __init__(self, master, *args, **kwargs):
 
+        DarkFrame.__init__(self, master, *args, **kwargs)
 
+        for column_num in range(2):  # range(2) -> (0, 1)
+            self.grid_columnconfigure(column_num, weight=1)
+
+        # status label
+        self.__StautsLabelStr = tk.StringVar()
+        self.__StautsLabelStr.set('Nothing running right now!')
+        StatusLabel = RegularDarkLabel(self, textvariable=self.__StautsLabelStr)
+        StatusLabel.grid(row=0, column=0, padx=DefaultPad, pady=DefaultPad / 3, sticky='w')
+
+        AutoUpdateFrame = DarkFrame(self)
+        AutoUpdateFrame.grid(row=0, column=1, padx=DefaultPad / 2, pady=DefaultPad / 3, sticky='e')
+
+        # auto update Label
+        self.__AutoUpdateLabelStr = tk.StringVar()
+        self.__AutoUpdateLabelStr.set('Next auto update in:')
+        AutoUpdateLabel = RegularDarkLabel(AutoUpdateFrame, textvariable=self.__AutoUpdateLabelStr)
+        AutoUpdateLabel.grid(row=0, column=0)
+
+        # timer label
+        self.__TimerLabelStr = tk.StringVar()
+        self.__TimerLabelStr.set('4:39')
+        TimerLabel = SpecialDarkLabel(AutoUpdateFrame, textvariable=self.__TimerLabelStr)
+        TimerLabel.grid(row=0, column=1)
+
+        # update button
+        self.__UpdateButtonStr = tk.StringVar()
+        self.__UpdateButtonStr.set('Update')
+        UpdateButton = SmallButton(AutoUpdateFrame, textvariable=self.__UpdateButtonStr)
+        UpdateButton.grid(row=0, column=2, padx=DefaultPad / 2)
+
+    def change_timer_text(self, new_time):
+        self.__TimerLabelStr.set(new_time)
+
+    def change_status_text(self, status_text):
+        self.__StautsLabelStr.set(status_text)
+
+    def self_pack(self):
+        self.pack(side='bottom', fill='both')
 
 
 class NameDescFrame(RegularFrame):
