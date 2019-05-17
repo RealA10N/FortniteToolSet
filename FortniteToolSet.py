@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox as tkmsgbx
+from tkinter import messagebox, colorchooser
 import os
 from PIL import Image, ImageTk
 from colour import Color
@@ -146,7 +146,7 @@ class ProgramGUI(tk.Tk):
         self.config(menu=menubar)
 
     def Quit(self):
-        quit = tkmsgbx.askyesno(
+        quit = messagebox.askyesno(
             title=self.GetTitle('Warning!'),
             message="You are about to exit. Are you sure?")
         if quit:
