@@ -54,6 +54,27 @@ class MyColorPalette():
             0.6)   # For smaller and less importent text
         self.LightColor = self.DefaultColor.NewChangeColorLightning(1.4)  # For text that pops up
 
+    def GetBackgroundColor(self):
+        return self.BackgroundColor.get_hex_l()
+
+    def GetBackgroundOppositeColor(self):
+        return self.BackgroudOppositeColor.get_hex_l()
+
+    def GetTrailingColor(self):
+        return self.TrailingColor.get_hex_l()
+
+    def GetDefaultColor(self):
+        return self.DefaultColor.get_hex_l()
+
+    def GetDiffrentColor(self):
+        return self.DiffrentColor.get_hex_l()
+
+    def GetDarkColor(self):
+        return self.DarkColor.get_hex_l()
+
+    def GetLightColor(self):
+        return self.LightColor.get_hex_l()
+
 
 class DefaultColorPalette(MyColorPalette):
 
