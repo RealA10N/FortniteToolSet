@@ -451,7 +451,7 @@ class RegularButton(DefaultButton):
                     activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
 
 
-class SmallButton(DefaultButton):
+class SmallButton(RegularButton):
 
     def __init__(self, master, *args, **kwargs):
 
@@ -464,25 +464,8 @@ class SmallButton(DefaultButton):
                                justify=tk.CENTER,  # center all the text lines
                                *args, **kwargs)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetTrailingColor(),    # regular color
-                    activebackground=ColorPalette.GetDarkColor(),  # while pressed color
-                    foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
-                    activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
 
-
-class SpecialButton(DefaultButton):
-
-    def __init__(self, master, *args, **kwargs):
-
-        DefaultButton.__init__(self, master,
-                               # button
-                               bd=0,  # size of border
-
-                               # font
-                               font=(DefaultFont, RegularFontSize),
-                               justify=tk.CENTER,  # center all the text lines
-                               *args, **kwargs)
+class SpecialButton(RegularButton):
 
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetDiffrentColor(),    # regular color
