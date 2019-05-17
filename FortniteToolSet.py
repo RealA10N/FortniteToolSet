@@ -464,6 +464,18 @@ class SmallLabel(DefaultLabel):
                     foreground=ColorPalette.GetDarkColor())
 
 
+class ColorLabel(DefaultLabel):
+
+    def __init__(self, master, *args, **kwargs):
+        DefaultLabel.__init__(self, master,
+                              padx=DefaultPad,
+                              pady=DefaultPad,
+                              width=2,
+                              relief='ridge',
+                              bd=2,
+                              *args, **kwargs)
+
+
 class DefaultEntry(tk.Entry):
 
     def SetColors(self, ColorPalette):
