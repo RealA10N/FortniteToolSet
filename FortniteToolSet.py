@@ -135,22 +135,22 @@ class ProgramGUI(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        self.pages = (HomePage, AboutPage, SettingsPage)  # all the pages list
+        self.pages = [HomePage, AboutPage, AppearanceSettingsPage]  # all the pages list
         self.frames = {}
         self.LoadAllPages(parent=container, controller=self)
         self.ShowPage(HomePage)
 
-        self.SetColorPalette(DefaultColorPalette())
+        self.SetColors(DefaultColorPalette())
 
     def LoadAllPages(self, parent, controller):
         for frame_obj in self.pages:
             frame = frame_obj(parent, controller)
             self.frames[frame_obj] = frame
 
-    def SetColorPalette(self, ColorPalette):
+    def SetColors(self, ColorPalette):
         for frame in self.frames:
-            self.frames[frame].SetAllElementsColors(ColorPalette)
-        self.StatusBar.SetAllElementsColors(ColorPalette)
+            self.frames[frame].SetColors(ColorPalette)
+        self.StatusBar.SetColors(ColorPalette)
 
     def ShowPage(self, page):
         frame = self.frames[page]
@@ -166,12 +166,14 @@ class ProgramGUI(tk.Tk):
 
         menubar.add_cascade(label="Program", menu=program_menu)
         program_menu.add_command(label="Home", command=lambda: self.ShowPage(HomePage))
-        program_menu.add_command(label="Settings", command=lambda: self.ShowPage(SettingsPage))
         program_menu.add_command(label="About", command=lambda: self.ShowPage(AboutPage))
-
         program_menu.add_separator()
-
         program_menu.add_command(label="Exit", command=lambda: self.Quit())
+
+        settings_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Settings", menu=settings_menu)
+        settings_menu.add_command(
+            label="Appearance", command=lambda: self.ShowPage(AppearanceSettingsPage))
 
         self.config(menu=menubar)
 
@@ -191,25 +193,31 @@ class ProgramGUI(tk.Tk):
 
 class DefaultFrame(tk.Frame):
 
+    elements = []
+
     def SetColors(self, ColorPalette):
-        pass
+        for element in self.elements:
+            element.SetColors(ColorPalette)
 
 
 class RegularFrame(DefaultFrame):
 
     def SetColors(self, ColorPalette):
+        DefaultFrame.SetColors(self, ColorPalette)
         self.config(background=ColorPalette.GetBackgroundColor())
 
 
 class DarkFrame(DefaultFrame):
 
     def SetColors(self, ColorPalette):
+        DefaultFrame.SetColors(self, ColorPalette)
         self.config(background=ColorPalette.GetDarkColor())
 
 
 class LightFrame(DefaultFrame):
 
     def SetColors(self, ColorPalette):
+        DefaultFrame.SetColors(self, ColorPalette)
         self.config(background=ColorPalette.GetLightColor())
 
 
@@ -219,7 +227,6 @@ class DefaultPage(RegularFrame):
     def __init__(self, parent, controller):
         self.parent = parent
         self.controller = controller
-        self.elements = ()  # empty tuple
         RegularFrame.__init__(self, self.parent)
         self.grid(row=0, column=0, sticky="nsew")
         self.grid_columnconfigure(0, weight=1)
@@ -227,10 +234,6 @@ class DefaultPage(RegularFrame):
     # will run every time the page loads
     def ShowMe(self):
         pass
-
-    def SetAllElementsColors(self, ColorPalette):
-        for element in self.elements:
-            element.SetColors(ColorPalette)
 
 
 class HomePage(DefaultPage):
@@ -250,7 +253,7 @@ class HomePage(DefaultPage):
             self, text='All Scripts Routine', command=lambda: self.allscriptsroutine())
         AllScriptsButton.pack(padx=DefaultPad, pady=DefaultPad)
 
-        self.elements = (self, Banner, WelcomeTitle, AllScriptsButton)
+        self.elements = [Banner, WelcomeTitle, AllScriptsButton]
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('Home'))
@@ -264,44 +267,95 @@ class AboutPage(DefaultPage):
         Title = RegularLabel(self, text='About - coming soon!')
         Title.pack(padx=DefaultPad, pady=DefaultPad)
 
-        self.elements = (self, Title)
+        self.elements = [Title]
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('About'))
 
 
-class SettingsPage(DefaultPage):
+class AppearanceSettingsPage(DefaultPage):
 
     def __init__(self, parent, controller):
         DefaultPage.__init__(self, parent, controller)
 
-        Title = BigLabel(self, text='Settigns')
-        Title.grid(padx=DefaultPad, pady=DefaultPad, row=0, columnspan=2, sticky='n')
+        for column_num in range(2):  # range(2) -> (0, 1)
+            self.grid_columnconfigure(column_num, weight=1)
 
-        self.BackgroundColorHex = tk.StringVar()
-        BackgroundColorEntry = RegularEntry(self, textvariable=self.BackgroundColorHex)
-        BackgroundColorEntry.grid()
+        Title = BigLabel(self, text='Appearance')
+        Title.grid(padx=DefaultPad, pady=DefaultPad, row=1, columnspan=2, sticky='n')
 
-        saveframe = RegularFrame(self)
-        saveframe.grid(columnspan=2, padx=DefaultPad, pady=DefaultPad, sticky='n')
+        self.SetColorPalette(DefaultColorPalette())
 
-        Savebutton = SpecialButton(saveframe, text='Save changes',
+        # Background color
+        BackgroundColorLabel = NameDescFrame(
+            self, "Background Color", "Color for the background of the program.")
+        BackgroundColorLabel.grid(pady=DefaultPad, row=2, column=0)
+        self.BackgroundColorFrame = AppearanceColorPicker(
+            self, self.ColorPalette.GetBackgroundColor())
+        self.BackgroundColorFrame.grid(row=2, column=1)
+
+        # Backgroud opposite color
+        OppositeColorLabel = NameDescFrame(
+            self, "Background Opposite Color", "Color for items on the background, like text.")
+        OppositeColorLabel.grid(pady=DefaultPad, row=3, column=0)
+        self.OppositeColorFrame = AppearanceColorPicker(
+            self, self.ColorPalette.GetBackgroundOppositeColor())
+        self.OppositeColorFrame.grid(row=3, column=1)
+
+        # Trailing color
+        TrailingColorLabel = NameDescFrame(
+            self, "Trailing Color", "Color for elements like basic buttons, basic text fields, etc.")
+        TrailingColorLabel.grid(pady=DefaultPad, row=4, column=0)
+        self.TrailingColorFrame = AppearanceColorPicker(self, self.ColorPalette.GetTrailingColor())
+        self.TrailingColorFrame.grid(row=4, column=1)
+
+        # Diffrent color
+        DiffrentColorLabel = NameDescFrame(
+            self, "Diffrent Color", "Color with your personality! used in diffrent menus and special elements.")
+        DiffrentColorLabel.grid(pady=DefaultPad, row=5, column=0)
+        self.DiffrentColorFrame = AppearanceColorPicker(self, self.ColorPalette.GetDefaultColor())
+        self.DiffrentColorFrame.grid(row=5, column=1)
+
+        # Special color
+        SpecialColorLabel = NameDescFrame(
+            self, "Special Color", "Completly diffrent. for special feuters like 'Save' buttons, etc.")
+        SpecialColorLabel.grid(pady=DefaultPad, row=6, column=0)
+        self.SpecialColorFrame = AppearanceColorPicker(self, self.ColorPalette.GetDiffrentColor())
+        self.SpecialColorFrame.grid(row=6, column=1)
+
+        BottomButtonsFrame = RegularFrame(self)
+        BottomButtonsFrame.grid(columnspan=2, padx=DefaultPad, pady=DefaultPad)
+
+        SaveButton = SpecialButton(BottomButtonsFrame, text='Save changes',
                                    command=lambda: self.SaveChanges())
-        Savebutton.grid(row=0, column=0, sticky='e')
+        SaveButton.grid(padx=DefaultPad / 2, row=0, column=0, sticky='e')
 
-        Resetbutton = RegularButton(saveframe, text='Reset changes')
-        Resetbutton.grid(padx=DefaultPad, pady=DefaultPad, row=0, column=1, sticky='w')
+        BackDefaultbutton = RegularButton(BottomButtonsFrame, text='Back To Default')
+        BackDefaultbutton.grid(padx=DefaultPad / 2, row=0, column=1, sticky='w')
 
-        self.elements = (self, Title, saveframe, Savebutton, Resetbutton, BackgroundColorEntry)
+        self.elements = [Title, BackgroundColorLabel, self.BackgroundColorFrame,
+                         OppositeColorLabel, self.OppositeColorFrame,
+                         TrailingColorLabel, self.TrailingColorFrame,
+                         DiffrentColorLabel, self.DiffrentColorFrame,
+                         SpecialColorLabel, self.SpecialColorFrame,
+                         BottomButtonsFrame, SaveButton, BackDefaultbutton]
+
+    def SetColorPalette(self, ColorPalette):
+        self.ColorPalette = ColorPalette
+        self.controller.SetColors(ColorPalette)
 
     def SaveChanges(self):
-        NewColorPalette = DefaultColorPalette()
-        NewColorPalette.BackgroundColor = MyColor(self.BackgroundColorHex.get())
-        self.controller.SetColorPalette(NewColorPalette)
+        NewColorPalette = MyColorPalette(
+            BackgroundColor=self.BackgroundColorFrame.SaveChanges(),
+            BackgroudOppositeColor=self.OppositeColorFrame.SaveChanges(),
+            TrailingColor=self.TrailingColorFrame.SaveChanges(),
+            DefaultColor=self.DiffrentColorFrame.SaveChanges(),
+            DiffrentColor=self.SpecialColorFrame.SaveChanges(),
+        )
+        self.SetColorPalette(NewColorPalette)
 
     def ShowMe(self):
-        self.controller.title(self.controller.GetTitle('Settings'))
-
+        self.controller.title(self.controller.GetTitle('Appearance Settings'))
 
 
 class AppearanceColorPicker(RegularFrame):
@@ -312,7 +366,8 @@ class AppearanceColorPicker(RegularFrame):
         self.DefaultValue = starting_value
         self.NewValue = starting_value
 
-        self.ColorLabel = ColorLabel(self, bg='#123456')
+        self.ColorLabel = ColorLabel(self)
+        self.UpdateColorLabel()
         self.ColorLabel.grid(row=0, column=0)
 
         ChangeButton = RegularButton(
@@ -345,6 +400,7 @@ class AppearanceColorPicker(RegularFrame):
 # # # # # # # # # # # # # #
 # G U I   E L E M E N T S #
 # # # # # # # # # # # # # #
+
 
 class DefaultCanvas(tk.Canvas):
 
@@ -401,25 +457,13 @@ class RegularLabel(DefaultLabel):
                     foreground=ColorPalette.GetDefaultColor())
 
 
-class RegularDarkLabel(DefaultLabel):
-
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, RegularFontSize)
-
-        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+class RegularDarkLabel(RegularLabel):
 
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetDarkColor(), foreground=ColorPalette.GetLightColor())
 
 
-class RegularLightLabel(DefaultLabel):
-
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, RegularFontSize)
-
-        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+class RegularLightLabel(RegularLabel):
 
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetLightColor(), foreground=ColorPalette.GetDarkColor())
@@ -510,11 +554,12 @@ class RegularButton(DefaultButton):
 
         DefaultButton.__init__(self, master,
                                # button
-                               bd=0,  # size of border
+                               bd=2,  # size of border
 
                                # font
                                font=(DefaultFont, RegularFontSize),
                                justify=tk.CENTER,  # center all the text lines
+                               relief='ridge',
                                *args, **kwargs)
 
     def SetColors(self, ColorPalette):
@@ -601,12 +646,8 @@ class StatusBar(DarkFrame):
         UpdateButton = SmallButton(AutoUpdateFrame, textvariable=self.__UpdateButtonStr)
         UpdateButton.grid(row=0, column=2, padx=DefaultPad / 2)
 
-        self.elements = (self, StatusLabel, AutoUpdateFrame,
-                         AutoUpdateLabel, TimerLabel, UpdateButton)
-
-    def SetAllElementsColors(self, ColorPalette):
-        for element in self.elements:
-            element.SetColors(ColorPalette)
+        self.elements = [StatusLabel, AutoUpdateFrame,
+                         AutoUpdateLabel, TimerLabel, UpdateButton]
 
     def change_timer_text(self, new_time):
         self.__TimerLabelStr.set(new_time)
@@ -624,10 +665,17 @@ class NameDescFrame(RegularFrame):
 
         RegularFrame.__init__(self, master, *args, **kwargs)
 
-        # text
-        RegularLabel(self, text=settingname).grid(row=0, column=0)
-        SmallLabel(self, text=settingdesc, wraplength=150).grid(
-            row=1, column=0, padx=DefaultPad)
+        NameLabel = RegularLabel(self, text=settingname)
+        NameLabel.grid(row=0, column=0)
+        DescLabel = SmallLabel(self, text=settingdesc, wraplength=175)
+        DescLabel.grid(row=1, column=0, padx=DefaultPad)
+
+        self.elements = [NameLabel, DescLabel]
+
+    def SetColors(self, ColorPalette):
+        RegularFrame.SetColors(self, ColorPalette)
+        for element in self.elements:
+            element.SetColors(ColorPalette)
 
 
 if __name__ == '__main__':
