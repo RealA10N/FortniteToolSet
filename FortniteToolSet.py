@@ -105,22 +105,30 @@ class ProgramGUI(tk.Tk):
         self.title('FortniteSetUpTool')  # default title
         self.LoadMenuBar()
 
-        StatusBar(self).self_pack()
+        self.StatusBar = StatusBar(self)
+        self.StatusBar.self_pack()
 
         container = RegularFrame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
+        self.pages = (HomePage, AboutPage, SettingsPage)  # all the pages list
         self.frames = {}
         self.LoadAllPages(parent=container, controller=self)
         self.ShowPage(HomePage)
 
+        self.SetColorPalette(DefaultColorPalette())
+
     def LoadAllPages(self, parent, controller):
-        pages = (HomePage, AboutPage, SettingsPage)  # all the pages list
-        for frame_obj in pages:
+        for frame_obj in self.pages:
             frame = frame_obj(parent, controller)
             self.frames[frame_obj] = frame
+
+    def SetColorPalette(self, ColorPalette):
+        for frame in self.frames:
+            self.frames[frame].SetAllElementsColors(ColorPalette)
+        self.StatusBar.SetAllElementsColors(ColorPalette)
 
     def ShowPage(self, page):
         frame = self.frames[page]
@@ -159,26 +167,28 @@ class ProgramGUI(tk.Tk):
 # G U I   P A G E S #
 # # # # # # # # # # #
 
+class DefaultFrame(tk.Frame):
 
-class RegularFrame(tk.Frame):
-
-    def __init__(self, master, *args, **kwargs):
-        tk.Frame.__init__(
-            self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), *args, **kwargs)
+    def SetColors(self, ColorPalette):
+        pass
 
 
-class DarkFrame(tk.Frame):
+class RegularFrame(DefaultFrame):
 
-    def __init__(self, master, *args, **kwargs):
-        tk.Frame.__init__(
-            self, master, bg=ColorPalette.DarkColor.get_hex_l(), *args, **kwargs)
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetBackgroundColor())
 
 
-class LightFrame(tk.Frame):
+class DarkFrame(DefaultFrame):
 
-    def __init__(self, master, *args, **kwargs):
-        tk.Frame.__init__(
-            self, master, bg=ColorPalette.LightColor.get_hex_l(), *args, **kwargs)
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetDarkColor())
+
+
+class LightFrame(DefaultFrame):
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetLightColor())
 
 
 class DefaultPage(RegularFrame):
@@ -187,6 +197,7 @@ class DefaultPage(RegularFrame):
     def __init__(self, parent, controller):
         self.parent = parent
         self.controller = controller
+        self.elements = ()  # empty tuple
         RegularFrame.__init__(self, self.parent)
         self.grid(row=0, column=0, sticky="nsew")
         self.grid_columnconfigure(0, weight=1)
@@ -194,6 +205,10 @@ class DefaultPage(RegularFrame):
     # will run every time the page loads
     def ShowMe(self):
         pass
+
+    def SetAllElementsColors(self, ColorPalette):
+        for element in self.elements:
+            element.SetColors(ColorPalette)
 
 
 class HomePage(DefaultPage):
@@ -213,8 +228,7 @@ class HomePage(DefaultPage):
             self, text='All Scripts Routine', command=lambda: self.allscriptsroutine())
         AllScriptsButton.pack(padx=DefaultPad, pady=DefaultPad)
 
-    def allscriptsroutine(self):
-        os.system(os.path.join(os.getcwd(), 'AllScriptsRoutine.py'))
+        self.elements = (self, Banner, WelcomeTitle, AllScriptsButton)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('Home'))
@@ -225,8 +239,10 @@ class AboutPage(DefaultPage):
     def __init__(self, parent, controller):
         DefaultPage.__init__(self, parent, controller)
 
-        Title = tk.Label(self, text='About - coming soon!')
+        Title = RegularLabel(self, text='About - coming soon!')
         Title.pack(padx=DefaultPad, pady=DefaultPad)
+
+        self.elements = (self, Title)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('About'))
@@ -240,14 +256,26 @@ class SettingsPage(DefaultPage):
         Title = BigLabel(self, text='Settigns')
         Title.grid(padx=DefaultPad, pady=DefaultPad, row=0, columnspan=2, sticky='n')
 
+        self.BackgroundColorHex = tk.StringVar()
+        BackgroundColorEntry = RegularEntry(self, textvariable=self.BackgroundColorHex)
+        BackgroundColorEntry.grid()
+
         saveframe = RegularFrame(self)
         saveframe.grid(columnspan=2, padx=DefaultPad, pady=DefaultPad, sticky='n')
 
-        Savebutton = SpecialButton(saveframe, text='Save changes')
+        Savebutton = SpecialButton(saveframe, text='Save changes',
+                                   command=lambda: self.SaveChanges())
         Savebutton.grid(row=0, column=0, sticky='e')
 
         Resetbutton = RegularButton(saveframe, text='Reset changes')
         Resetbutton.grid(padx=DefaultPad, pady=DefaultPad, row=0, column=1, sticky='w')
+
+        self.elements = (self, Title, saveframe, Savebutton, Resetbutton, BackgroundColorEntry)
+
+    def SaveChanges(self):
+        NewColorPalette = DefaultColorPalette()
+        NewColorPalette.BackgroundColor = MyColor(self.BackgroundColorHex.get())
+        self.controller.SetColorPalette(NewColorPalette)
 
     def ShowMe(self):
         self.controller.title(self.controller.GetTitle('Settings'))
@@ -257,8 +285,13 @@ class SettingsPage(DefaultPage):
 # G U I   E L E M E N T S #
 # # # # # # # # # # # # # #
 
-# crates a transperent canvas and pastes image on it
-class ImageCanvas(tk.Canvas):
+class DefaultCanvas(tk.Canvas):
+
+    def SetColors(self, ColorPalette):
+        pass
+
+
+class ImageCanvas(DefaultCanvas):
 
     def __init__(self, master, pilImg, *args, **kwargs):
 
@@ -266,150 +299,196 @@ class ImageCanvas(tk.Canvas):
         self.tkImg = ImageTk.PhotoImage(self.pilImg)
         width, height = pilImg.size
 
-        tk.Canvas.__init__(self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), highlightthickness=0,
+        tk.Canvas.__init__(self, master, highlightthickness=0,
                            height=height, width=width, *args, **kwargs)
 
         self.create_image(0, 0, image=self.tkImg, anchor='nw')
 
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetBackgroundColor())
 
-class BigLabel(tk.Label):
+
+class DefaultLabel(tk.Label):
+
+    def SetColors(self, ColorPalette):
+        pass
+
+
+class BigLabel(DefaultLabel):
 
     def __init__(self, master, *args, **kwargs):
 
         Font = (DefaultFont, BigFontSize)
 
-        tk.Label.__init__(self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), font=Font,
-                          fg=ColorPalette.DiffrentColor.get_hex_l(), *args, **kwargs)
+        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetBackgroundColor(),
+                    foreground=ColorPalette.GetDiffrentColor())
 
 
-class RegularLabel(tk.Label):
-
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, RegularFontSize)
-
-        tk.Label.__init__(self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), font=Font,
-                          fg=ColorPalette.DefaultColor.get_hex_l(), *args, **kwargs)
-
-
-class RegularDarkLabel(tk.Label):
+class RegularLabel(DefaultLabel):
 
     def __init__(self, master, *args, **kwargs):
 
         Font = (DefaultFont, RegularFontSize)
 
-        tk.Label.__init__(self, master, bg=ColorPalette.DarkColor.get_hex_l(), font=Font,
-                          fg=ColorPalette.LightColor.get_hex_l(), *args, **kwargs)
+        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetBackgroundColor(),
+                    foreground=ColorPalette.GetDefaultColor())
 
 
-class RegularLightLabel(tk.Label):
-
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, RegularFontSize)
-
-        tk.Label.__init__(self, master, bg=ColorPalette.LightColor.get_hex_l(), font=Font,
-                          fg=ColorPalette.DarkColor.get_hex_l(), *args, **kwargs)
-
-
-class SpecialLightLabel(tk.Label):
+class RegularDarkLabel(DefaultLabel):
 
     def __init__(self, master, *args, **kwargs):
 
         Font = (DefaultFont, RegularFontSize)
 
-        tk.Label.__init__(self, master, bg=ColorPalette.LightColor.get_hex_l(), font=Font,
-                          fg=ColorPalette.DiffrentColor.get_hex_l(), *args, **kwargs)
+        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetDarkColor(), foreground=ColorPalette.GetLightColor())
 
 
-class SpecialDarkLabel(tk.Label):
+class RegularLightLabel(DefaultLabel):
 
     def __init__(self, master, *args, **kwargs):
 
         Font = (DefaultFont, RegularFontSize)
 
-        tk.Label.__init__(self, master, bg=ColorPalette.DarkColor.get_hex_l(), font=Font,
-                          fg=ColorPalette.DiffrentColor.get_hex_l(), *args, **kwargs)
+        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetLightColor(), foreground=ColorPalette.GetDarkColor())
 
 
-class SmallLabel(tk.Label):
+class SpecialLightLabel(DefaultLabel):
+
+    def __init__(self, master, *args, **kwargs):
+
+        Font = (DefaultFont, RegularFontSize)
+
+        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetLightColor(),
+                    foreground=ColorPalette.GetDiffrentColor())
+
+
+class SpecialDarkLabel(DefaultLabel):
+
+    def __init__(self, master, *args, **kwargs):
+
+        Font = (DefaultFont, RegularFontSize)
+
+        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetDarkColor(),
+                    foreground=ColorPalette.GetDiffrentColor())
+
+
+class SmallLabel(DefaultLabel):
 
     def __init__(self, master, *args, **kwargs):
 
         Font = (DefaultFont, SmallFontSize)
 
-        tk.Label.__init__(self, master, bg=ColorPalette.BackgroundColor.get_hex_l(), font=Font,
-                          fg=ColorPalette.DarkColor.get_hex_l(), *args, **kwargs)
+        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetBackgroundColor(),
+                    foreground=ColorPalette.GetDarkColor())
 
 
-class RegularEntry(tk.Entry):
+class DefaultEntry(tk.Entry):
 
-    def __init__(self, master, *args, **kwargs):
-
-        tk.Entry.__init__(self, master, bg=ColorPalette.TrailingColor.get_hex_l(),
-                          font=(DefaultFont, RegularFontSize),  # font
-                          relief=tk.FLAT,  # style of the entry
-                          bd=2,  # size of border
-                          fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # color of font
-                          selectbackground=ColorPalette.DarkColor.get_hex_l(),  # background color when text selected
-                          *args, **kwargs)
+    def SetColors(self, ColorPalette):
+        pass
 
 
-class RegularButton(tk.Button):
+class RegularEntry(DefaultEntry):
 
     def __init__(self, master, *args, **kwargs):
 
-        tk.Button.__init__(self, master,
+        DefaultEntry.__init__(self, master,
+                              font=(DefaultFont, RegularFontSize),  # font
+                              relief=tk.FLAT,  # style of the entry
+                              bd=2,  # size of border
+                              *args, **kwargs)
 
-                           # button
-                           bg=ColorPalette.TrailingColor.get_hex_l(),  # regular color
-                           activebackground=ColorPalette.DarkColor.get_hex_l(),  # while pressed color
-                           bd=0,  # size of border
-
-                           # font
-                           font=(DefaultFont, RegularFontSize),
-                           fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # regular color
-                           activeforeground=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # while pressed color
-                           justify=tk.CENTER,  # center all the text lines
-                           *args, **kwargs)
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetTrailingColor(),
+                    foreground=ColorPalette.GetBackgroundOppositeColor(),  # color of font
+                    selectbackground=ColorPalette.GetDarkColor())  # background color when text selected
 
 
-class SmallButton(tk.Button):
+class DefaultButton(tk.Button):
 
-    def __init__(self, master, *args, **kwargs):
-
-        tk.Button.__init__(self, master,
-
-                           # button
-                           bg=ColorPalette.TrailingColor.get_hex_l(),  # regular color
-                           activebackground=ColorPalette.DarkColor.get_hex_l(),  # while pressed color
-                           bd=0,  # size of border
-
-                           # font
-                           font=(DefaultFont, SmallFontSize),
-                           fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # regular color
-                           activeforeground=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # while pressed color
-                           justify=tk.CENTER,  # center all the text lines
-                           *args, **kwargs)
+    def SetColors(self, ColorPalette):
+        pass
 
 
-class SpecialButton(tk.Button):
+class RegularButton(DefaultButton):
 
     def __init__(self, master, *args, **kwargs):
 
-        tk.Button.__init__(self, master,
+        DefaultButton.__init__(self, master,
+                               # button
+                               bd=0,  # size of border
 
-                           # button
-                           bg=ColorPalette.DiffrentColor.get_hex_l(),  # regular color
-                           activebackground=ColorPalette.DarkColor.get_hex_l(),  # while pressed color
-                           bd=0,  # size of border
+                               # font
+                               font=(DefaultFont, RegularFontSize),
+                               justify=tk.CENTER,  # center all the text lines
+                               *args, **kwargs)
 
-                           # font
-                           font=(DefaultFont, RegularFontSize),
-                           fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # regular color
-                           activeforeground=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # while pressed color
-                           justify=tk.CENTER,  # center all the text lines
-                           *args, **kwargs)
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetTrailingColor(),    # regular color
+                    activebackground=ColorPalette.GetDarkColor(),  # while pressed color
+                    foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
+                    activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
+
+
+class SmallButton(DefaultButton):
+
+    def __init__(self, master, *args, **kwargs):
+
+        DefaultButton.__init__(self, master,
+                               # button
+                               bd=0,  # size of border
+
+                               # font
+                               font=(DefaultFont, SmallFontSize),
+                               justify=tk.CENTER,  # center all the text lines
+                               *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetTrailingColor(),    # regular color
+                    activebackground=ColorPalette.GetDarkColor(),  # while pressed color
+                    foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
+                    activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
+
+
+class SpecialButton(DefaultButton):
+
+    def __init__(self, master, *args, **kwargs):
+
+        DefaultButton.__init__(self, master,
+                               # button
+                               bd=0,  # size of border
+
+                               # font
+                               font=(DefaultFont, RegularFontSize),
+                               justify=tk.CENTER,  # center all the text lines
+                               *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetDiffrentColor(),    # regular color
+                    activebackground=ColorPalette.GetDarkColor(),  # while pressed color
+                    foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
+                    activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
 
 
 class RegularRadiobutton(tk.Radiobutton):
@@ -465,6 +544,13 @@ class StatusBar(DarkFrame):
         self.__UpdateButtonStr.set('Update')
         UpdateButton = SmallButton(AutoUpdateFrame, textvariable=self.__UpdateButtonStr)
         UpdateButton.grid(row=0, column=2, padx=DefaultPad / 2)
+
+        self.elements = (self, StatusLabel, AutoUpdateFrame,
+                         AutoUpdateLabel, TimerLabel, UpdateButton)
+
+    def SetAllElementsColors(self, ColorPalette):
+        for element in self.elements:
+            element.SetColors(ColorPalette)
 
     def change_timer_text(self, new_time):
         self.__TimerLabelStr.set(new_time)
