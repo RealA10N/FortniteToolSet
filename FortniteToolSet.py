@@ -303,6 +303,45 @@ class SettingsPage(DefaultPage):
         self.controller.title(self.controller.GetTitle('Settings'))
 
 
+
+class AppearanceColorPicker(RegularFrame):
+
+    def __init__(self, master, starting_value, *args, **kwargs):
+        RegularFrame.__init__(self, master, *args, **kwargs)
+
+        self.DefaultValue = starting_value
+        self.NewValue = starting_value
+
+        self.ColorLabel = ColorLabel(self, bg='#123456')
+        self.ColorLabel.grid(row=0, column=0)
+
+        ChangeButton = RegularButton(
+            self, text='Change', command=lambda: self.ChangeColor())
+        ChangeButton.grid(row=0, column=1)
+
+        ResetButton = RegularButton(self, text='Restore', command=lambda: self.RestoreColor())
+        ResetButton.grid(row=0, column=2)
+
+        self.elements = [ChangeButton, ResetButton]
+
+    def UpdateColorLabel(self):
+        self.ColorLabel.config(bg=self.NewValue)
+
+    def ChangeColor(self):
+        color_input = colorchooser.askcolor()[1]
+        if color_input is not None:
+            self.NewValue = color_input
+            self.UpdateColorLabel()
+
+    def RestoreColor(self):
+        self.NewValue = self.DefaultValue
+        self.UpdateColorLabel()
+
+    def SaveChanges(self):
+        self.DefaultValue = self.NewValue
+        return self.NewValue
+
+
 # # # # # # # # # # # # # #
 # G U I   E L E M E N T S #
 # # # # # # # # # # # # # #
