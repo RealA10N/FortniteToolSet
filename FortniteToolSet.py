@@ -50,24 +50,46 @@ class MyColorPalette():
         self.DefaultColor = MyColor(DefaultColor)  # most of the text
         self.DiffrentColor = MyColor(DiffrentColor)  # For special buttons and functions
 
-        self.DarkColor = self.DefaultColor.NewChangeColorLightning(
-            0.6)   # For smaller and less importent text
-        self.LightColor = self.DefaultColor.NewChangeColorLightning(1.4)  # For text that pops up
+        self.__GenerateDarkColor()  # For smaller and less importent text
+        self.__GenerateLightColor()  # For text that pops up
+
+    def __GenerateDarkColor(self):
+        self.DarkColor = self.DefaultColor.NewChangeColorLightning(0.6)
+
+    def __GenerateLightColor(self):
+        self.LightColor = self.DefaultColor.NewChangeColorLightning(1.4)
 
     def GetBackgroundColor(self):
         return self.BackgroundColor.get_hex_l()
 
+    def SetBackgroundColor(self, hex_color):
+        self.BackgroundColor = MyColor(hex_color)
+
     def GetBackgroundOppositeColor(self):
         return self.BackgroudOppositeColor.get_hex_l()
+
+    def SetBackgroundOppositeColor(self, hex_color):
+        self.BackgroundOppositeColor = MyColor(hex_color)
 
     def GetTrailingColor(self):
         return self.TrailingColor.get_hex_l()
 
+    def SetTrailingColor(self, hex_color):
+        self.TrailingColor = MyColor(hex_color)
+
     def GetDefaultColor(self):
         return self.DefaultColor.get_hex_l()
 
+    def SetDefaultColor(self, hex_color):
+        self.DefaultColor = MyColor(hex_color)
+        self.__GenerateDarkColor()
+        self.__GenerateLightColor()
+
     def GetDiffrentColor(self):
         return self.DiffrentColor.get_hex_l()
+
+    def SetDiffrentColor(self, hex_color):
+        self.DiffrentColor = MyColor(hex_color)
 
     def GetDarkColor(self):
         return self.DarkColor.get_hex_l()
