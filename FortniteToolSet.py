@@ -186,7 +186,7 @@ class ProgramGUI(tk.Tk):
 
     def Quit(self):
         quit = messagebox.askyesno(
-            title=self.GetTitle('Warning!'),
+            title='Warning!',
             message="You are about to exit. Are you sure?")
         if quit:
             self.deiconify()
@@ -349,19 +349,33 @@ class AppearanceSettingsPage(DefaultPage):
                                    command=lambda: self.SaveChanges())
         SaveButton.grid(padx=DefaultPad / 2, row=0, column=0, sticky='e')
 
-        BackDefaultbutton = RegularButton(BottomButtonsFrame, text='Back To Default')
+        BackDefaultbutton = RegularButton(
+            BottomButtonsFrame, text='Back To Default', command=lambda: self.ResetToDefault())
         BackDefaultbutton.grid(padx=DefaultPad / 2, row=0, column=1, sticky='w')
 
-        self.elements = [Title, BackgroundColorLabel, self.BackgroundColorFrame,
-                         OppositeColorLabel, self.OppositeColorFrame,
-                         TrailingColorLabel, self.TrailingColorFrame,
-                         DiffrentColorLabel, self.DiffrentColorFrame,
-                         SpecialColorLabel, self.SpecialColorFrame,
-                         BottomButtonsFrame, SaveButton, BackDefaultbutton]
+        self.AllColorFrames = [self.BackgroundColorFrame, self.OppositeColorFrame,
+                               self.TrailingColorFrame, self.DiffrentColorFrame, self.SpecialColorFrame]
+        self.AllColorLabels = [BackgroundColorLabel, OppositeColorLabel,
+                               TrailingColorLabel, DiffrentColorLabel, SpecialColorLabel, BottomButtonsFrame]
+        self.elements = [Title, SaveButton, BackDefaultbutton] + \
+            self.AllColorFrames + self.AllColorLabels
 
     def SetColorPalette(self, ColorPalette):
         self.ColorPalette = ColorPalette
         self.controller.SetColors(ColorPalette)
+
+    def ResetToDefault(self):
+        reset = messagebox.askyesno(
+            title='Warning!',
+            message="You are about to reset all the appearance settings to default. Are you sure?")
+        if reset:
+            NewColorPalette = DefaultColorPalette()
+            self.SetColorPalette(NewColorPalette)
+            self.BackgroundColorFrame.ChangeColor(NewColorPalette.GetBackgroundColor())
+            self.OppositeColorFrame.ChangeColor(NewColorPalette.GetBackgroundOppositeColor())
+            self.TrailingColorFrame.ChangeColor(NewColorPalette.GetTrailingColor())
+            self.DiffrentColorFrame.ChangeColor(NewColorPalette.GetDefaultColor())
+            self.SpecialColorFrame.ChangeColor(NewColorPalette.GetDiffrentColor())
 
     def SaveChanges(self):
         NewColorPalette = MyColorPalette(
@@ -390,7 +404,7 @@ class AppearanceColorPicker(RegularFrame):
         self.ColorLabel.grid(row=0, column=0)
 
         ChangeButton = RegularButton(
-            self, text='Change', command=lambda: self.ChangeColor())
+            self, text='Change', command=lambda: self.ChangeColor(self.PickColor()))
         ChangeButton.grid(row=0, column=1)
 
         ResetButton = RegularButton(self, text='Restore', command=lambda: self.RestoreColor())
@@ -401,10 +415,12 @@ class AppearanceColorPicker(RegularFrame):
     def UpdateColorLabel(self):
         self.ColorLabel.config(bg=self.NewValue)
 
-    def ChangeColor(self):
-        color_input = colorchooser.askcolor()[1]
-        if color_input is not None:
-            self.NewValue = color_input
+    def PickColor(self):
+        return colorchooser.askcolor()[1]
+
+    def ChangeColor(self, ColorHex):
+        if ColorHex is not None:
+            self.NewValue = ColorHex
             self.UpdateColorLabel()
 
     def RestoreColor(self):
