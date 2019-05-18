@@ -135,9 +135,10 @@ class ProgramGUI(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        self.pages = [HomePage, AboutPage, AppearanceSettingsPage]  # all the pages list
+        self.pages = [HomePage, AppearanceSettingsPage, AboutPage]  # all the pages list
         self.frames = {}
         self.LoadAllPages(parent=container, controller=self)
+        self.CurrentPage = None
         self.ShowPage(HomePage)
 
         self.SetColors(DefaultColorPalette())
@@ -153,9 +154,12 @@ class ProgramGUI(tk.Tk):
         self.StatusBar.SetColors(ColorPalette)
 
     def ShowPage(self, page):
-        frame = self.frames[page]
-        frame.ShowMe()
-        frame.tkraise()
+        if self.CurrentPage is not None:
+            self.frames[self.CurrentPage].grid_forget()
+        self.CurrentPage = page
+        CurrentFrame = self.frames[page]
+        CurrentFrame.grid(row=0, column=0, sticky="nsew")
+        CurrentFrame.ShowMe()
 
     def GetTitle(self, page_name):
         return '%s | FortniteToolSet' % page_name
@@ -228,7 +232,6 @@ class DefaultPage(RegularFrame):
         self.parent = parent
         self.controller = controller
         RegularFrame.__init__(self, self.parent)
-        self.grid(row=0, column=0, sticky="nsew")
         self.grid_columnconfigure(0, weight=1)
 
     # will run every time the page loads
