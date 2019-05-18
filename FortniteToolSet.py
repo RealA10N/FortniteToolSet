@@ -266,10 +266,27 @@ class AboutPage(DefaultPage):
     def __init__(self, parent, controller):
         DefaultPage.__init__(self, parent, controller)
 
-        Title = RegularLabel(self, text='About - coming soon!')
-        Title.pack(padx=DefaultPad, pady=DefaultPad)
+        TextFrame = RegularFrame(self)
+        TextFrame.pack(padx=DefaultPad, pady=DefaultPad)
 
-        self.elements = [Title]
+        ToolSetLabel = BigLabel(TextFrame, text='FortniteToolSet')
+        ToolSetLabel.grid(row=0, column=0, padx=DefaultPad / 2)
+
+        StringForTextLabel = ""
+        ListForTextLabel = ["Made By RealA10N. For personal use only! (;",
+                            "Assets the not mentioned below created by me.",
+                            "Some icons in the program are made by Lucy G from Flaticon"]
+        for line in ListForTextLabel:
+            StringForTextLabel = StringForTextLabel + line + "\n"
+        StringForTextLabel = StringForTextLabel[:-1]
+
+        TextLabel = RegularLabel(TextFrame, text=StringForTextLabel)
+        TextLabel.grid(row=1, column=0)
+
+        # Icon pack: https://www.flaticon.com/packs/free-basic-ui-elements
+        # all icons are 64x64
+
+        self.elements = [TextFrame, ToolSetLabel, TextLabel]
 
     def ShowMe(self):
         self.controller.SetTitle('About')
