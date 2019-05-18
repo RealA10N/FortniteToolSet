@@ -161,8 +161,11 @@ class ProgramGUI(tk.Tk):
         CurrentFrame.grid(row=0, column=0, sticky="nsew")
         CurrentFrame.ShowMe()
 
-    def GetTitle(self, page_name):
-        return '%s | FortniteToolSet' % page_name
+    def SetTitle(self, page_name=None):
+        if page_name is None:
+            self.title('FortniteToolSet')
+        else:
+            self.title('%s - FortniteToolSet' % page_name)
 
     def LoadMenuBar(self):
         menubar = tk.Menu(self)
@@ -255,7 +258,7 @@ class HomePage(DefaultPage):
         self.elements = [Banner, WelcomeTitle]
 
     def ShowMe(self):
-        self.controller.title(self.controller.GetTitle('Home'))
+        self.controller.SetTitle(None)
 
 
 class AboutPage(DefaultPage):
@@ -269,7 +272,7 @@ class AboutPage(DefaultPage):
         self.elements = [Title]
 
     def ShowMe(self):
-        self.controller.title(self.controller.GetTitle('About'))
+        self.controller.SetTitle('About')
 
 
 class AppearanceSettingsPage(DefaultPage):
@@ -354,7 +357,7 @@ class AppearanceSettingsPage(DefaultPage):
         self.SetColorPalette(NewColorPalette)
 
     def ShowMe(self):
-        self.controller.title(self.controller.GetTitle('Appearance Settings'))
+        self.controller.SetTitle('Appearance')
 
 
 class AppearanceColorPicker(RegularFrame):
