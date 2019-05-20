@@ -109,10 +109,6 @@ class DefaultColorPalette(MyColorPalette):
                                 DefaultColor='#51afe1',
                                 DiffrentColor='#fd5f00')
 
-
-ColorPalette = DefaultColorPalette()
-
-
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
 # # # # # # # # # # # # #
@@ -623,22 +619,27 @@ class SpecialButton(RegularButton):
                     activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
 
 
-class RegularRadiobutton(tk.Radiobutton):
+class DefaultRadiobutton(tk.Radiobutton):
+
+    def SetColors(self, ColorPalette):
+        pass
+
+
+class RegularRadiobutton(DefaultRadiobutton):
 
     def __init__(self, master, *args, **kwargs):
 
-        tk.Radiobutton.__init__(self, master,
-                                # button
-                                bg=ColorPalette.BackgroundColor.get_hex_l(),  # background color
-                                activebackground=ColorPalette.BackgroundColor.get_hex_l(),  # while pressed color
-                                borderwidth=0,  # size of border
-                                selectcolor=ColorPalette.DarkColor.get_hex_l(),
+        DefaultRadiobutton.__init__(self, master,
+                                    borderwidth=0,  # size of border
+                                    font=(DefaultFont, RegularFontSize),
+                                    *args, **kwargs)
 
-                                # font
-                                font=(DefaultFont, RegularFontSize),
-                                fg=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # text Color
-                                activeforeground=ColorPalette.BackgroudOppositeColor.get_hex_l(),  # while pressed color
-                                *args, **kwargs)
+    def SetColors(self, ColorPalette):
+        self.config(bg=ColorPalette.GetBackgroundColor(),  # background color
+                    activebackground=ColorPalette.GetBackgroundColor(),  # while pressed color
+                    selectcolor=ColorPalette.GetDarkColor(),
+                    fg=ColorPalette.GetBackgroundOppositeColor(),  # text color
+                    activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed text color
 
 
 class StatusBar(DarkFrame):
