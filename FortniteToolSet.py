@@ -152,9 +152,8 @@ class ProgramGUI(tk.Tk):
             pickle_in = open(SettingsPath, 'rb')
             try:
                 self.SettingsContainer = pickle.load(pickle_in)
-            except pickle.UnpicklingError:
+            except:
                 self.SettingsContainer = SettingsContainer(SettingsPath)
-                # using this to load the window, and only then pop the error message.
                 Corrupted = True
 
         else:
@@ -179,7 +178,7 @@ class ProgramGUI(tk.Tk):
 
         self.SetColors(self.SettingsContainer.GetAppearanceContainer())
 
-        if Corrupted:
+        if Corrupted:  # using this to load the window, and only then pop the error message.
             messagebox.showerror(
                 "Corrupted Settings File", 'Your "Settings.FortniteToolSet" file was corrupted. All your settings returned to their default state.')
 
