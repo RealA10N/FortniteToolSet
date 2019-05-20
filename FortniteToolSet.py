@@ -284,12 +284,33 @@ class AboutPage(DefaultPage):
         TextLabel.grid(row=1, column=0)
 
         # Icon pack: https://www.flaticon.com/packs/free-basic-ui-elements
-        # all icons are 64x64
 
         self.elements = [TextFrame, ToolSetLabel, TextLabel]
 
     def ShowMe(self):
         self.controller.SetTitle('About')
+
+
+class AppearanceSettingLine():
+
+    def __init__(self, master, name, desc, color, grid_row):
+
+        self.Label = NameDescFrame(master, name, desc)
+        self.Label.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=0)
+        self.ColorPicker = AppearanceColorPicker(master, color)
+        self.ColorPicker.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=1)
+
+        self.elements = [self.Label, self.ColorPicker]
+
+    def SetColors(self, ColorPalette):
+        for element in self.elements:
+            element.SetColors(ColorPalette)
+
+    def ChangeColor(self, color):
+        self.ColorPicker.ChangeColor(color)
+
+    def SaveChanges(self):
+        return self.ColorPicker.SaveChanges()
 
 
 class AppearanceSettingsPage(DefaultPage):
@@ -301,46 +322,24 @@ class AppearanceSettingsPage(DefaultPage):
             self.grid_columnconfigure(column_num, weight=1)
 
         Title = BigLabel(self, text='Appearance')
-        Title.grid(padx=DefaultPad, pady=DefaultPad, row=1, columnspan=2, sticky='n')
+        Title.grid(padx=DefaultPad, pady=DefaultPad, row=0, columnspan=2, sticky='n')
 
         self.SetColorPalette(DefaultColorPalette())
 
-        # Background color
-        BackgroundColorLabel = NameDescFrame(
-            self, "Background Color", "Color for the background of the program.")
-        BackgroundColorLabel.grid(pady=DefaultPad, row=2, column=0)
-        self.BackgroundColorFrame = AppearanceColorPicker(
-            self, self.ColorPalette.GetBackgroundColor())
-        self.BackgroundColorFrame.grid(row=2, column=1)
+        ColorElementsInfo = {'Background': {'Name': 'Background Color', 'Desc': 'Color for the background of the program.', 'StartingColor': self.ColorPalette.GetBackgroundColor()},
+                             'Opposite': {'Name': 'Background Opposite Color', 'Desc': 'Color for items on the background, like text.', 'StartingColor': self.ColorPalette.GetBackgroundOppositeColor()},
+                             'Trailing': {'Name': 'Trailing Color', 'Desc': 'Color for elements like basic buttons, basic text fields, etc.', 'StartingColor': self.ColorPalette.GetTrailingColor()},
+                             'Different': {'Name': 'Different Color', 'Desc': 'Color with your personality! used in diffrent menus and special elements.', 'StartingColor': self.ColorPalette.GetDefaultColor()},
+                             'Special': {'Name': 'Special Color', 'Desc': "Completly diffrent. for special features like 'Save' buttons, etc.", 'StartingColor': self.ColorPalette.GetDiffrentColor()},
+                             }
 
-        # Backgroud opposite color
-        OppositeColorLabel = NameDescFrame(
-            self, "Background Opposite Color", "Color for items on the background, like text.")
-        OppositeColorLabel.grid(pady=DefaultPad, row=3, column=0)
-        self.OppositeColorFrame = AppearanceColorPicker(
-            self, self.ColorPalette.GetBackgroundOppositeColor())
-        self.OppositeColorFrame.grid(row=3, column=1)
-
-        # Trailing color
-        TrailingColorLabel = NameDescFrame(
-            self, "Trailing Color", "Color for elements like basic buttons, basic text fields, etc.")
-        TrailingColorLabel.grid(pady=DefaultPad, row=4, column=0)
-        self.TrailingColorFrame = AppearanceColorPicker(self, self.ColorPalette.GetTrailingColor())
-        self.TrailingColorFrame.grid(row=4, column=1)
-
-        # Diffrent color
-        DiffrentColorLabel = NameDescFrame(
-            self, "Diffrent Color", "Color with your personality! used in diffrent menus and special elements.")
-        DiffrentColorLabel.grid(pady=DefaultPad, row=5, column=0)
-        self.DiffrentColorFrame = AppearanceColorPicker(self, self.ColorPalette.GetDefaultColor())
-        self.DiffrentColorFrame.grid(row=5, column=1)
-
-        # Special color
-        SpecialColorLabel = NameDescFrame(
-            self, "Special Color", "Completly diffrent. for special feuters like 'Save' buttons, etc.")
-        SpecialColorLabel.grid(pady=DefaultPad, row=6, column=0)
-        self.SpecialColorFrame = AppearanceColorPicker(self, self.ColorPalette.GetDiffrentColor())
-        self.SpecialColorFrame.grid(row=6, column=1)
+        CurRow = 1
+        self.ColorElements = {}
+        for Element, InfoDict in ColorElementsInfo.items():
+            ElementObj = AppearanceSettingLine(
+                self, name=InfoDict['Name'], desc=InfoDict['Desc'], color=InfoDict['StartingColor'], grid_row=CurRow)
+            CurRow += 1
+            self.ColorElements[Element] = ElementObj
 
         BottomButtonsFrame = RegularFrame(self)
         BottomButtonsFrame.grid(columnspan=2, padx=DefaultPad, pady=DefaultPad)
@@ -353,12 +352,12 @@ class AppearanceSettingsPage(DefaultPage):
             BottomButtonsFrame, text='Back To Default', command=lambda: self.ResetToDefault())
         BackDefaultbutton.grid(padx=DefaultPad / 2, row=0, column=1, sticky='w')
 
-        self.AllColorFrames = [self.BackgroundColorFrame, self.OppositeColorFrame,
-                               self.TrailingColorFrame, self.DiffrentColorFrame, self.SpecialColorFrame]
-        self.AllColorLabels = [BackgroundColorLabel, OppositeColorLabel,
-                               TrailingColorLabel, DiffrentColorLabel, SpecialColorLabel, BottomButtonsFrame]
-        self.elements = [Title, SaveButton, BackDefaultbutton] + \
-            self.AllColorFrames + self.AllColorLabels
+        AllColorElements = []
+        for name, element in self.ColorElements.items():
+            AllColorElements.append(element)
+
+        self.elements = [Title, BottomButtonsFrame, SaveButton, BackDefaultbutton] + \
+            AllColorElements
 
     def SetColorPalette(self, ColorPalette):
         self.ColorPalette = ColorPalette
@@ -371,20 +370,17 @@ class AppearanceSettingsPage(DefaultPage):
         if reset:
             NewColorPalette = DefaultColorPalette()
             self.SetColorPalette(NewColorPalette)
-            self.BackgroundColorFrame.ChangeColor(NewColorPalette.GetBackgroundColor())
-            self.OppositeColorFrame.ChangeColor(NewColorPalette.GetBackgroundOppositeColor())
-            self.TrailingColorFrame.ChangeColor(NewColorPalette.GetTrailingColor())
-            self.DiffrentColorFrame.ChangeColor(NewColorPalette.GetDefaultColor())
-            self.SpecialColorFrame.ChangeColor(NewColorPalette.GetDiffrentColor())
+            self.ColorElements['Background'].ChangeColor(NewColorPalette.GetBackgroundColor())
+            self.ColorElements['Opposite'].ChangeColor(NewColorPalette.GetBackgroundOppositeColor())
+            self.ColorElements['Trailing'].ChangeColor(NewColorPalette.GetTrailingColor())
+            self.ColorElements['Different'].ChangeColor(NewColorPalette.GetDefaultColor())
+            self.ColorElements['Special'].ChangeColor(NewColorPalette.GetDiffrentColor())
 
     def SaveChanges(self):
-        NewColorPalette = MyColorPalette(
-            BackgroundColor=self.BackgroundColorFrame.SaveChanges(),
-            BackgroudOppositeColor=self.OppositeColorFrame.SaveChanges(),
-            TrailingColor=self.TrailingColorFrame.SaveChanges(),
-            DefaultColor=self.DiffrentColorFrame.SaveChanges(),
-            DiffrentColor=self.SpecialColorFrame.SaveChanges(),
-        )
+        SavedChangesValue = []
+        for Name, Element in self.ColorElements.items():
+            SavedChangesValue.append(Element.SaveChanges())
+        NewColorPalette = MyColorPalette(*SavedChangesValue)
         self.SetColorPalette(NewColorPalette)
 
     def ShowMe(self):
