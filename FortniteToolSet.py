@@ -27,7 +27,7 @@ DefaultPad = 10
 class SettingsContainer():
 
     def __init__(self, FilePath):
-        self.AppearanceContainer = DefaultColorPalette()
+        self.AppearanceContainer = DefaultAppearanceSettings()
 
         self.FilePath = FilePath
         self.SaveChanges()
@@ -65,7 +65,7 @@ class MyColor(Color):
         return MyColor(rgb=(newr, newg, newb))
 
 
-class MyColorPalette():
+class AppearanceSettingsContainer():
 
     def __init__(self, BackgroundColor,
                  BackgroudOppositeColor, TrailingColor,
@@ -125,16 +125,16 @@ class MyColorPalette():
         return self.LightColor.get_hex_l()
 
 
-class DefaultColorPalette(MyColorPalette):
+class DefaultAppearanceSettings(AppearanceSettingsContainer):
 
     def __init__(self):
 
-        MyColorPalette.__init__(self,
-                                BackgroundColor='#222831',
-                                BackgroudOppositeColor='#FFFFFF',
-                                TrailingColor='#393e46',
-                                DiffrentColor='#51afe1',
-                                SpecialColor='#fd5f00')
+        AppearanceSettingsContainer.__init__(self,
+                                             BackgroundColor='#222831',
+                                             BackgroudOppositeColor='#FFFFFF',
+                                             TrailingColor='#393e46',
+                                             DiffrentColor='#51afe1',
+                                             SpecialColor='#fd5f00')
 
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
@@ -381,7 +381,7 @@ class AppearanceSettingsPage(DefaultPage):
             title='Warning!',
             message="You are about to reset all the appearance settings to default. Are you sure?")
         if reset:
-            NewColorPalette = DefaultColorPalette()
+            NewColorPalette = DefaultAppearanceSettings()
             self.SetColorPalette(NewColorPalette)
             self.ColorElements['Background'].ChangeColor(NewColorPalette.GetBackgroundColor())
             self.ColorElements['Opposite'].ChangeColor(NewColorPalette.GetBackgroundOppositeColor())
@@ -393,7 +393,7 @@ class AppearanceSettingsPage(DefaultPage):
         SavedChangesValue = []
         for Name, Element in self.ColorElements.items():
             SavedChangesValue.append(Element.SaveChanges())
-        NewColorPalette = MyColorPalette(*SavedChangesValue)
+        NewColorPalette = AppearanceSettingsContainer(*SavedChangesValue)
         self.SetColorPalette(NewColorPalette)
 
     def ShowMe(self):
