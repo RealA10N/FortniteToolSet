@@ -42,22 +42,22 @@ class MyColorPalette():
 
     def __init__(self, BackgroundColor,
                  BackgroudOppositeColor, TrailingColor,
-                 DefaultColor, DiffrentColor):
+                 DiffrentColor, SpecialColor):
 
         self.BackgroundColor = MyColor(BackgroundColor)  # the color of the window
         self.BackgroudOppositeColor = MyColor(BackgroudOppositeColor)  # For items on background
         self.TrailingColor = MyColor(TrailingColor)  # buttons, text fields etc.
-        self.DefaultColor = MyColor(DefaultColor)  # most of the text
-        self.DiffrentColor = MyColor(DiffrentColor)  # For special buttons and functions
+        self.DiffrentColor = MyColor(DiffrentColor)  # most of the text
+        self.SpecialColor = MyColor(SpecialColor)  # For special buttons and functions
 
         self.__GenerateDarkColor()  # For smaller and less importent text
         self.__GenerateLightColor()  # For text that pops up
 
     def __GenerateDarkColor(self):
-        self.DarkColor = self.DefaultColor.NewChangeColorLightning(0.6)
+        self.DarkColor = self.DiffrentColor.NewChangeColorLightning(0.6)
 
     def __GenerateLightColor(self):
-        self.LightColor = self.DefaultColor.NewChangeColorLightning(1.4)
+        self.LightColor = self.DiffrentColor.NewChangeColorLightning(1.4)
 
     def GetBackgroundColor(self):
         return self.BackgroundColor.get_hex_l()
@@ -77,19 +77,19 @@ class MyColorPalette():
     def SetTrailingColor(self, hex_color):
         self.TrailingColor = MyColor(hex_color)
 
-    def GetDefaultColor(self):
-        return self.DefaultColor.get_hex_l()
-
-    def SetDefaultColor(self, hex_color):
-        self.DefaultColor = MyColor(hex_color)
-        self.__GenerateDarkColor()
-        self.__GenerateLightColor()
-
     def GetDiffrentColor(self):
         return self.DiffrentColor.get_hex_l()
 
     def SetDiffrentColor(self, hex_color):
         self.DiffrentColor = MyColor(hex_color)
+        self.__GenerateDarkColor()
+        self.__GenerateLightColor()
+
+    def GetSpecialColor(self):
+        return self.SpecialColor.get_hex_l()
+
+    def SetSpecialColor(self, hex_color):
+        self.SpecialColor = MyColor(hex_color)
 
     def GetDarkColor(self):
         return self.DarkColor.get_hex_l()
@@ -106,8 +106,8 @@ class DefaultColorPalette(MyColorPalette):
                                 BackgroundColor='#222831',
                                 BackgroudOppositeColor='#FFFFFF',
                                 TrailingColor='#393e46',
-                                DefaultColor='#51afe1',
-                                DiffrentColor='#fd5f00')
+                                DiffrentColor='#51afe1',
+                                SpecialColor='#fd5f00')
 
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
@@ -325,8 +325,8 @@ class AppearanceSettingsPage(DefaultPage):
         ColorElementsInfo = {'Background': {'Name': 'Background Color', 'Desc': 'Color for the background of the program.', 'StartingColor': self.ColorPalette.GetBackgroundColor()},
                              'Opposite': {'Name': 'Background Opposite Color', 'Desc': 'Color for items on the background, like text.', 'StartingColor': self.ColorPalette.GetBackgroundOppositeColor()},
                              'Trailing': {'Name': 'Trailing Color', 'Desc': 'Color for elements like basic buttons, basic text fields, etc.', 'StartingColor': self.ColorPalette.GetTrailingColor()},
-                             'Different': {'Name': 'Different Color', 'Desc': 'Color with your personality! used in diffrent menus and special elements.', 'StartingColor': self.ColorPalette.GetDefaultColor()},
-                             'Special': {'Name': 'Special Color', 'Desc': "Completly diffrent. for special features like 'Save' buttons, etc.", 'StartingColor': self.ColorPalette.GetDiffrentColor()},
+                             'Different': {'Name': 'Different Color', 'Desc': 'Color with your personality! used in diffrent menus and special elements.', 'StartingColor': self.ColorPalette.GetDiffrentColor()},
+                             'Special': {'Name': 'Special Color', 'Desc': "Completly diffrent. for special features like 'Save' buttons, etc.", 'StartingColor': self.ColorPalette.GetSpecialColor()},
                              }
 
         CurRow = 1
@@ -369,8 +369,8 @@ class AppearanceSettingsPage(DefaultPage):
             self.ColorElements['Background'].ChangeColor(NewColorPalette.GetBackgroundColor())
             self.ColorElements['Opposite'].ChangeColor(NewColorPalette.GetBackgroundOppositeColor())
             self.ColorElements['Trailing'].ChangeColor(NewColorPalette.GetTrailingColor())
-            self.ColorElements['Different'].ChangeColor(NewColorPalette.GetDefaultColor())
-            self.ColorElements['Special'].ChangeColor(NewColorPalette.GetDiffrentColor())
+            self.ColorElements['Different'].ChangeColor(NewColorPalette.GetDiffrentColor())
+            self.ColorElements['Special'].ChangeColor(NewColorPalette.GetSpecialColor())
 
     def SaveChanges(self):
         SavedChangesValue = []
@@ -468,7 +468,7 @@ class BigLabel(DefaultLabel):
 
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetBackgroundColor(),
-                    foreground=ColorPalette.GetDiffrentColor())
+                    foreground=ColorPalette.GetSpecialColor())
 
 
 class RegularLabel(DefaultLabel):
@@ -481,7 +481,7 @@ class RegularLabel(DefaultLabel):
 
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetBackgroundColor(),
-                    foreground=ColorPalette.GetDefaultColor())
+                    foreground=ColorPalette.GetDiffrentColor())
 
 
 class RegularDarkLabel(RegularLabel):
@@ -506,7 +506,7 @@ class SpecialLightLabel(DefaultLabel):
 
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetLightColor(),
-                    foreground=ColorPalette.GetDiffrentColor())
+                    foreground=ColorPalette.GetSpecialColor())
 
 
 class SpecialDarkLabel(DefaultLabel):
@@ -519,7 +519,7 @@ class SpecialDarkLabel(DefaultLabel):
 
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetDarkColor(),
-                    foreground=ColorPalette.GetDiffrentColor())
+                    foreground=ColorPalette.GetSpecialColor())
 
 
 class SmallLabel(DefaultLabel):
@@ -613,7 +613,7 @@ class SmallButton(RegularButton):
 class SpecialButton(RegularButton):
 
     def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetDiffrentColor(),    # regular color
+        self.config(background=ColorPalette.GetSpecialColor(),    # regular color
                     activebackground=ColorPalette.GetDarkColor(),  # while pressed color
                     foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
                     activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
