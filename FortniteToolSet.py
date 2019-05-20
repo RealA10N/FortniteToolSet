@@ -148,9 +148,16 @@ class ProgramGUI(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         SettingsPath = "Settings.FortniteToolSet"
+        Corrupted = None
         if os.path.isfile(SettingsPath):
             pickle_in = open(SettingsPath, 'rb')
-            self.SettingsContainer = pickle.load(pickle_in)
+            try:
+                self.SettingsContainer = pickle.load(pickle_in)
+            except pickle.UnpicklingError:
+                self.SettingsContainer = SettingsContainer(SettingsPath)
+                # using this to load the window, and only then pop the error message.
+                Corrupted = True
+
         else:
             self.SettingsContainer = SettingsContainer(SettingsPath)
 
@@ -172,6 +179,10 @@ class ProgramGUI(tk.Tk):
         self.ShowPage(HomePage)
 
         self.SetColors(self.SettingsContainer.GetAppearanceContainer())
+
+        if Corrupted:
+            messagebox.showerror(
+                "Corrupted Settings File", 'Your "Settings.FortniteToolSet" file was corrupted. All your settings returned to their default state.')
 
     def LoadAllPages(self, parent, controller):
         for frame_obj in self.pages:
