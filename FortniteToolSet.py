@@ -3,6 +3,7 @@ from tkinter import messagebox, colorchooser
 import os
 from PIL import Image, ImageTk
 from colour import Color
+import pickle
 
 
 # # # # # # # #
@@ -17,6 +18,32 @@ RegularFontSize = 12
 SmallFontSize = 8
 
 DefaultPad = 10
+
+# # # # # # # # # # # # # # # # # # # #
+# S E T T I N G S   C O N T A I N E R #
+# # # # # # # # # # # # # # # # # # # #
+
+
+class SettingsContainer():
+
+    def __init__(self, FilePath):
+        self.AppearanceContainer = DefaultColorPalette()
+
+        self.FilePath = FilePath
+        self.SaveChanges()
+
+    def GetAppearanceContainer(self):
+        return self.AppearanceContainer
+
+    def SetAppearanceContainer(self, Container):
+        self.AppearanceContainer = Container
+        self.SaveChanges()
+
+    def SaveChanges(self):
+        SettingsSaveFile = open(self.FilePath, "wb")
+        pickle.dump(self, SettingsSaveFile)
+        SettingsSaveFile.close()
+
 
 # # # # # # # # # # # # # # # # #
 # C O L O R   F U N C T I O N S #
@@ -120,6 +147,13 @@ class ProgramGUI(tk.Tk):
 
         tk.Tk.__init__(self, *args, **kwargs)
 
+        SettingsPath = "Settings.FortniteToolSet"
+        if os.path.isfile(SettingsPath):
+            pickle_in = open(SettingsPath, 'rb')
+            self.SettingsContainer = pickle.load(pickle_in)
+        else:
+            self.SettingsContainer = SettingsContainer(SettingsPath)
+
         self.title('FortniteSetUpTool')  # default title
         self.LoadMenuBar()
 
@@ -137,7 +171,7 @@ class ProgramGUI(tk.Tk):
         self.CurrentPage = None
         self.ShowPage(HomePage)
 
-        self.SetColors(DefaultColorPalette())
+        self.SetColors(self.SettingsContainer.GetAppearanceContainer())
 
     def LoadAllPages(self, parent, controller):
         for frame_obj in self.pages:
@@ -190,9 +224,9 @@ class ProgramGUI(tk.Tk):
             self.quit()
 
 
-# # # # # # # # # # #
-# G U I   P A G E S #
-# # # # # # # # # # #
+# # # # # # # # # # # # # # #
+# F R A M E   W I D G E T S #
+# # # # # # # # # # # # # # #
 
 class DefaultFrame(tk.Frame):
 
@@ -223,6 +257,10 @@ class LightFrame(DefaultFrame):
         DefaultFrame.SetColors(self, ColorPalette)
         self.config(background=ColorPalette.GetLightColor())
 
+
+# # # # # # # # # # #
+# G U I   P A G E S #
+# # # # # # # # # # #
 
 class DefaultPage(RegularFrame):
 
@@ -287,28 +325,6 @@ class AboutPage(DefaultPage):
         self.controller.SetTitle('About')
 
 
-class AppearanceSettingLine():
-
-    def __init__(self, master, name, desc, color, grid_row):
-
-        self.Label = NameDescFrame(master, name, desc)
-        self.Label.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=0)
-        self.ColorPicker = AppearanceColorPicker(master, color)
-        self.ColorPicker.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=1)
-
-        self.elements = [self.Label, self.ColorPicker]
-
-    def SetColors(self, ColorPalette):
-        for element in self.elements:
-            element.SetColors(ColorPalette)
-
-    def ChangeColor(self, color):
-        self.ColorPicker.ChangeColor(color)
-
-    def SaveChanges(self):
-        return self.ColorPicker.SaveChanges()
-
-
 class AppearanceSettingsPage(DefaultPage):
 
     def __init__(self, parent, controller):
@@ -320,13 +336,14 @@ class AppearanceSettingsPage(DefaultPage):
         Title = BigLabel(self, text='Appearance')
         Title.grid(padx=DefaultPad, pady=DefaultPad, row=0, columnspan=2, sticky='n')
 
-        self.SetColorPalette(DefaultColorPalette())
+        ColorPalette = self.controller.SettingsContainer.GetAppearanceContainer()
+        self.SetColorPalette(ColorPalette)
 
-        ColorElementsInfo = {'Background': {'Name': 'Background Color', 'Desc': 'Color for the background of the program.', 'StartingColor': self.ColorPalette.GetBackgroundColor()},
-                             'Opposite': {'Name': 'Background Opposite Color', 'Desc': 'Color for items on the background, like text.', 'StartingColor': self.ColorPalette.GetBackgroundOppositeColor()},
-                             'Trailing': {'Name': 'Trailing Color', 'Desc': 'Color for elements like basic buttons, basic text fields, etc.', 'StartingColor': self.ColorPalette.GetTrailingColor()},
-                             'Different': {'Name': 'Different Color', 'Desc': 'Color with your personality! used in diffrent menus and special elements.', 'StartingColor': self.ColorPalette.GetDiffrentColor()},
-                             'Special': {'Name': 'Special Color', 'Desc': "Completly diffrent. for special features like 'Save' buttons, etc.", 'StartingColor': self.ColorPalette.GetSpecialColor()},
+        ColorElementsInfo = {'Background': {'Name': 'Background Color', 'Desc': 'Color for the background of the program.', 'StartingColor': ColorPalette.GetBackgroundColor()},
+                             'Opposite': {'Name': 'Background Opposite Color', 'Desc': 'Color for items on the background, like text.', 'StartingColor': ColorPalette.GetBackgroundOppositeColor()},
+                             'Trailing': {'Name': 'Trailing Color', 'Desc': 'Color for elements like basic buttons, basic text fields, etc.', 'StartingColor': ColorPalette.GetTrailingColor()},
+                             'Different': {'Name': 'Different Color', 'Desc': 'Color with your personality! used in diffrent menus and special elements.', 'StartingColor': ColorPalette.GetDiffrentColor()},
+                             'Special': {'Name': 'Special Color', 'Desc': "Completly diffrent. for special features like 'Save' buttons, etc.", 'StartingColor': ColorPalette.GetSpecialColor()},
                              }
 
         CurRow = 1
@@ -356,7 +373,7 @@ class AppearanceSettingsPage(DefaultPage):
             AllColorElements
 
     def SetColorPalette(self, ColorPalette):
-        self.ColorPalette = ColorPalette
+        self.controller.SettingsContainer.SetAppearanceContainer(ColorPalette)
         self.controller.SetColors(ColorPalette)
 
     def ResetToDefault(self):
@@ -383,51 +400,9 @@ class AppearanceSettingsPage(DefaultPage):
         self.controller.SetTitle('Appearance')
 
 
-class AppearanceColorPicker(RegularFrame):
-
-    def __init__(self, master, starting_value, *args, **kwargs):
-        RegularFrame.__init__(self, master, *args, **kwargs)
-
-        self.DefaultValue = starting_value
-        self.NewValue = starting_value
-
-        self.ColorLabel = ColorLabel(self)
-        self.UpdateColorLabel()
-        self.ColorLabel.grid(row=0, column=0)
-
-        ChangeButton = RegularButton(
-            self, text='Change', command=lambda: self.ChangeColor(self.PickColor()))
-        ChangeButton.grid(row=0, column=1)
-
-        ResetButton = RegularButton(self, text='Restore', command=lambda: self.RestoreColor())
-        ResetButton.grid(row=0, column=2)
-
-        self.elements = [ChangeButton, ResetButton]
-
-    def UpdateColorLabel(self):
-        self.ColorLabel.config(bg=self.NewValue)
-
-    def PickColor(self):
-        return colorchooser.askcolor()[1]
-
-    def ChangeColor(self, ColorHex):
-        if ColorHex is not None:
-            self.NewValue = ColorHex
-            self.UpdateColorLabel()
-
-    def RestoreColor(self):
-        self.NewValue = self.DefaultValue
-        self.UpdateColorLabel()
-
-    def SaveChanges(self):
-        self.DefaultValue = self.NewValue
-        return self.NewValue
-
-
 # # # # # # # # # # # # # #
 # G U I   E L E M E N T S #
 # # # # # # # # # # # # # #
-
 
 class DefaultCanvas(tk.Canvas):
 
@@ -642,6 +617,73 @@ class RegularRadiobutton(DefaultRadiobutton):
                     activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed text color
 
 
+# # # # # # # # # # # # # # # #
+# C U S T O M   W I D G E T S #
+# # # # # # # # # # # # # # # #
+
+class AppearanceSettingLine():
+
+    def __init__(self, master, name, desc, color, grid_row):
+
+        self.Label = NameDescFrame(master, name, desc)
+        self.Label.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=0)
+        self.ColorPicker = AppearanceColorPicker(master, color)
+        self.ColorPicker.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=1)
+
+        self.elements = [self.Label, self.ColorPicker]
+
+    def SetColors(self, ColorPalette):
+        for element in self.elements:
+            element.SetColors(ColorPalette)
+
+    def ChangeColor(self, color):
+        self.ColorPicker.ChangeColor(color)
+
+    def SaveChanges(self):
+        return self.ColorPicker.SaveChanges()
+
+
+class AppearanceColorPicker(RegularFrame):
+
+    def __init__(self, master, starting_value, *args, **kwargs):
+        RegularFrame.__init__(self, master, *args, **kwargs)
+
+        self.DefaultValue = starting_value
+        self.NewValue = starting_value
+
+        self.ColorLabel = ColorLabel(self)
+        self.UpdateColorLabel()
+        self.ColorLabel.grid(row=0, column=0)
+
+        ChangeButton = RegularButton(
+            self, text='Change', command=lambda: self.ChangeColor(self.PickColor()))
+        ChangeButton.grid(row=0, column=1)
+
+        ResetButton = RegularButton(self, text='Restore', command=lambda: self.RestoreColor())
+        ResetButton.grid(row=0, column=2)
+
+        self.elements = [ChangeButton, ResetButton]
+
+    def UpdateColorLabel(self):
+        self.ColorLabel.config(bg=self.NewValue)
+
+    def PickColor(self):
+        return colorchooser.askcolor()[1]
+
+    def ChangeColor(self, ColorHex):
+        if ColorHex is not None:
+            self.NewValue = ColorHex
+            self.UpdateColorLabel()
+
+    def RestoreColor(self):
+        self.NewValue = self.DefaultValue
+        self.UpdateColorLabel()
+
+    def SaveChanges(self):
+        self.DefaultValue = self.NewValue
+        return self.NewValue
+
+
 class StatusBar(DarkFrame):
 
     def __init__(self, master, *args, **kwargs):
@@ -709,6 +751,10 @@ class NameDescFrame(RegularFrame):
         for element in self.elements:
             element.SetColors(ColorPalette)
 
+
+# # # # # # # # # # # # # #
+# M A I N   P R O G R A M #
+# # # # # # # # # # # # # #
 
 if __name__ == '__main__':
     root = ProgramGUI()
