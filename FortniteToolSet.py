@@ -436,6 +436,58 @@ class ImageCanvas(DefaultCanvas):
         self.config(background=ColorPalette.GetBackgroundColor())
 
 
+class LineCanvas(DefaultCanvas):
+
+    def __init__(self, master, SizeX, SizeY, *args, **kwargs):
+        DefaultCanvas.__init__(self, master, width=SizeX, height=SizeY,
+                               highlightthickness=0, *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        pass
+
+
+class HorizontalLine(LineCanvas):
+
+    def __init__(self, master, length):
+        LineCanvas.__init__(self, master, SizeX=length, SizeY=2)
+
+
+class RegularShortLine(HorizontalLine):
+
+    def __init__(self, master):
+        HorizontalLine.__init__(self, master, 150)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetDiffrentColor())
+
+
+class RegularLongLine(HorizontalLine):
+
+    def __init__(self, master):
+        HorizontalLine.__init__(self, master, 300)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetDiffrentColor())
+
+
+class SpecialShortLine(HorizontalLine):
+
+    def __init__(self, master):
+        HorizontalLine.__init__(self, master, 150)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetSpecialColor())
+
+
+class SpecialLongLine(HorizontalLine):
+
+    def __init__(self, master):
+        HorizontalLine.__init__(self, master, 300)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetSpecialColor())
+
+
 class DefaultLabel(tk.Label):
 
     def SetColors(self, ColorPalette):
