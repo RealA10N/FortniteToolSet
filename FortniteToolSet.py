@@ -19,10 +19,29 @@ SmallFontSize = 8
 
 DefaultPad = 10
 
-# # # # # # # # # # # # # # # # # # # #
-# S E T T I N G S   C O N T A I N E R #
-# # # # # # # # # # # # # # # # # # # #
 
+# # # # # # # # # # # # # # # # #
+# C O L O R   F U N C T I O N S #
+# # # # # # # # # # # # # # # # #
+
+class MyColor(Color):
+
+    def __init__(self, *args, **kwargs):
+
+        Color.__init__(self, *args, **kwargs)
+
+    def NewChangeColorLightning(self, amount):
+
+        newr = min(self.red * amount, 1)
+        newg = min(self.green * amount, 1)
+        newb = min(self.blue * amount, 1)
+
+        return MyColor(rgb=(newr, newg, newb))
+
+
+# # # # # # # # # #
+# S E T T I N G S #
+# # # # # # # # # #
 
 class SettingsContainer():
 
@@ -43,26 +62,6 @@ class SettingsContainer():
         SettingsSaveFile = open(self.FilePath, "wb")
         pickle.dump(self, SettingsSaveFile)
         SettingsSaveFile.close()
-
-
-# # # # # # # # # # # # # # # # #
-# C O L O R   F U N C T I O N S #
-# # # # # # # # # # # # # # # # #
-
-
-class MyColor(Color):
-
-    def __init__(self, *args, **kwargs):
-
-        Color.__init__(self, *args, **kwargs)
-
-    def NewChangeColorLightning(self, amount):
-
-        newr = min(self.red * amount, 1)
-        newg = min(self.green * amount, 1)
-        newb = min(self.blue * amount, 1)
-
-        return MyColor(rgb=(newr, newg, newb))
 
 
 class AppearanceSettingsContainer():
@@ -136,10 +135,10 @@ class DefaultAppearanceSettings(AppearanceSettingsContainer):
                                              DiffrentColor='#51afe1',
                                              SpecialColor='#fd5f00')
 
+
 # # # # # # # # # # # # #
 # G E N E R A L   G U I #
 # # # # # # # # # # # # #
-
 
 class ProgramGUI(tk.Tk):
 
