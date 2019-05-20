@@ -637,7 +637,7 @@ class AppearanceSettingLine():
 
         self.Label = NameDescFrame(master, name, desc)
         self.Label.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=0)
-        self.ColorPicker = AppearanceColorPicker(master, color)
+        self.ColorPicker = AppearanceColorPicker(master, color, name)
         self.ColorPicker.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=1)
 
         self.elements = [self.Label, self.ColorPicker]
@@ -655,7 +655,7 @@ class AppearanceSettingLine():
 
 class AppearanceColorPicker(RegularFrame):
 
-    def __init__(self, master, starting_value, *args, **kwargs):
+    def __init__(self, master, starting_value, name, *args, **kwargs):
         RegularFrame.__init__(self, master, *args, **kwargs)
 
         self.DefaultValue = starting_value
@@ -666,7 +666,7 @@ class AppearanceColorPicker(RegularFrame):
         self.ColorLabel.grid(row=0, column=0)
 
         ChangeButton = RegularButton(
-            self, text='Change', command=lambda: self.ChangeColor(self.PickColor()))
+            self, text='Change', command=lambda: self.ChangeColor(self.PickColor(self.NewValue, name)))
         ChangeButton.grid(row=0, column=1)
 
         ResetButton = RegularButton(self, text='Restore', command=lambda: self.RestoreColor())
@@ -677,8 +677,8 @@ class AppearanceColorPicker(RegularFrame):
     def UpdateColorLabel(self):
         self.ColorLabel.config(bg=self.NewValue)
 
-    def PickColor(self):
-        return colorchooser.askcolor()[1]
+    def PickColor(self, starting_color, title):
+        return colorchooser.askcolor(starting_color, title='Select {}'.format(title))[1]
 
     def ChangeColor(self, ColorHex):
         if ColorHex is not None:
