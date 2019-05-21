@@ -21,7 +21,6 @@ DefaultPad = 10
 class MyColor(Color):
 
     def __init__(self, *args, **kwargs):
-
         Color.__init__(self, *args, **kwargs)
 
     def NewChangeColorLightning(self, amount):
@@ -399,11 +398,11 @@ class AppearanceSettingsPage(DefaultPage):
         CurRow += 1
 
         self.FontLine = AppearanceEntryLine(
-            self, 'Font', 'desc', ColorPalette.GetFont(), grid_row=CurRow)
+            self, 'Font', 'Select the program default font. Make sure the font is installed!', ColorPalette.GetFont(), grid_row=CurRow)
         CurRow += 1
 
         self.FontSizeLine = AppearanceSpinboxLine(
-            self, 'Font Size', 'desc', ColorPalette.GetFontSize(), 10, 20, grid_row=CurRow)
+            self, 'Font Size', 'The size of the regular text. Other text will adapt to this setting.', ColorPalette.GetFontSize(), 10, 20, grid_row=CurRow)
         CurRow += 1
 
         BottomButtonsFrame = RegularFrame(self)
