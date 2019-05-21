@@ -597,6 +597,7 @@ class RegularEntry(DefaultEntry):
                               font=(DefaultFont, RegularFontSize),  # font
                               relief=tk.FLAT,  # style of the entry
                               bd=2,  # size of border
+                              width=15,
                               *args, **kwargs)
 
     def SetColors(self, ColorPalette):
