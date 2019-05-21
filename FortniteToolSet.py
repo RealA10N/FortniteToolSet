@@ -344,15 +344,11 @@ class AboutPage(DefaultPage):
         ToolSetLabel = BigLabel(TextFrame, text='FortniteToolSet')
         ToolSetLabel.grid(row=0, column=0, padx=DefaultPad / 2)
 
-        StringForTextLabel = ""
         ListForTextLabel = ["Made By RealA10N. For personal use only! (;",
                             "Assets the not mentioned below created by me.",
                             "Some icons in the program are made by Lucy G from Flaticon"]
-        for line in ListForTextLabel:
-            StringForTextLabel = StringForTextLabel + line + "\n"
-        StringForTextLabel = StringForTextLabel[:-1]
 
-        TextLabel = RegularLabel(TextFrame, text=StringForTextLabel)
+        TextLabel = RegularLabel(TextFrame, text=LinesListToString(ListForTextLabel))
         TextLabel.grid(row=1, column=0)
 
         # Icon pack: https://www.flaticon.com/packs/free-basic-ui-elements
@@ -921,6 +917,18 @@ class NameDescFrame(RegularFrame):
         RegularFrame.SetColors(self, ColorPalette)
         for element in self.elements:
             element.SetColors(ColorPalette)
+
+# # # # # # # # # # # # # # # # # #
+# P U B L I C   F U N C T I O N S #
+# # # # # # # # # # # # # # # # # #
+
+
+def LinesListToString(list):
+    # takes list of lines, and converts it to one string with '\n' between lines
+    finalstr = ""
+    for line in list:
+        finalstr = finalstr + line + "\n"
+    return finalstr[:-1]
 
 
 # # # # # # # # # # # # # #
