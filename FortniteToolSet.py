@@ -205,7 +205,7 @@ class ProgramGUI(tk.Tk):
         self.CurrentPage = None
         self.ShowPage(HomePage)
 
-        self.SetColors(self.SettingsContainer.GetAppearanceContainer())
+        self.SetAppearance(self.SettingsContainer.GetAppearanceContainer())
 
         if Corrupted:  # using this to load the window, and only then pop the error message.
             messagebox.showerror(
@@ -216,10 +216,10 @@ class ProgramGUI(tk.Tk):
             frame = frame_obj(parent, controller)
             self.frames[frame_obj] = frame
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         for frame in self.frames:
-            self.frames[frame].SetColors(ColorPalette)
-        self.StatusBar.SetColors(ColorPalette)
+            self.frames[frame].SetAppearance(Container)
+        self.StatusBar.SetAppearance(Container)
 
     def ShowPage(self, page):
         if self.CurrentPage is not None:
@@ -270,30 +270,30 @@ class DefaultFrame(tk.Frame):
 
     elements = []
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         for element in self.elements:
-            element.SetColors(ColorPalette)
+            element.SetAppearance(Container)
 
 
 class RegularFrame(DefaultFrame):
 
-    def SetColors(self, ColorPalette):
-        DefaultFrame.SetColors(self, ColorPalette)
-        self.config(background=ColorPalette.GetBackgroundColor())
+    def SetAppearance(self, Container):
+        DefaultFrame.SetAppearance(self, Container)
+        self.config(background=Container.GetBackgroundColor())
 
 
 class DarkFrame(DefaultFrame):
 
-    def SetColors(self, ColorPalette):
-        DefaultFrame.SetColors(self, ColorPalette)
-        self.config(background=ColorPalette.GetDarkColor())
+    def SetAppearance(self, Container):
+        DefaultFrame.SetAppearance(self, Container)
+        self.config(background=Container.GetDarkColor())
 
 
 class LightFrame(DefaultFrame):
 
-    def SetColors(self, ColorPalette):
-        DefaultFrame.SetColors(self, ColorPalette)
-        self.config(background=ColorPalette.GetLightColor())
+    def SetAppearance(self, Container):
+        DefaultFrame.SetAppearance(self, Container)
+        self.config(background=Container.GetLightColor())
 
 
 # # # # # # # # # # #
@@ -421,7 +421,7 @@ class AppearanceSettingsPage(DefaultPage):
 
     def SetColorPalette(self, ColorPalette):
         self.controller.SettingsContainer.SetAppearanceContainer(ColorPalette)
-        self.controller.SetColors(ColorPalette)
+        self.controller.SetAppearance(ColorPalette)
 
     def ResetToDefault(self):
         reset = messagebox.askyesno(
@@ -456,7 +456,7 @@ class AppearanceSettingsPage(DefaultPage):
 
 class DefaultCanvas(tk.Canvas):
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         pass
 
 
@@ -473,8 +473,8 @@ class ImageCanvas(DefaultCanvas):
 
         self.create_image(0, 0, image=self.tkImg, anchor='nw')
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetBackgroundColor())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetBackgroundColor())
 
 
 class LineCanvas(DefaultCanvas):
@@ -483,7 +483,7 @@ class LineCanvas(DefaultCanvas):
         DefaultCanvas.__init__(self, master, width=SizeX, height=SizeY,
                                highlightthickness=0, *args, **kwargs)
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         pass
 
 
@@ -498,8 +498,8 @@ class RegularShortLine(HorizontalLine):
     def __init__(self, master):
         HorizontalLine.__init__(self, master, 150)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetDiffrentColor())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetDiffrentColor())
 
 
 class RegularLongLine(HorizontalLine):
@@ -507,8 +507,8 @@ class RegularLongLine(HorizontalLine):
     def __init__(self, master):
         HorizontalLine.__init__(self, master, 300)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetDiffrentColor())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetDiffrentColor())
 
 
 class SpecialShortLine(HorizontalLine):
@@ -516,8 +516,8 @@ class SpecialShortLine(HorizontalLine):
     def __init__(self, master):
         HorizontalLine.__init__(self, master, 150)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetSpecialColor())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetSpecialColor())
 
 
 class SpecialLongLine(HorizontalLine):
@@ -525,70 +525,70 @@ class SpecialLongLine(HorizontalLine):
     def __init__(self, master):
         HorizontalLine.__init__(self, master, 300)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetSpecialColor())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetSpecialColor())
 
 
 class DefaultLabel(tk.Label):
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         pass
 
 
 class BigLabel(DefaultLabel):
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetBackgroundColor(),
-                    foreground=ColorPalette.GetSpecialColor(),
-                    font=ColorPalette.GetBigFont())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetBackgroundColor(),
+                    foreground=Container.GetSpecialColor(),
+                    font=Container.GetBigFont())
 
 
 class RegularLabel(DefaultLabel):
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetBackgroundColor(),
-                    foreground=ColorPalette.GetDiffrentColor(),
-                    font=ColorPalette.GetRegularFont())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetBackgroundColor(),
+                    foreground=Container.GetDiffrentColor(),
+                    font=Container.GetRegularFont())
 
 
 class RegularDarkLabel(RegularLabel):
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetDarkColor(),
-                    foreground=ColorPalette.GetLightColor(),
-                    font=ColorPalette.GetRegularFont())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetDarkColor(),
+                    foreground=Container.GetLightColor(),
+                    font=Container.GetRegularFont())
 
 
 class RegularLightLabel(RegularLabel):
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetLightColor(),
-                    foreground=ColorPalette.GetDarkColor(),
-                    font=ColorPalette.GetRegularFont())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetLightColor(),
+                    foreground=Container.GetDarkColor(),
+                    font=Container.GetRegularFont())
 
 
 class SpecialLightLabel(DefaultLabel):
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetLightColor(),
-                    foreground=ColorPalette.GetSpecialColor(),
-                    font=ColorPalette.GetRegularFont())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetLightColor(),
+                    foreground=Container.GetSpecialColor(),
+                    font=Container.GetRegularFont())
 
 
 class SpecialDarkLabel(DefaultLabel):
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetDarkColor(),
-                    foreground=ColorPalette.GetSpecialColor(),
-                    font=ColorPalette.GetRegularFont())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetDarkColor(),
+                    foreground=Container.GetSpecialColor(),
+                    font=Container.GetRegularFont())
 
 
 class SmallLabel(DefaultLabel):
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetBackgroundColor(),
-                    foreground=ColorPalette.GetDarkColor(),
-                    font=ColorPalette.GetSmallFont())
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetBackgroundColor(),
+                    foreground=Container.GetDarkColor(),
+                    font=Container.GetSmallFont())
 
 
 class ColorLabel(DefaultLabel):
@@ -605,7 +605,7 @@ class ColorLabel(DefaultLabel):
 
 class DefaultEntry(tk.Entry):
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         pass
 
 
@@ -619,16 +619,16 @@ class RegularEntry(DefaultEntry):
                               width=15,
                               *args, **kwargs)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetTrailingColor(),
-                    foreground=ColorPalette.GetBackgroundOppositeColor(),  # color of font
-                    selectbackground=ColorPalette.GetDarkColor(),  # background color when text selected
-                    font=ColorPalette.GetRegularFont())  # font
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetTrailingColor(),
+                    foreground=Container.GetBackgroundOppositeColor(),  # color of font
+                    selectbackground=Container.GetDarkColor(),  # background color when text selected
+                    font=Container.GetRegularFont())  # font
 
 
 class DefaultButton(tk.Button):
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         pass
 
 
@@ -645,12 +645,12 @@ class RegularButton(DefaultButton):
                                relief='ridge',
                                *args, **kwargs)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetTrailingColor(),    # regular color
-                    activebackground=ColorPalette.GetDarkColor(),  # while pressed color
-                    foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
-                    activeforeground=ColorPalette.GetBackgroundOppositeColor(),  # while pressed color
-                    font=ColorPalette.GetRegularFont())  # font
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetTrailingColor(),  # regular color
+                    activebackground=Container.GetDarkColor(),  # while pressed color
+                    foreground=Container.GetBackgroundOppositeColor(),  # regular color
+                    activeforeground=Container.GetBackgroundOppositeColor(),  # while pressed color
+                    font=Container.GetRegularFont())  # font
 
 
 class SmallButton(RegularButton):
@@ -665,27 +665,27 @@ class SmallButton(RegularButton):
                                justify=tk.CENTER,  # center all the text lines
                                *args, **kwargs)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetTrailingColor(),    # regular color
-                    activebackground=ColorPalette.GetDarkColor(),  # while pressed color
-                    foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
-                    activeforeground=ColorPalette.GetBackgroundOppositeColor(),  # while pressed color
-                    font=ColorPalette.GetSmallFont())  # font
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetTrailingColor(),  # regular color
+                    activebackground=Container.GetDarkColor(),  # while pressed color
+                    foreground=Container.GetBackgroundOppositeColor(),  # regular color
+                    activeforeground=Container.GetBackgroundOppositeColor(),  # while pressed color
+                    font=Container.GetSmallFont())  # font
 
 
 class SpecialButton(RegularButton):
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetSpecialColor(),    # regular color
-                    activebackground=ColorPalette.GetDarkColor(),  # while pressed color
-                    foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
-                    activeforeground=ColorPalette.GetBackgroundOppositeColor(),  # while pressed color
-                    font=ColorPalette.GetRegularFont())  # font
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetSpecialColor(),  # regular color
+                    activebackground=Container.GetDarkColor(),  # while pressed color
+                    foreground=Container.GetBackgroundOppositeColor(),  # regular color
+                    activeforeground=Container.GetBackgroundOppositeColor(),  # while pressed color
+                    font=Container.GetRegularFont())  # font
 
 
 class DefaultRadiobutton(tk.Radiobutton):
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         pass
 
 
@@ -697,18 +697,18 @@ class RegularRadiobutton(DefaultRadiobutton):
                                     borderwidth=0,  # size of border
                                     *args, **kwargs)
 
-    def SetColors(self, ColorPalette):
-        self.config(bg=ColorPalette.GetBackgroundColor(),  # background color
-                    activebackground=ColorPalette.GetBackgroundColor(),  # while pressed color
-                    selectcolor=ColorPalette.GetDarkColor(),
-                    fg=ColorPalette.GetBackgroundOppositeColor(),  # text color
-                    activeforeground=ColorPalette.GetBackgroundOppositeColor(),  # while pressed text color
-                    font=ColorPalette.GetRegularFont())  # font
+    def SetAppearance(self, Container):
+        self.config(bg=Container.GetBackgroundColor(),  # background color
+                    activebackground=Container.GetBackgroundColor(),  # while pressed color
+                    selectcolor=Container.GetDarkColor(),
+                    fg=Container.GetBackgroundOppositeColor(),  # text color
+                    activeforeground=Container.GetBackgroundOppositeColor(),  # while pressed text color
+                    font=Container.GetRegularFont())  # font
 
 
 class DefaultSpinbox(tk.Spinbox):
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         pass
 
 
@@ -722,12 +722,12 @@ class RegularSpinbox(DefaultSpinbox):
                                 buttonuprelief='ridge',
                                 *args, **kwargs)
 
-    def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetTrailingColor(),
-                    activebackground=ColorPalette.GetTrailingColor(),
-                    foreground=ColorPalette.GetBackgroundOppositeColor(),
-                    buttonbackground=ColorPalette.GetTrailingColor(),
-                    font=ColorPalette.GetRegularFont()
+    def SetAppearance(self, Container):
+        self.config(background=Container.GetTrailingColor(),
+                    activebackground=Container.GetTrailingColor(),
+                    foreground=Container.GetBackgroundOppositeColor(),
+                    buttonbackground=Container.GetTrailingColor(),
+                    font=Container.GetRegularFont()
                     )
 
 
@@ -745,9 +745,9 @@ class SettingLine():
 
         self.elements = [self.Label]
 
-    def SetColors(self, ColorPalette):
+    def SetAppearance(self, Container):
         for element in self.elements:
-            element.SetColors(ColorPalette)
+            element.SetAppearance(Container)
 
     def GridSettingElement(self, element, row):
         element.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=row, column=1)
@@ -913,10 +913,10 @@ class NameDescFrame(RegularFrame):
 
         self.elements = [NameLabel, DescLabel]
 
-    def SetColors(self, ColorPalette):
-        RegularFrame.SetColors(self, ColorPalette)
+    def SetAppearance(self, Container):
+        RegularFrame.SetAppearance(self, Container)
         for element in self.elements:
-            element.SetColors(ColorPalette)
+            element.SetAppearance(Container)
 
 # # # # # # # # # # # # # # # # # #
 # P U B L I C   F U N C T I O N S #
