@@ -11,12 +11,6 @@ import pickle
 # # # # # # # #
 
 AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
-DefaultFont = 'Alef'
-
-BigFontSize = 20
-RegularFontSize = 12
-SmallFontSize = 8
-
 DefaultPad = 10
 
 
@@ -68,7 +62,7 @@ class AppearanceSettingsContainer():
 
     def __init__(self, BackgroundColor,
                  BackgroudOppositeColor, TrailingColor,
-                 DiffrentColor, SpecialColor):
+                 DiffrentColor, SpecialColor, Font, RegularFontSize):
 
         self.BackgroundColor = MyColor(BackgroundColor)  # the color of the window
         self.BackgroudOppositeColor = MyColor(BackgroudOppositeColor)  # For items on background
@@ -78,6 +72,9 @@ class AppearanceSettingsContainer():
 
         self.__GenerateDarkColor()  # For smaller and less importent text
         self.__GenerateLightColor()  # For text that pops up
+
+        self.Font = Font
+        self.SetFontSize(RegularFontSize)
 
     def __GenerateDarkColor(self):
         self.DarkColor = self.DiffrentColor.NewChangeColorLightning(0.6)
@@ -123,17 +120,50 @@ class AppearanceSettingsContainer():
     def GetLightColor(self):
         return self.LightColor.get_hex_l()
 
+    # - - - - - - - - - - #
+    # n o t   c o l o r s #
+    # - - - - - - - - - - #
+
+    def SetFont(self, FontName):
+        self.Font = FontName
+
+    def SetFontSize(self, RegularFontSize):
+        multiplier = (5 / 3)  # 1.666666...
+        self.RegularFontSize = int(RegularFontSize)
+        self.BigFontSize = int(self.RegularFontSize * multiplier)
+        self.SmallFontSize = int(self.RegularFontSize / multiplier)
+
+    def GetFontSize(self):
+        return self.RegularFontSize
+
+    def GetFont(self):
+        return self.Font
+
+    def GetRegularFont(self):
+        return (self.Font, self.RegularFontSize)
+
+    def GetBigFont(self):
+        return (self.Font, self.BigFontSize)
+
+    def GetSmallFont(self):
+        return (self.Font, self.SmallFontSize)
+
 
 class DefaultAppearanceSettings(AppearanceSettingsContainer):
 
     def __init__(self):
 
         AppearanceSettingsContainer.__init__(self,
+                                             # c o l o r s
                                              BackgroundColor='#222831',
                                              BackgroudOppositeColor='#FFFFFF',
                                              TrailingColor='#393e46',
                                              DiffrentColor='#51afe1',
-                                             SpecialColor='#fd5f00')
+                                             SpecialColor='#fd5f00',
+
+                                             # f o n t
+                                             Font='Alef',
+                                             RegularFontSize=12)
 
 
 # # # # # # # # # # # # #
@@ -339,11 +369,13 @@ class AppearanceSettingsPage(DefaultPage):
     def __init__(self, parent, controller):
         DefaultPage.__init__(self, parent, controller)
 
+        CurRow = 0
         for column_num in range(2):  # range(2) -> (0, 1)
             self.grid_columnconfigure(column_num, weight=1)
 
         Title = BigLabel(self, text='Appearance')
-        Title.grid(padx=DefaultPad, pady=DefaultPad, row=0, columnspan=2, sticky='n')
+        Title.grid(padx=DefaultPad, pady=DefaultPad, row=CurRow, columnspan=2, sticky='n')
+        CurRow += 1
 
         ColorPalette = self.controller.SettingsContainer.GetAppearanceContainer()
         self.SetColorPalette(ColorPalette)
@@ -355,13 +387,24 @@ class AppearanceSettingsPage(DefaultPage):
                              'Special': {'Name': 'Special Color', 'Desc': "Completly diffrent. for special features like 'Save' buttons, etc.", 'StartingColor': ColorPalette.GetSpecialColor()},
                              }
 
-        CurRow = 1
         self.ColorElements = {}
         for Element, InfoDict in ColorElementsInfo.items():
-            ElementObj = AppearanceSettingLine(
+            ElementObj = AppearanceColorLine(
                 self, name=InfoDict['Name'], desc=InfoDict['Desc'], color=InfoDict['StartingColor'], grid_row=CurRow)
             CurRow += 1
             self.ColorElements[Element] = ElementObj
+
+        SeparateLine = RegularLongLine(self)
+        SeparateLine.grid(row=CurRow, columnspan=2, padx=DefaultPad, pady=DefaultPad)
+        CurRow += 1
+
+        self.FontLine = AppearanceEntryLine(
+            self, 'Font', 'desc', ColorPalette.GetFont(), grid_row=CurRow)
+        CurRow += 1
+
+        self.FontSizeLine = AppearanceSpinboxLine(
+            self, 'Font Size', 'desc', ColorPalette.GetFontSize(), 10, 20, grid_row=CurRow)
+        CurRow += 1
 
         BottomButtonsFrame = RegularFrame(self)
         BottomButtonsFrame.grid(columnspan=2, padx=DefaultPad, pady=DefaultPad)
@@ -378,7 +421,7 @@ class AppearanceSettingsPage(DefaultPage):
         for name, element in self.ColorElements.items():
             AllColorElements.append(element)
 
-        self.elements = [Title, BottomButtonsFrame, SaveButton, BackDefaultbutton] + \
+        self.elements = [Title, SeparateLine, self.FontLine, self.FontSizeLine, BottomButtonsFrame, SaveButton, BackDefaultbutton] + \
             AllColorElements
 
     def SetColorPalette(self, ColorPalette):
@@ -397,12 +440,15 @@ class AppearanceSettingsPage(DefaultPage):
             self.ColorElements['Trailing'].ChangeColor(NewColorPalette.GetTrailingColor())
             self.ColorElements['Different'].ChangeColor(NewColorPalette.GetDiffrentColor())
             self.ColorElements['Special'].ChangeColor(NewColorPalette.GetSpecialColor())
+            self.FontLine.SetValue(NewColorPalette.GetFont())
+            self.FontSizeLine.SetValue(NewColorPalette.GetFontSize())
 
     def SaveChanges(self):
         SavedChangesValue = []
         for Name, Element in self.ColorElements.items():
             SavedChangesValue.append(Element.SaveChanges())
-        NewColorPalette = AppearanceSettingsContainer(*SavedChangesValue)
+        NewColorPalette = AppearanceSettingsContainer(
+            *SavedChangesValue, Font=self.FontLine.GetValue(), RegularFontSize=self.FontSizeLine.GetValue())
         self.SetColorPalette(NewColorPalette)
 
     def ShowMe(self):
@@ -496,79 +542,58 @@ class DefaultLabel(tk.Label):
 
 class BigLabel(DefaultLabel):
 
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, BigFontSize)
-
-        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
-
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetBackgroundColor(),
-                    foreground=ColorPalette.GetSpecialColor())
+                    foreground=ColorPalette.GetSpecialColor(),
+                    font=ColorPalette.GetBigFont())
 
 
 class RegularLabel(DefaultLabel):
 
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, RegularFontSize)
-
-        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
-
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetBackgroundColor(),
-                    foreground=ColorPalette.GetDiffrentColor())
+                    foreground=ColorPalette.GetDiffrentColor(),
+                    font=ColorPalette.GetRegularFont())
 
 
 class RegularDarkLabel(RegularLabel):
 
     def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetDarkColor(), foreground=ColorPalette.GetLightColor())
+        self.config(background=ColorPalette.GetDarkColor(),
+                    foreground=ColorPalette.GetLightColor(),
+                    font=ColorPalette.GetRegularFont())
 
 
 class RegularLightLabel(RegularLabel):
 
     def SetColors(self, ColorPalette):
-        self.config(background=ColorPalette.GetLightColor(), foreground=ColorPalette.GetDarkColor())
+        self.config(background=ColorPalette.GetLightColor(),
+                    foreground=ColorPalette.GetDarkColor(),
+                    font=ColorPalette.GetRegularFont())
 
 
 class SpecialLightLabel(DefaultLabel):
 
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, RegularFontSize)
-
-        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
-
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetLightColor(),
-                    foreground=ColorPalette.GetSpecialColor())
+                    foreground=ColorPalette.GetSpecialColor(),
+                    font=ColorPalette.GetRegularFont())
 
 
 class SpecialDarkLabel(DefaultLabel):
 
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, RegularFontSize)
-
-        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
-
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetDarkColor(),
-                    foreground=ColorPalette.GetSpecialColor())
+                    foreground=ColorPalette.GetSpecialColor(),
+                    font=ColorPalette.GetRegularFont())
 
 
 class SmallLabel(DefaultLabel):
 
-    def __init__(self, master, *args, **kwargs):
-
-        Font = (DefaultFont, SmallFontSize)
-
-        DefaultLabel.__init__(self, master, font=Font, *args, **kwargs)
-
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetBackgroundColor(),
-                    foreground=ColorPalette.GetDarkColor())
+                    foreground=ColorPalette.GetDarkColor(),
+                    font=ColorPalette.GetSmallFont())
 
 
 class ColorLabel(DefaultLabel):
@@ -594,7 +619,6 @@ class RegularEntry(DefaultEntry):
     def __init__(self, master, *args, **kwargs):
 
         DefaultEntry.__init__(self, master,
-                              font=(DefaultFont, RegularFontSize),  # font
                               relief=tk.FLAT,  # style of the entry
                               bd=2,  # size of border
                               width=15,
@@ -603,7 +627,8 @@ class RegularEntry(DefaultEntry):
     def SetColors(self, ColorPalette):
         self.config(background=ColorPalette.GetTrailingColor(),
                     foreground=ColorPalette.GetBackgroundOppositeColor(),  # color of font
-                    selectbackground=ColorPalette.GetDarkColor())  # background color when text selected
+                    selectbackground=ColorPalette.GetDarkColor(),  # background color when text selected
+                    font=ColorPalette.GetRegularFont())  # font
 
 
 class DefaultButton(tk.Button):
@@ -621,7 +646,6 @@ class RegularButton(DefaultButton):
                                bd=2,  # size of border
 
                                # font
-                               font=(DefaultFont, RegularFontSize),
                                justify=tk.CENTER,  # center all the text lines
                                relief='ridge',
                                *args, **kwargs)
@@ -630,7 +654,8 @@ class RegularButton(DefaultButton):
         self.config(background=ColorPalette.GetTrailingColor(),    # regular color
                     activebackground=ColorPalette.GetDarkColor(),  # while pressed color
                     foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
-                    activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
+                    activeforeground=ColorPalette.GetBackgroundOppositeColor(),  # while pressed color
+                    font=ColorPalette.GetRegularFont())  # font
 
 
 class SmallButton(RegularButton):
@@ -642,9 +667,15 @@ class SmallButton(RegularButton):
                                bd=0,  # size of border
 
                                # font
-                               font=(DefaultFont, SmallFontSize),
                                justify=tk.CENTER,  # center all the text lines
                                *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetTrailingColor(),    # regular color
+                    activebackground=ColorPalette.GetDarkColor(),  # while pressed color
+                    foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
+                    activeforeground=ColorPalette.GetBackgroundOppositeColor(),  # while pressed color
+                    font=ColorPalette.GetSmallFont())  # font
 
 
 class SpecialButton(RegularButton):
@@ -653,7 +684,8 @@ class SpecialButton(RegularButton):
         self.config(background=ColorPalette.GetSpecialColor(),    # regular color
                     activebackground=ColorPalette.GetDarkColor(),  # while pressed color
                     foreground=ColorPalette.GetBackgroundOppositeColor(),        # regular color
-                    activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed color
+                    activeforeground=ColorPalette.GetBackgroundOppositeColor(),  # while pressed color
+                    font=ColorPalette.GetRegularFont())  # font
 
 
 class DefaultRadiobutton(tk.Radiobutton):
@@ -668,7 +700,6 @@ class RegularRadiobutton(DefaultRadiobutton):
 
         DefaultRadiobutton.__init__(self, master,
                                     borderwidth=0,  # size of border
-                                    font=(DefaultFont, RegularFontSize),
                                     *args, **kwargs)
 
     def SetColors(self, ColorPalette):
@@ -676,7 +707,8 @@ class RegularRadiobutton(DefaultRadiobutton):
                     activebackground=ColorPalette.GetBackgroundColor(),  # while pressed color
                     selectcolor=ColorPalette.GetDarkColor(),
                     fg=ColorPalette.GetBackgroundOppositeColor(),  # text color
-                    activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed text color
+                    activeforeground=ColorPalette.GetBackgroundOppositeColor(),  # while pressed text color
+                    font=ColorPalette.GetRegularFont())  # font
 
 
 class DefaultSpinbox(tk.Spinbox):
@@ -708,26 +740,79 @@ class RegularSpinbox(DefaultSpinbox):
 # C U S T O M   W I D G E T S #
 # # # # # # # # # # # # # # # #
 
-class AppearanceSettingLine():
 
-    def __init__(self, master, name, desc, color, grid_row):
+class SettingLine():
+
+    def __init__(self, master, name, desc, grid_row):
 
         self.Label = NameDescFrame(master, name, desc)
         self.Label.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=0)
-        self.ColorPicker = AppearanceColorPicker(master, color, name)
-        self.ColorPicker.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=grid_row, column=1)
 
-        self.elements = [self.Label, self.ColorPicker]
+        self.elements = [self.Label]
 
     def SetColors(self, ColorPalette):
         for element in self.elements:
             element.SetColors(ColorPalette)
+
+    def GridSettingElement(self, element, row):
+        element.grid(pady=DefaultPad / 2, padx=DefaultPad / 2, row=row, column=1)
+
+
+class AppearanceColorLine(SettingLine):
+
+    def __init__(self, master, name, desc, grid_row, color):
+
+        SettingLine.__init__(self, master, name, desc, grid_row)
+        self.ColorPicker = AppearanceColorPicker(master, color, name)
+        self.GridSettingElement(self.ColorPicker, grid_row)
+
+        self.elements = self.elements + [self.ColorPicker]
 
     def ChangeColor(self, color):
         self.ColorPicker.ChangeColor(color)
 
     def SaveChanges(self):
         return self.ColorPicker.SaveChanges()
+
+
+class AppearanceEntryLine(SettingLine):
+
+    def __init__(self, master, name, desc, text, grid_row):
+        SettingLine.__init__(self, master, name, desc, grid_row)
+
+        self.EntryStr = tk.StringVar()
+        self.EntryStr.set(text)
+
+        self.Entry = RegularEntry(master, textvariable=self.EntryStr)
+        self.GridSettingElement(self.Entry, grid_row)
+
+        self.elements = self.elements + [self.Entry]
+
+    def GetValue(self):
+        return self.EntryStr.get()
+
+    def SetValue(self, value):
+        self.EntryStr.set(value)
+
+
+class AppearanceSpinboxLine(SettingLine):
+
+    def __init__(self, master, name, desc, value, min, max, grid_row):
+        SettingLine.__init__(self, master, name, desc, grid_row)
+
+        self.Value = tk.StringVar()
+        self.Value.set(value)
+
+        self.Spinbox = RegularSpinbox(master, from_=min, to=max, textvariable=self.Value)
+        self.GridSettingElement(self.Spinbox, grid_row)
+
+        self.elements = self.elements + [self.Spinbox]
+
+    def GetValue(self):
+        return int(self.Value.get())
+
+    def SetValue(self, value):
+        self.Value.set(str(value))
 
 
 class AppearanceColorPicker(RegularFrame):
