@@ -679,6 +679,31 @@ class RegularRadiobutton(DefaultRadiobutton):
                     activeforeground=ColorPalette.GetBackgroundOppositeColor())  # while pressed text color
 
 
+class DefaultSpinbox(tk.Spinbox):
+
+    def SetColors(self, ColorPalette):
+        pass
+
+
+class RegularSpinbox(DefaultSpinbox):
+
+    def __init__(self, master, *args, **kwargs):
+        DefaultSpinbox.__init__(self, master,
+                                bd=0,
+                                width=3,
+                                buttondownrelief='ridge',
+                                buttonuprelief='ridge',
+                                *args, **kwargs)
+
+    def SetColors(self, ColorPalette):
+        self.config(background=ColorPalette.GetTrailingColor(),
+                    activebackground=ColorPalette.GetTrailingColor(),
+                    foreground=ColorPalette.GetBackgroundOppositeColor(),
+                    buttonbackground=ColorPalette.GetTrailingColor(),
+                    font=ColorPalette.GetRegularFont()
+                    )
+
+
 # # # # # # # # # # # # # # # #
 # C U S T O M   W I D G E T S #
 # # # # # # # # # # # # # # # #
