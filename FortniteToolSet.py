@@ -303,21 +303,22 @@ class LightFrame(DefaultFrame):
 class DefaultPage(RegularFrame):
 
     # default init for all pages in the program
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, basic_name):
         self.parent = parent
         self.controller = controller
+        self.basic_name = basic_name
         RegularFrame.__init__(self, self.parent)
         self.grid_columnconfigure(0, weight=1)
 
     # will run every time the page loads
     def ShowMe(self):
-        pass
+        self.controller.SetTitle(self.basic_name)
 
 
 class HomePage(DefaultPage):
 
     def __init__(self, parent, controller):
-        DefaultPage.__init__(self, parent, controller)
+        DefaultPage.__init__(self, parent, controller, basic_name=None)
 
         # banner image
         imgBanner = Image.open(os.path.join(AssetsFolder, 'Banner.png')).resize((500, 250))
@@ -329,14 +330,11 @@ class HomePage(DefaultPage):
 
         self.elements = [Banner, WelcomeTitle]
 
-    def ShowMe(self):
-        self.controller.SetTitle(None)
-
 
 class AboutPage(DefaultPage):
 
     def __init__(self, parent, controller):
-        DefaultPage.__init__(self, parent, controller)
+        DefaultPage.__init__(self, parent, controller, basic_name='About')
 
         TextFrame = RegularFrame(self)
         TextFrame.pack(padx=DefaultPad, pady=DefaultPad)
@@ -355,14 +353,11 @@ class AboutPage(DefaultPage):
 
         self.elements = [TextFrame, ToolSetLabel, TextLabel]
 
-    def ShowMe(self):
-        self.controller.SetTitle('About')
-
 
 class AppearanceSettingsPage(DefaultPage):
 
     def __init__(self, parent, controller):
-        DefaultPage.__init__(self, parent, controller)
+        DefaultPage.__init__(self, parent, controller, basic_name='Appearance')
 
         CurRow = 0
         for column_num in range(2):  # range(2) -> (0, 1)
@@ -446,8 +441,6 @@ class AppearanceSettingsPage(DefaultPage):
             *SavedChangesValue, Font=self.FontLine.GetValue(), RegularFontSize=self.FontSizeLine.GetValue())
         self.SetColorPalette(NewColorPalette)
 
-    def ShowMe(self):
-        self.controller.SetTitle('Appearance')
 
 
 # # # # # # # # # # # # # #
