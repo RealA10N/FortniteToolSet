@@ -619,6 +619,15 @@ class RegularEntry(DefaultEntry):
                     font=Container.GetRegularFont())  # font
 
 
+class RegularLongEntry(RegularEntry):
+
+    def __init__(self, master, *args, **kwargs):
+        DefaultEntry.__init__(self, master,
+                              relief=tk.FLAT,  # style of the entry
+                              bd=2,  # size of border
+                              *args, **kwargs)
+
+
 class DefaultButton(tk.Button):
 
     def SetAppearance(self, Container):
