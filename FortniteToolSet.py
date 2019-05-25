@@ -956,6 +956,40 @@ def LinesListToString(list):
     return finalstr[:-1]
 
 
+# # # # # # # # # # # # #
+# A P I   C L A S S E S #
+# # # # # # # # # # # # #
+
+class DefaultAPI():
+
+    def __init__(self, url, headers):
+        self.url = url
+        self.headers = headers
+        self.__ApiJson = None
+
+    def GetJsonDate(self):
+        if self.__ApiJson is None:
+            self.__ApiJson = self.__GenerateJsonData()
+        return self.__ApiJson
+
+    def __GenerateJsonData(self):
+        request = requests.request("GET", self.url, headers=self.headers)
+        return request.json()
+
+
+# # # # # # # # # # # # # #
+# A P I   E L E M E N T S #
+# # # # # # # # # # # # # #
+
+class FortniteAPIelement():
+
+    def __init__(self, Dict):
+        self.Dict = Dict
+
+    def GetDict(self):
+        return self.Dict
+
+
 # # # # # # # # # # # # # #
 # M A I N   P R O G R A M #
 # # # # # # # # # # # # # #
