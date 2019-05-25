@@ -4,6 +4,8 @@ import os
 from PIL import Image, ImageTk
 from colour import Color
 import pickle
+import win32clipboard
+from io import BytesIO
 
 
 # # # # # # # #
@@ -954,6 +956,21 @@ def LinesListToString(list):
     for line in list:
         finalstr = finalstr + line + "\n"
     return finalstr[:-1]
+
+
+def SendToClipboard(type, date):
+    win32clipboard.OpenClipboard()
+    win32clipboard.EmptyClipboard()
+    win32clipboard.SetClipboardData(type, date)
+    win32clipboard.CloseClipboard()
+
+
+def SendImageToClipboard(image):
+    output = BytesIO()
+    image.save(output, 'BMP')
+    data = output.getvalue()[14:]
+    output.close()
+    SendToClipboard(win32clipboard.CF_DIB, data)
 
 
 # # # # # # # # # # # # #
