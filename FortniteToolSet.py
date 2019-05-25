@@ -224,6 +224,10 @@ class ProgramGUI(tk.Tk):
         self.StatusBar.SetAppearance(Container)
 
     def ShowPage(self, page):
+
+        if page == self.CurrentPage:
+            return
+
         CurrentFrame = self.frames[page]
         CurrentFrame.grid(row=0, column=0, sticky="nsew")
 
