@@ -904,13 +904,13 @@ class StatusBar(DarkFrame):
 
 class NameDescFrame(RegularFrame):
 
-    def __init__(self, master, settingname, settingdesc, *args, **kwargs):
+    def __init__(self, master, name, desc, *args, **kwargs):
 
         RegularFrame.__init__(self, master, *args, **kwargs)
 
-        NameLabel = RegularLabel(self, text=settingname)
+        NameLabel = RegularLabel(self, text=name)
         NameLabel.grid(row=0, column=0)
-        DescLabel = SmallLabel(self, text=settingdesc, wraplength=175)
+        DescLabel = SmallLabel(self, text=desc, wraplength=175)
         DescLabel.grid(row=1, column=0, padx=DefaultPad)
 
         self.elements = [NameLabel, DescLabel]
