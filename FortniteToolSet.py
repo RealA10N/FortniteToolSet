@@ -965,6 +965,13 @@ def SendToClipboard(type, date):
     win32clipboard.CloseClipboard()
 
 
+def SendStringToClipboard(string):
+    win32clipboard.OpenClipboard()
+    win32clipboard.EmptyClipboard()
+    win32clipboard.SetClipboardData(win32con.CF_UNICODETEXT, string)
+    win32clipboard.CloseClipboard()
+
+
 def SendImageToClipboard(image):
     output = BytesIO()
     image.save(output, 'BMP')
