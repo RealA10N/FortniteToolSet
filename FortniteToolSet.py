@@ -611,7 +611,7 @@ class RegularEntry(DefaultEntry):
     def __init__(self, master, *args, **kwargs):
 
         DefaultEntry.__init__(self, master,
-                              relief=tk.FLAT,  # style of the entry
+                              relief='flat',  # style of the entry
                               bd=2,  # size of border
                               width=15,
                               *args, **kwargs)
@@ -627,7 +627,7 @@ class RegularLongEntry(RegularEntry):
 
     def __init__(self, master, *args, **kwargs):
         DefaultEntry.__init__(self, master,
-                              relief=tk.FLAT,  # style of the entry
+                              relief='flat',  # style of the entry
                               bd=2,  # size of border
                               *args, **kwargs)
 
@@ -647,7 +647,7 @@ class RegularButton(DefaultButton):
                                bd=2,  # size of border
 
                                # font
-                               justify=tk.CENTER,  # center all the text lines
+                               justify='center',  # center all the text lines
                                relief='ridge',
                                *args, **kwargs)
 
@@ -668,7 +668,7 @@ class SmallButton(RegularButton):
                                bd=0,  # size of border
 
                                # font
-                               justify=tk.CENTER,  # center all the text lines
+                               justify='center',  # center all the text lines
                                *args, **kwargs)
 
     def SetAppearance(self, Container):
