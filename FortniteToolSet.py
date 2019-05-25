@@ -224,11 +224,13 @@ class ProgramGUI(tk.Tk):
         self.StatusBar.SetAppearance(Container)
 
     def ShowPage(self, page):
-        if self.CurrentPage is not None:
-            self.frames[self.CurrentPage].grid_forget()
-        self.CurrentPage = page
         CurrentFrame = self.frames[page]
         CurrentFrame.grid(row=0, column=0, sticky="nsew")
+
+        if self.CurrentPage is not None:
+            self.frames[self.CurrentPage].grid_forget()
+
+        self.CurrentPage = page
         CurrentFrame.ShowMe()
 
     def SetTitle(self, page_name=None):
