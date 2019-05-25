@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, colorchooser
-import os
+from os import path, getcwd
 from PIL import Image, ImageTk
 from colour import Color
 import pickle
@@ -16,7 +16,7 @@ import requests
 # A S S E T S #
 # # # # # # # #
 
-AssetsFolder = os.path.join(os.getcwd(), 'FortniteToolSetAssets')
+AssetsFolder = path.join(getcwd(), 'FortniteToolSetAssets')
 DefaultPad = 10
 
 
@@ -183,7 +183,7 @@ class ProgramGUI(tk.Tk):
 
         SettingsPath = "Settings.FortniteToolSet"
         Corrupted = None
-        if os.path.isfile(SettingsPath):
+        if path.isfile(SettingsPath):
             pickle_in = open(SettingsPath, 'rb')
             try:
                 self.SettingsContainer = pickle.load(pickle_in)
@@ -346,7 +346,7 @@ class HomePage(DefaultPage):
         DefaultPage.__init__(self, parent, controller, basic_name=None)
 
         # banner image
-        imgBanner = Image.open(os.path.join(AssetsFolder, 'Banner.png')).resize((500, 250))
+        imgBanner = Image.open(path.join(AssetsFolder, 'Banner.png')).resize((500, 250))
         Banner = ImageCanvas(self, imgBanner)
         Banner.pack(padx=DefaultPad, pady=DefaultPad)
 
