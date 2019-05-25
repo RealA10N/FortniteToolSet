@@ -733,6 +733,23 @@ class RegularSpinbox(DefaultSpinbox):
                     )
 
 
+class DefaultCheckbutton(tk.Checkbutton):
+
+    def SetAppearance(self, Container):
+        pass
+
+
+class RegularCheckbutton(DefaultCheckbutton):
+
+    def SetAppearance(self, Container):
+        self.config(bg=Container.GetBackgroundColor(),  # background color
+                    activebackground=Container.GetBackgroundColor(),  # while pressed color
+                    selectcolor=Container.GetDarkColor(),
+                    fg=Container.GetBackgroundOppositeColor(),  # text color
+                    activeforeground=Container.GetBackgroundOppositeColor(),  # while pressed text color
+                    font=Container.GetRegularFont())  # font
+
+
 # # # # # # # # # # # # # # # #
 # C U S T O M   W I D G E T S #
 # # # # # # # # # # # # # # # #
