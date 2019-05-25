@@ -4,8 +4,12 @@ import os
 from PIL import Image, ImageTk
 from colour import Color
 import pickle
+from time import sleep
 import win32clipboard
+import win32con
+import threading
 from io import BytesIO
+import requests
 
 
 # # # # # # # #
@@ -201,7 +205,7 @@ class ProgramGUI(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
-        self.pages = [HomePage, AppearanceSettingsPage, AboutPage]  # all the pages list
+        self.pages = [HomePage, AppearanceSettingsPage, AboutPage, NewsPage]  # all the pages list
         self.frames = {}
         self.LoadAllPages(parent=container, controller=self)
         self.CurrentPage = None
@@ -258,6 +262,11 @@ class ProgramGUI(tk.Tk):
         settings_menu.add_command(
             label="Appearance", command=lambda: self.ShowPage(AppearanceSettingsPage))
 
+        api_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Tools", menu=api_menu)
+        api_menu.add_command(
+            label="News Feed", command=lambda: self.ShowPage(NewsPage))
+
         self.config(menu=menubar)
 
     def Quit(self):
@@ -268,6 +277,14 @@ class ProgramGUI(tk.Tk):
             self.deiconify()
             self.destroy()
             self.quit()
+
+    PublicAPI = None  # local variable
+
+    def GetPublicAPI(self):
+        return self.PublicAPI
+
+    def LoadPublicAPI(self):
+        self.PublicAPI = FortnitePublicAPI()
 
 
 # # # # # # # # # # # # # # #
@@ -449,6 +466,88 @@ class AppearanceSettingsPage(DefaultPage):
             *SavedChangesValue, Font=self.FontLine.GetValue(), RegularFontSize=self.FontSizeLine.GetValue())
         self.SetColorPalette(NewColorPalette)
 
+
+class NewsPage(DefaultPage):
+
+    def __init__(self, parent, controller):
+        DefaultPage.__init__(self, parent, controller, basic_name='News')
+
+        Title = BigLabel(self, text='News Feed')
+        Title.grid(padx=DefaultPad, pady=DefaultPad)
+
+        self.BeforeLoadFrame = RegularFrame(self)
+        self.BeforeLoadFrame.grid(row=1, column=0)
+
+        self.AfterLoadFrame = RegularFrame(self)
+
+        PreviousButton = RegularButton(self.AfterLoadFrame, text=' < ',
+                                       command=lambda: self.NextNews())
+        PreviousButton.grid(row=0, column=0, sticky='e')
+
+        NextButton = RegularButton(self.AfterLoadFrame, text=' > ',
+                                   command=lambda: self.PreviousNews())
+        NextButton.grid(row=0, column=1, sticky='w')
+
+        LoadingLabel = RegularLabel(self.BeforeLoadFrame, text='Loading...')
+        LoadingLabel.grid(row=0, column=0)
+
+        self.elements = [Title, LoadingLabel, self.BeforeLoadFrame,
+                         self.AfterLoadFrame, PreviousButton, NextButton]
+
+    def NextNews(self):
+        if self.CrntDisplayerIndex == len(self.NewsDisplayers) - 1:  # if its the last item
+            self.ShowNewsDisplayer(0)
+        else:
+            self.ShowNewsDisplayer(self.CrntDisplayerIndex + 1)
+
+    def PreviousNews(self):
+        if self.CrntDisplayerIndex == 0:
+            self.ShowNewsDisplayer(len(self.NewsDisplayers) - 1)
+        else:
+            self.ShowNewsDisplayer(self.CrntDisplayerIndex - 1)
+
+    PageLoaded = False
+
+    def __LoadFrames(self):
+        self.NewsFrame = RegularFrame(self.AfterLoadFrame)
+        self.NewsFrame.grid(row=1, column=0, columnspan=2)
+        self.NewsDisplayers = []
+        for News in self.controller.GetPublicAPI().GetBattleRoyaleNewsItems():
+            Displayer = NewsDisplayer(self.NewsFrame, News)
+
+            self.NewsDisplayers.append(Displayer)
+            self.elements.append(Displayer)
+
+        self.elements.append(self.NewsFrame)
+        self.SetAppearance(self.controller.SettingsContainer.GetAppearanceContainer())
+        self.ShowNewsDisplayer(0)
+
+        self.AfterLoadFrame.grid(row=1, column=0)
+        self.BeforeLoadFrame.grid_forget()
+
+    CrntDisplayerIndex = None
+
+    def ShowNewsDisplayer(self, news_index):
+        if self.CrntDisplayerIndex is not None:
+            self.NewsDisplayers[self.CrntDisplayerIndex].grid_forget()
+
+        NewsDisplayer = self.NewsDisplayers[news_index]
+        self.CrntDisplayerIndex = news_index
+        NewsDisplayer.grid(row=0, column=0, padx=DefaultPad, pady=DefaultPad)
+
+    def ShowMe(self):
+        DefaultPage.ShowMe(self)
+
+        if not self.PageLoaded:
+            self.PageLoaded = True
+
+            # load the api
+            if self.controller.GetPublicAPI() is None:  # if not loaded
+                ApiThread = threading.Thread(target=self.controller.LoadPublicAPI)
+                ApiThread.start()
+
+            PageThread = threading.Thread(target=self.__LoadFrames)
+            PageThread.start()
 
 
 # # # # # # # # # # # # # #
@@ -951,10 +1050,63 @@ class NameDescFrame(RegularFrame):
         for element in self.elements:
             element.SetAppearance(Container)
 
+
+class NewsDisplayer(RegularFrame):
+
+    def __init__(self, master, news, *args, **kwargs):
+        RegularFrame.__init__(self, master, *args, **kwargs)
+        self.News = news
+
+        for i in range(2):
+            self.grid_columnconfigure(i, weight=1)
+
+        self.image = self.News.GetImagePIL()
+        self.Canvas = None
+
+        self.CopyImgTxt = tk.StringVar()
+        self.CopyImgTxt.set('Copy Image')
+        CopyImgBtn = RegularButton(self, textvariable=self.CopyImgTxt,
+                                   command=lambda: self.CopyImage())
+        CopyImgBtn.grid(sticky='w', row=1, column=1, padx=DefaultPad,
+                        pady=DefaultPad / 2)
+
+        NameDesc = NameDescFrame(self, self.__GenerateTitleText(), self.News.GetBody())
+        NameDesc.grid(row=1, column=0, padx=DefaultPad,
+                      pady=DefaultPad / 2)
+
+        self.elements = [CopyImgBtn, NameDesc]
+
+    def SetAppearance(self, Container):
+        RegularFrame.SetAppearance(self, Container)
+        ScaledSize = Container.GetFontSize() * 20
+
+        if self.Canvas is not None:
+            self.Canvas.grid_forget()
+        self.Canvas = ImageCanvas(self, self.image.resize(
+            (ScaledSize * 2, ScaledSize)))
+        self.Canvas.grid(row=0, column=0, columnspan=2, padx=DefaultPad, pady=DefaultPad / 2)
+
+    def __GenerateTitleText(self):
+        if self.News.GetAdspace() is None:
+            return '{}'.format(self.News.GetTitle())
+        else:
+            return '{} | {}'.format(self.News.GetAdspace(), self.News.GetTitle())
+
+    def __ChangeCopyBtnTitle(self):
+        sleep(1.5)
+        self.CopyImgTxt.set('Copy Image')
+
+    def CopyImage(self):
+        self.CopyImgTxt.set('Copied Image!')
+        SendImageToClipboard(self.News.GetImagePIL())
+
+        Thread = threading.Thread(target=self.__ChangeCopyBtnTitle)
+        Thread.start()
+
+
 # # # # # # # # # # # # # # # # # #
 # P U B L I C   F U N C T I O N S #
 # # # # # # # # # # # # # # # # # #
-
 
 def LinesListToString(list):
     # takes list of lines, and converts it to one string with '\n' between lines
