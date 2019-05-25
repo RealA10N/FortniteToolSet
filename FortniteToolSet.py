@@ -977,6 +977,51 @@ class DefaultAPI():
         return request.json()
 
 
+class FortnitePublicAPI(DefaultAPI):
+
+    def __init__(self):
+
+        DefaultAPI.__init__(self,
+                            url='https://fortnitecontent-website-prod07.ol.epicgames.com/content/api/pages/fortnite-game',
+                            headers={})
+        self.__BattleRoyaleNewsItems = None
+        self.__SaveTheWorldNewsItems = None
+        self.__PlaylistItems = None
+
+    def __GenerateItems(self, dicts_list, item_class):
+        ItemsDict = []
+        for dict in dicts_list:
+            Item = item_class(dict)
+            ItemsDict.append(Item)
+        return ItemsDict
+
+    def GetBattleRoyaleNews(self):
+        return self.GetJsonDate()['battleroyalenews']['news']['messages']
+
+    def GetBattleRoyaleNewsItems(self):
+        if self.__BattleRoyaleNewsItems is None:
+            self.__BattleRoyaleNewsItems = self.__GenerateItems(
+                self.GetBattleRoyaleNews(), FortniteNews)
+        return self.__BattleRoyaleNewsItems
+
+    def GetSaveTheWorldNews(self):
+        return self.GetJsonDate()['savetheworldnews']['news']['messages']
+
+    def GetSaveTheWorldNewsItems(self):
+        if self.__SaveTheWorldNewsItems is None:
+            self.__SaveTheWorldNewsItems = self.__GenerateItems(
+                self.GetSaveTheWorldNews(), FortniteNews)
+        return self.__SaveTheWorldNewsItems
+
+    def GetPlayList(self):
+        return self.GetJsonDate()['playlistimages']['playlistimages']['images']
+
+    def GetPlayListItems(self):
+        if self.__PlaylistItems is None:
+            self.__PlaylistItems = self.__GenerateItems(self.GetPlayList, FortnitePlaylist)
+        return self.__PlaylistItems
+
+
 # # # # # # # # # # # # # #
 # A P I   E L E M E N T S #
 # # # # # # # # # # # # # #
@@ -988,6 +1033,60 @@ class FortniteAPIelement():
 
     def GetDict(self):
         return self.Dict
+
+
+class FortniteNews(FortniteAPIelement):
+
+    # local variables
+    __ImagePIL = None
+
+    def GetImageUrl(self):
+        return self.GetDict()['image']
+
+    def __GenerateImagePIL(self):
+        Request = requests.get(self.GetImageUrl())
+        Bytes = BytesIO(Request.content)
+        return Image.open(Bytes).convert("RGBA")
+
+    def GetImagePIL(self):
+        if self.__ImagePIL is None:
+            self.__ImagePIL = self.__GenerateImagePIL()
+        return self.__ImagePIL
+
+    def GetIfHidden(self):
+        if self.GetAdspace == 'NEW!':
+            return True
+        return bool(self.GetDict()['hidden'])
+
+    def GetType(self):
+        return self.GetDict()['_type']
+
+    def GetAdspace(self):
+        if 'adspace' in self.GetDict():
+            if self.GetDict()['adspace'] != '':
+                return self.GetDict()['adspace']
+        return None  # else...
+
+    def GetTitle(self):
+        return self.GetDict()['title']
+
+    def GetBody(self):
+        return self.GetDict()['body']
+
+    def GetIfSpotlight(self):
+        return bool(self.GetDict()['spotlight'])
+
+
+class FortnitePlaylist(FortniteAPIelement):
+
+    def GetImageUrl(self):
+        return self.GetDict()['image']
+
+    def GetType(self):
+        return self.GetDict()['_type']
+
+    def GetName(self):
+        return self.GetDict()['playlistname']
 
 
 # # # # # # # # # # # # # #
