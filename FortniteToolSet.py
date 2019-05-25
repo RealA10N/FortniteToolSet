@@ -738,6 +738,12 @@ class DefaultCheckbutton(tk.Checkbutton):
     def SetAppearance(self, Container):
         pass
 
+    def SetValue(self, value):
+        if value:
+            self.select()
+        elif value is False:
+            self.deselect()
+
 
 class RegularCheckbutton(DefaultCheckbutton):
 
