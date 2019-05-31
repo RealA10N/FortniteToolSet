@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import messagebox, colorchooser
 from os import path, getcwd
 from PIL import Image, ImageTk
-from colour import Color
 import pickle
 from time import sleep
 import win32clipboard
@@ -24,18 +23,114 @@ DefaultPad = 10
 # C O L O R   F U N C T I O N S #
 # # # # # # # # # # # # # # # # #
 
-class MyColor(Color):
+class Color():
 
-    def __init__(self, *args, **kwargs):
-        Color.__init__(self, *args, **kwargs)
+    def __init__(self, Hex=None, RGB=None):
+        if Hex is not None and RGB is None:
+            if Hex[0] == '#':
+                self.Hex = Hex[1:]
+            else:
+                self.Hex = Hex
 
-    def NewChangeColorLightning(self, amount):
+            if not self.CheckValidHex(self.Hex):
+                raise Exception('Invalid Hex')
 
-        newr = min(self.red * amount, 1)
-        newg = min(self.green * amount, 1)
-        newb = min(self.blue * amount, 1)
+            self.RGB = self.__HexToRGB(self.Hex)
 
-        return MyColor(rgb=(newr, newg, newb))
+        elif Hex is None and RGB is not None:
+            self.RGB = RGB
+
+            if not self.CheckValidRGB(self.RGB):
+                raise Exception('Invalid RGB')
+
+            self.Hex = self.__RGBToHex(self.RGB)
+
+        else:
+            raise Exception('You must pass only RGB or Hex as arguments')
+
+    def CheckValidRGB(self, rgb):
+
+        if len(rgb) != 3:
+            return False
+
+        for color in rgb:
+            if color < 0 or color > 255:
+                return False
+
+        return True
+
+    def CheckValidHex(self, hex):
+        if len(hex) != 6:
+            return False
+
+        hex_chrs = '0123456789abcdef'
+        for ch in hex:
+            low_ch = ch.lower()
+            if low_ch not in hex_chrs:
+                return False
+
+        return True
+
+    def __RGBToHex(self, RGB):
+        return '{:02x}{:02x}{:02x}'.format(RGB[0], RGB[1], RGB[2])
+
+    def __HexToRGB(self, hex):
+
+        HexR = hex[0:2]
+        HexG = hex[2:4]
+        HexB = hex[4:6]
+
+        ValueR = int(HexR, 16)
+        ValueG = int(HexG, 16)
+        ValueB = int(HexB, 16)
+
+        return (ValueR, ValueG, ValueB)
+
+    def GetRed(self):
+        return self.RGB[0]
+
+    def GetGreen(self):
+        return self.RGB[1]
+
+    def GetBlue(self):
+        return self.RGB[2]
+
+    def GetHex(self):
+        return '#' + self.Hex
+
+    def NewColorChangeBrightness(self, multiplier):
+
+        # if (multiplier < 0) --> color will be darker
+        # if (multiplier > 0) --> color will be lighter
+
+        if multiplier <= 0 and multiplier >= -1:
+            NewRGB = self.__GenerateDarkerColor(multiplier + 1)
+        elif multiplier >= 0 and multiplier <= 1:
+            NewRGB = self.__GenerateLighterColor(multiplier)
+        else:
+            raise Exception('Multiplier must be between -1 and 1')
+
+        return Color(RGB=NewRGB)
+
+    def __GenerateDarkerColor(self, multiplier):
+
+        NewR = int(self.GetRed() * multiplier)
+        NewG = int(self.GetGreen() * multiplier)
+        NewB = int(self.GetBlue() * multiplier)
+
+        return [NewR, NewG, NewB]
+
+    def __GenerateLighterColor(self, multiplier):
+
+        DifR = 255 - self.GetRed()
+        DifG = 255 - self.GetGreen()
+        DifB = 255 - self.GetBlue()
+
+        NewR = int(self.GetRed() + (DifR * multiplier))
+        NewG = int(self.GetGreen() + (DifG * multiplier))
+        NewB = int(self.GetBlue() + (DifB * multiplier))
+
+        return [NewR, NewG, NewB]
 
 
 # # # # # # # # # #
@@ -69,61 +164,61 @@ class AppearanceSettingsContainer():
                  BackgroudOppositeColor, TrailingColor,
                  DiffrentColor, SpecialColor, Font, RegularFontSize):
 
-        self.BackgroundColor = MyColor(BackgroundColor)  # the color of the window
-        self.BackgroudOppositeColor = MyColor(BackgroudOppositeColor)  # For items on background
-        self.TrailingColor = MyColor(TrailingColor)  # buttons, text fields etc.
-        self.DiffrentColor = MyColor(DiffrentColor)  # most of the text
-        self.SpecialColor = MyColor(SpecialColor)  # For special buttons and functions
+        self.BackgroundColor = Color(BackgroundColor)  # the color of the window
+        self.BackgroudOppositeColor = Color(BackgroudOppositeColor)  # For items on background
+        self.TrailingColor = Color(TrailingColor)  # buttons, text fields etc.
+        self.DiffrentColor = Color(DiffrentColor)  # most of the text
+        self.SpecialColor = Color(SpecialColor)  # For special buttons and functions
 
-        self.__GenerateDarkColor()  # For smaller and less importent text
+        self.__GenerateDarkColor()  # For smaller and less important text
         self.__GenerateLightColor()  # For text that pops up
 
         self.Font = Font
         self.SetFontSize(RegularFontSize)
 
     def __GenerateDarkColor(self):
-        self.DarkColor = self.DiffrentColor.NewChangeColorLightning(0.6)
+        self.DarkColor = self.DiffrentColor.NewColorChangeBrightness(-0.5)
 
     def __GenerateLightColor(self):
-        self.LightColor = self.DiffrentColor.NewChangeColorLightning(1.4)
+        self.LightColor = self.DiffrentColor.NewColorChangeBrightness(0.5)
 
     def GetBackgroundColor(self):
-        return self.BackgroundColor.get_hex_l()
+        return self.BackgroundColor.GetHex()
 
     def SetBackgroundColor(self, hex_color):
-        self.BackgroundColor = MyColor(hex_color)
+        self.BackgroundColor = Color(hex_color)
 
     def GetBackgroundOppositeColor(self):
-        return self.BackgroudOppositeColor.get_hex_l()
+        return self.BackgroudOppositeColor.GetHex()
 
     def SetBackgroundOppositeColor(self, hex_color):
-        self.BackgroundOppositeColor = MyColor(hex_color)
+        self.BackgroundOppositeColor = Color(hex_color)
 
     def GetTrailingColor(self):
-        return self.TrailingColor.get_hex_l()
+        return self.TrailingColor.GetHex()
 
     def SetTrailingColor(self, hex_color):
-        self.TrailingColor = MyColor(hex_color)
+        self.TrailingColor = Color(hex_color)
 
     def GetDiffrentColor(self):
-        return self.DiffrentColor.get_hex_l()
+        return self.DiffrentColor.GetHex()
 
     def SetDiffrentColor(self, hex_color):
-        self.DiffrentColor = MyColor(hex_color)
+        self.DiffrentColor = Color(hex_color)
         self.__GenerateDarkColor()
         self.__GenerateLightColor()
 
     def GetSpecialColor(self):
-        return self.SpecialColor.get_hex_l()
+        return self.SpecialColor.GetHex()
 
     def SetSpecialColor(self, hex_color):
-        self.SpecialColor = MyColor(hex_color)
+        self.SpecialColor = Color(hex_color)
 
     def GetDarkColor(self):
-        return self.DarkColor.get_hex_l()
+        return self.DarkColor.GetHex()
 
     def GetLightColor(self):
-        return self.LightColor.get_hex_l()
+        return self.LightColor.GetHex()
 
     # - - - - - - - - - - #
     # n o t   c o l o r s #
