@@ -65,11 +65,11 @@ def paste_images_on_canvas(canvas, table):
     for items_row in table:
 
         if 'taken' not in items_row:
-            starting_position = (75 + (150 * items_row.count(None)), 500)
+            starting_position = (75 + (150 * items_row.count(None)), 410)
             while None in items_row:
                 items_row.remove(None)  # remove all 'None' from items_row
         else:  # list has 'taken'
-            starting_position = (75, 500)
+            starting_position = (75, 410)
 
         item_index = 0
         for item in items_row:
