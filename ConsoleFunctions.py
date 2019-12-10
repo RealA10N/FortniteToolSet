@@ -1,5 +1,5 @@
 import sys
-from time import clock
+from time import process_time
 
 
 class ConsolePrintFunctions:
@@ -78,7 +78,7 @@ class ConsolePrintFunctions:
         return input(self.__add_open_text(text))
 
     def start_script_clock(self):
-        clock()
+        self.starting_time = process_time()
 
     def end_script_clock(self):
-        input('Script run finished in %s seconds. Press enter to exit.' % int(clock()))
+        input('Script run finished in %s seconds. Press enter to exit.' % int(process_time() - self.starting_time))
